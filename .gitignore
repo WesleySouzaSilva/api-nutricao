@@ -1,0 +1,56 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+*.flattened-pom.xml
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.project
+.classpath
+.factorypath
+*.class
+*.jar
+*.war
+
+# Eclipse
+bin/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.loadpath
+
+# NetBeans
+nbproject/
+nb-configuration.xml
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Env
+.env
+.env.local
+*.env
+
+# Logs
+*.log
+log/
+
+# Docker
+docker-compose.override.yml
+
+# Spring Boot
+application-local.yml
+application-local.properties
