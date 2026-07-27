@@ -90,57 +90,59 @@ O **api-nutricao** é uma API REST desenvolvida do zero para demonstrar competê
 ## 📦 Entidades do Domínio
 
 ```
-┌──────────────┐     ┌──────────────────┐     ┌───────────────────┐     ┌──────────────────┐
-│     User     │1──N│    Refeicao      │1──N│ AlimentoRefeicao  │N──1│    Alimento      │
-├──────────────┤     ├──────────────────┤     ├───────────────────┤     ├──────────────────┤
-│ id (PK)      │     │ id (PK)          │     │ id (PK)           │     │ id (PK)          │
-│ nome         │     │ usuario_id (FK)  │     │ refeicao_id (FK)  │     │ nome             │
-│ email        │     │ tipo             │     │ alimento_id (FK)  │     │ categoria_id (FK)│──┐
-│ senha (hash) │     │ data_refeicao    │     │ quantidade        │     │ calorias         │  │
-│ data_nasc    │     │ observacao       │     │ calorias (calc)   │     │ proteina         │  │
-│ sexo         │     │ created_at       │     │ created_at        │     │ carboidrato      │  │
-│ altura       │     └──────────────────┘     └───────────────────┘     │ gordura          │  │
-│ created_at   │                                                         │ fibra            │  │
-│ updated_at   │                                                         └──────────────────┘  │
-└──────┬───────┘                                                                              │
-       │1                                                                                      │
-       │                                                                                       │
-       │1              ┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐   │
-       ├──────────────N│  MetaNutricional │     │ RegistroDiario   │     │  CategoriaAlim   │───┘
-       │               ├──────────────────┤     ├──────────────────┤     ├──────────────────┤
-       │               │ id (PK)          │     │ id (PK)          │     │ id (PK)          │
-       │               │ usuario_id (FK)  │     │ usuario_id (FK)  │     │ nome             │
-       │               │ tipo (CALORIA/   │     │ data             │     │ created_at       │
-       │               │   PROTEINA/      │     │ peso_jejum       │     └──────────────────┘
-       │               │   CARBOIDRATO/   │     │ agua_ml          │
-       │               │   GORDURA)       │     │ passos           │
-       │               │ valor_meta       │     │ created_at       │
-       │               │ data_inicio      │     └──────────────────┘
-       │               │ created_at       │
-       │               └──────────────────┘
-       │
-       │1              ┌──────────────────────┐
-       └──────────────N│ AlimentoFavorito      │
-                       ├──────────────────────┤
-                       │ id (PK)              │
-                       │ usuario_id (FK)      │
-                       │ alimento_id (FK)     │
-                       │ created_at           │
-                       └──────────────────────┘
+┌──────────────────┐     ┌──────────────────┐     ┌───────────────────┐     ┌──────────────────┐
+│    Usuario       │1──N│    Refeicao      │1──N│ AlimentoRefeicao  │N──1│    Alimento      │
+├──────────────────┤     ├──────────────────┤     ├───────────────────┤     ├──────────────────┤
+│ id (PK)          │     │ id (PK)          │     │ id (PK)           │     │ id (PK)          │
+│ nome             │     │ usuario_id (FK)  │     │ refeicao_id (FK)  │     │ nome             │
+│ senha            │     │ tipo             │     │ alimento_id (FK)  │     │ categoria_id (FK)│──┐
+│ email            │     │ data_refeicao    │     │ quantidade        │     │ categoria        │  │
+│ data_nascimento  │     │ observacao       │     │ calorias (calc)   │     │ calorias         │  │
+│ altura           │     │ created_at       │     │ created_at        │     │ proteina         │  │
+│ sexo             │     └──────────────────┘     └───────────────────┘     │ carboidrato      │  │
+│ data_cadastro    │                                                         │ gordura          │  │
+│ medida           │                                                         │ fibra            │  │
+│ tipo_login       │                                                         └──────────────────┘  │
+│ token_id         │                                                                              │
+└────────┬─────────┘                                                                              │
+         │1                                                                                        │
+         │                                                                                         │
+         │1              ┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐     │
+         ├──────────────N│  MetaNutricional │     │ RegistroDiario   │     │  CategoriaAlim   │─────┘
+         │               ├──────────────────┤     ├──────────────────┤     ├──────────────────┤
+         │               │ id (PK)          │     │ id (PK)          │     │ id (PK)          │
+         │               │ usuario_id (FK)  │     │ usuario_id (FK)  │     │ nome             │
+         │               │ tipo (CALORIA/   │     │ data             │     │ created_at       │
+         │               │   PROTEINA/      │     │ peso_jejum       │     └──────────────────┘
+         │               │   CARBOIDRATO/   │     │ agua_ml          │
+         │               │   GORDURA)       │     │ passos           │
+         │               │ valor_meta       │     │ created_at       │
+         │               │ data_inicio      │     └──────────────────┘
+         │               │ created_at       │
+         │               └──────────────────┘
+         │
+         │1              ┌──────────────────────┐
+         └──────────────N│ AlimentoFavorito      │
+                         ├──────────────────────┤
+                         │ id (PK)              │
+                         │ usuario_id (FK)      │
+                         │ alimento_id (FK)     │
+                         │ created_at           │
+                         └──────────────────────┘
 ```
 
 ### Descrição das Entidades
 
-| Entidade | Tabela | Finalidade | Cache/Qtde |
+| Entidade | Tabela | Finalidade | Campos principais |
 |---|---|---|---|
-| **User** | `users` | Cadastro e autenticação de usuários | 1 por usuário |
-| **CategoriaAlimento** | `categorias_alimento` | Classificação de alimentos (Laticínios, Carnes, Frutas, etc.) | ~15 registros |
-| **Alimento** | `alimentos` | Tabela nutricional com calorias, proteínas, carboidratos, gorduras, fibras, sódio | ~50-100 registros |
-| **Refeicao** | `refeicoes` | Registro de refeição com tipo (CAFE_DA_MANHA, ALMOCO, JANTAR, LANCHE) | ~300/dia por usuário |
-| **AlimentoRefeicao** | `refeicoes_alimentos` | Itens consumidos em cada refeição com quantidade e calorias calculadas | ~5-10 por refeição |
-| **MetaNutricional** | `metas_nutricionais` | Metas diárias de calorias, proteínas, carboidratos e gorduras | ~4 por usuário |
-| **RegistroDiario** | `registros_diarios` | Acompanhamento diário: peso jejum, água ingerida (ml), passos | 1 por dia por usuário |
-| **AlimentoFavorito** | `alimentos_favoritos` | Alimentos marcados como favoritos para acesso rápido | ~10-20 por usuário |
+| **Usuario** | `usuario` | Cadastro e autenticação de usuários | id, nome, senha, email, dataNascimento, altura, sexo, dataCadastro, medida, tipoLogin, tokenId |
+| **CategoriaAlimento** | `categoria_alimento` | Classificação de alimentos (Laticínios, Carnes, Frutas, etc.) | id, nome |
+| **Alimento** | `alimento` | Tabela nutricional com calorias, proteínas, carboidratos, gorduras, fibras | id, nome, categoria, calorias, proteina, carboidrato, gordura, fibra |
+| **Refeicao** | `refeicao` | Registro de refeição (CAFE_DA_MANHA, ALMOCO, JANTAR, LANCHE) | id, usuario, tipo, dataRefeicao, observacao |
+| **AlimentoRefeicao** | `refeicao_alimento` | Itens consumidos em cada refeição | id, refeicao, alimento, quantidade, calorias |
+| **MetaNutricional** | `meta_nutricional` | Metas diárias de calorias, proteínas, carboidratos e gorduras | id, usuario, tipo, valorMeta, dataInicio |
+| **RegistroDiario** | `registro_diario` | Acompanhamento diário: peso jejum, água (ml), passos | id, usuario, data, pesoJejum, aguaMl, passos |
+| **AlimentoFavorito** | `alimento_favorito` | Alimentos marcados como favoritos | id, usuario, alimento |
 
 ---
 
@@ -291,7 +293,7 @@ Os ciclos foram reestruturados para seguir TDD, começando pelas entidades e ser
 
 | # | Tarefa | TDD? | Arquivos |
 |---|--------|------|----------|
-| 2.1 | **Teste** → Entidade User | ✅ | `UserTest.java`, `User.java` |
+| 2.1 | **Teste** → Entidade Usuario | ✅ | `UsuarioTest.java`, `Usuario.java` |
 | 2.2 | **Teste** → Entidade CategoriaAlimento | ✅ | `CategoriaAlimentoTest.java`, `CategoriaAlimento.java` |
 | 2.3 | **Teste** → Entidade Alimento | ✅ | `AlimentoTest.java`, `Alimento.java` |
 | 2.4 | **Teste** → Entidade Refeicao + AlimentoRefeicao | ✅ | `RefeicaoTest.java`, `Refeicao.java`, `AlimentoRefeicao.java` |
@@ -305,7 +307,7 @@ Os ciclos foram reestruturados para seguir TDD, começando pelas entidades e ser
 
 | # | Tarefa | TDD? | Arquivos |
 |---|--------|------|----------|
-| 3.1 | **Teste** → UserRepository (findByEmail) | ✅ | `UserRepositoryTest.java`, `UserRepository.java` |
+| 3.1 | **Teste** → UsuarioRepository (findByEmail) | ✅ | `UsuarioRepositoryTest.java`, `UsuarioRepository.java` |
 | 3.2 | **Teste** → AlimentoRepository (filtros, search) | ✅ | `AlimentoRepositoryTest.java`, `AlimentoRepository.java` |
 | 3.3 | **Teste** → RefeicaoRepository (queries por período) | ✅ | `RefeicaoRepositoryTest.java`, `RefeicaoRepository.java` |
 | 3.4 | **Teste** → AlimentoSpecification | ✅ | `AlimentoSpecificationTest.java`, `AlimentoSpecification.java` |
@@ -318,7 +320,7 @@ Os ciclos foram reestruturados para seguir TDD, começando pelas entidades e ser
 | # | Tarefa | TDD? | Arquivos |
 |---|--------|------|----------|
 | 4.1 | **Teste** → JwtUtil (gerar/validar token) | ✅ | `JwtUtilTest.java`, `JwtUtil.java` |
-| 4.2 | **Teste** → UserService (criar, buscar, email duplicado) | ✅ | `UserServiceTest.java`, `UserService.java` |
+| 4.2 | **Teste** → UsuarioService (criar, buscar, email duplicado) | ✅ | `UsuarioServiceTest.java`, `UsuarioService.java` |
 | 4.3 | **Teste** → AlimentoService (CRUD, filtros) | ✅ | `AlimentoServiceTest.java`, `AlimentoService.java` |
 | 4.4 | **Teste** → RefeicaoService (calcular calorias, resumo) | ✅ | `RefeicaoServiceTest.java`, `RefeicaoService.java` |
 | 4.5 | **Teste** → MetaNutricionalService | ✅ | `MetaNutricionalServiceTest.java`, `MetaNutricionalService.java` |
@@ -332,8 +334,8 @@ Os ciclos foram reestruturados para seguir TDD, começando pelas entidades e ser
 | # | Tarefa | TDD? | Arquivos |
 |---|--------|------|----------|
 | 5.1 | **Teste** → AuthController (register + login) | ✅ | `AuthControllerTest.java`, `AuthController.java` |
-| 5.2 | **Teste** → UserController (me, update, delete) | ✅ | `UserControllerTest.java`, `UserController.java` |
-| 5.3 | DTOs de request/response (Auth + User) | ❌ | `LoginRequest.java`, `UserCreateRequest.java`, `UserUpdateRequest.java`, `TokenResponse.java`, `UserResponse.java` |
+| 5.2 | **Teste** → UsuarioController (me, update, delete) | ✅ | `UsuarioControllerTest.java`, `UsuarioController.java` |
+| 5.3 | DTOs de request/response (Auth + Usuario) | ❌ | `LoginRequest.java`, `UsuarioCreateRequest.java`, `UsuarioUpdateRequest.java`, `TokenResponse.java`, `UsuarioResponse.java` |
 
 ### Ciclo 6 — TDD: Controllers (Alimentos + Categorias)
 *Arquivos: 8 | Depende de: Ciclo 5*
@@ -390,7 +392,7 @@ api-nutricao/
 │   │   │   │   └── OpenApiConfig.java
 │   │   │   ├── domain/
 │   │   │   │   ├── model/
-│   │   │   │   │   ├── User.java
+│   │   │   │   │   ├── Usuario.java
 │   │   │   │   │   ├── CategoriaAlimento.java
 │   │   │   │   │   ├── Alimento.java
 │   │   │   │   │   ├── Refeicao.java
@@ -399,13 +401,13 @@ api-nutricao/
 │   │   │   │   │   ├── RegistroDiario.java
 │   │   │   │   │   └── AlimentoFavorito.java
 │   │   │   │   ├── repository/
-│   │   │   │   │   ├── UserRepository.java
+│   │   │   │   │   ├── UsuarioRepository.java
 │   │   │   │   │   ├── AlimentoRepository.java
 │   │   │   │   │   ├── RefeicaoRepository.java
 │   │   │   │   │   ├── MetaNutricionalRepository.java
 │   │   │   │   │   └── RegistroDiarioRepository.java
 │   │   │   │   └── service/
-│   │   │   │       ├── UserService.java
+│   │   │   │       ├── UsuarioService.java
 │   │   │   │       ├── AlimentoService.java
 │   │   │   │       ├── RefeicaoService.java
 │   │   │   │       ├── MetaNutricionalService.java
@@ -413,7 +415,7 @@ api-nutricao/
 │   │   │   ├── api/
 │   │   │   │   ├── controller/
 │   │   │   │   │   ├── AuthController.java
-│   │   │   │   │   ├── UserController.java
+│   │   │   │   │   ├── UsuarioController.java
 │   │   │   │   │   ├── CategoriaController.java
 │   │   │   │   │   ├── AlimentoController.java
 │   │   │   │   │   ├── RefeicaoController.java
@@ -424,15 +426,15 @@ api-nutricao/
 │   │   │   │   ├── dto/
 │   │   │   │   │   ├── request/
 │   │   │   │   │   │   ├── LoginRequest.java
-│   │   │   │   │   │   ├── UserCreateRequest.java
-│   │   │   │   │   │   ├── UserUpdateRequest.java
+│   │   │   │   │   │   ├── UsuarioCreateRequest.java
+│   │   │   │   │   │   ├── UsuarioUpdateRequest.java
 │   │   │   │   │   │   ├── CategoriaRequest.java
 │   │   │   │   │   │   ├── AlimentoRequest.java
 │   │   │   │   │   │   ├── RefeicaoRequest.java
 │   │   │   │   │   │   └── ... (demais requests)
 │   │   │   │   │   └── response/
 │   │   │   │   │       ├── TokenResponse.java
-│   │   │   │   │       ├── UserResponse.java
+│   │   │   │   │       ├── UsuarioResponse.java
 │   │   │   │   │       ├── AlimentoResponse.java
 │   │   │   │   │       ├── RefeicaoResponse.java
 │   │   │   │   │       ├── ResumoDiarioResponse.java
@@ -459,16 +461,16 @@ api-nutricao/
 │   │           └── V2__seed_alimentos.sql
 │   └── test/java/br/com/nutricao/
 │       ├── domain/model/
-│       │   ├── UserTest.java
+│       │   ├── UsuarioTest.java
 │       │   ├── AlimentoTest.java
 │       │   ├── RefeicaoTest.java
 │       │   └── ... (demais testes de entidade)
 │       ├── domain/repository/
-│       │   ├── UserRepositoryTest.java
+│       │   ├── UsuarioRepositoryTest.java
 │       │   ├── AlimentoRepositoryTest.java
 │       │   └── ... (demais testes de repository)
 │       ├── domain/service/
-│       │   ├── UserServiceTest.java
+│       │   ├── UsuarioServiceTest.java
 │       │   ├── AlimentoServiceTest.java
 │       │   ├── RefeicaoServiceTest.java
 │       │   └── ... (demais testes de service)
