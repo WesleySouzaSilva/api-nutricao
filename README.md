@@ -59,7 +59,7 @@ O **api-nutricao** é uma API REST desenvolvida do zero para demonstrar competê
 
 | Característica | api-nutricao | api-mbs (referência) |
 |---|---|---|
-| **Abordagem** | TDD (test-first) | Sem testes |
+| **Abordagem** | TDD (test-first) | TDD (test-first) |
 | **Migrações** | Flyway versionado | Manual |
 | **Entidades** | 9, enxutas e focadas | 14+, com acoplamento excessivo |
 | **Exception Handling** | RFC 7807 com handler global | RFC 7807 |
