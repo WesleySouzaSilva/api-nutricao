@@ -2,7 +2,22 @@
 
 API REST para controle alimentar e nutricional. Projeto portfólio construído com TDD, Clean Architecture e práticas profissionais de desenvolvimento Spring.
 
-**Stack:** Java 11 · Spring Boot 2.7.18 · MySQL 8 · Flyway · JWT (auth0) · SpringDoc OpenAPI · Docker · JUnit 5 + Mockito
+---
+
+## Stack Tecnológica
+
+| Categoria | Tecnologia | Versão |
+|---|---|---|
+| **Linguagem** | Java | 11 (LTS) |
+| **Framework** | Spring Boot | 2.7.18 |
+| **Build** | Maven | 3.9.9 |
+| **Banco** | MySQL | 8.0+ |
+| **Migration** | Flyway | 9.x |
+| **Autenticação** | auth0 java-jwt | 4.4.0 |
+| **Documentação** | SpringDoc OpenAPI | 1.8.0 |
+| **Mapping** | ModelMapper | 3.2.1 |
+| **Testes** | JUnit 5 + Mockito | — |
+| **Container** | Docker + Compose | — |
 
 ---
 
@@ -23,32 +38,17 @@ Acessar em `http://localhost:8080` · Swagger em `http://localhost:8080/swagger-
 
 ---
 
-## Entidades (9)
-
-| Entidade | Descrição |
-|---|---|
-| **Usuario** | Cadastro e autenticação |
-| **CategoriaAlimento** | Classificação de alimentos |
-| **Alimento** | Tabela nutricional completa |
-| **Refeicao** | Registro de refeições (CAFE_DA_MANHA, ALMOCO, JANTAR, LANCHE) |
-| **AlimentoRefeicao** | Itens consumidos em cada refeição |
-| **MetaNutricional** | Metas com periodicidade (DIARIO, SEMANAL, MENSAL, TRIMESTRAL) |
-| **Objetivo** | Objetivo do usuário (GANHAR_MASSA, REDUZIR_GORDURA, MANTER_PESO) |
-| **RegistroDiario** | Acompanhamento diário (peso, água, passos) |
-| **AlimentoFavorito** | Alimentos favoritos do usuário |
-
-Detalhes completos → [`docs/ENTIDADES.md`](docs/ENTIDADES.md)
-
----
-
 ## Documentação
+
+Os detalhes do projeto foram organizados em documentos separados:
 
 | Documento | Conteúdo |
 |---|---|
-| [`docs/ENDPOINTS.md`](docs/ENDPOINTS.md) | Todos os endpoints da API (28 no total) |
-| [`docs/PLANEJAMENTO.md`](docs/PLANEJAMENTO.md) | Abordagem TDD, ciclos de implementação e matriz de testes |
-| [`docs/ESTRUTURA.md`](docs/ESTRUTURA.md) | Estrutura completa do projeto (~82 arquivos) |
-| [`docs/HISTORICO.md`](docs/HISTORICO.md) | Histórico e contexto do projeto |
+| [`docs/ENTIDADES.md`](docs/ENTIDADES.md) | Diagrama ER, entidades do domínio e descrição dos campos |
+| [`docs/ENDPOINTS.md`](docs/ENDPOINTS.md) | Todos os endpoints da API (28 endpoints, 9 controllers) |
+| [`docs/PLANEJAMENTO.md`](docs/PLANEJAMENTO.md) | Abordagem TDD, matriz de testes e ciclos de implementação |
+| [`docs/ESTRUTURA.md`](docs/ESTRUTURA.md) | Estrutura completa de arquivos (~82) e como executar |
+| [`docs/HISTORICO.md`](docs/HISTORICO.md) | Histórico e trajetória de aprendizado |
 
 ---
 
@@ -56,7 +56,7 @@ Detalhes completos → [`docs/ENTIDADES.md`](docs/ENTIDADES.md)
 
 | Característica | api-nutricao | api-mbs (referência) |
 |---|---|---|
-| **Abordagem** | TDD (test-first) | Sem testes |
+| **Abordagem TDD** | Testes antes da implementação (RED → GREEN → REFACTOR) | Sem testes automatizados |
 | **Migrações** | Flyway versionado | Manual |
 | **Entidades** | 9, enxutas e focadas | 14+, com acoplamento excessivo |
 | **Exception Handling** | RFC 7807 com handler global | RFC 7807 |
