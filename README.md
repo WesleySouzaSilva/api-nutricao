@@ -47,7 +47,8 @@ O **api-nutricao** é uma API REST desenvolvida do zero para demonstrar competê
 - ✅ Cadastro e autenticação de usuários com JWT
 - ✅ Tabela nutricional completa com alimentos e categorias
 - ✅ Registro de refeições diárias com cálculo automático de calorias e macronutrientes
-- ✅ Metas nutricionais personalizadas (calorias, proteínas, carboidratos, gorduras)
+- ✅ Definição de objetivos (ganhar massa, reduzir gordura, manter peso)
+- ✅ Metas nutricionais personalizadas com periodicidade (diária, semanal, mensal, trimestral)
 - ✅ Acompanhamento diário de peso, ingestão de água e passos
 - ✅ Dashboard com progresso diário e semanal
 - ✅ Documentação OpenAPI (Swagger)
@@ -60,7 +61,7 @@ O **api-nutricao** é uma API REST desenvolvida do zero para demonstrar competê
 |---|---|---|
 | **Abordagem** | TDD (test-first) | Sem testes |
 | **Migrações** | Flyway versionado | Manual |
-| **Entidades** | 8, enxutas e focadas | 14+, com acoplamento excessivo |
+| **Entidades** | 9, enxutas e focadas | 14+, com acoplamento excessivo |
 | **Exception Handling** | RFC 7807 com handler global | RFC 7807 |
 | **Documentação** | SpringDoc OpenAPI | SpringFox (deprecated) |
 | **Container** | Docker + Compose ativo | Docker comentado no POM |
@@ -117,9 +118,29 @@ O **api-nutricao** é uma API REST desenvolvida do zero para demonstrar competê
          │               │   CARBOIDRATO/   │     │ agua_ml          │
          │               │   GORDURA)       │     │ passos           │
          │               │ valor_meta       │     │ created_at       │
-         │               │ data_inicio      │     └──────────────────┘
+         │               │ periodicidade    │     └──────────────────┘
+         │               │   (DIARIO/       │
+         │               │    SEMANAL/      │
+         │               │    MENSAL/       │
+         │               │    TRIMESTRAL)   │
+         │               │ data_inicio      │
+         │               │ data_fim         │
          │               │ created_at       │
          │               └──────────────────┘
+         │
+         │1              ┌────────────────────────┐
+         ├──────────────N│      Objetivo           │
+         │               ├────────────────────────┤
+         │               │ id (PK)                │
+         │               │ usuario_id (FK)        │
+         │               │ tipo (GANHAR_MASSA/     │
+         │               │   REDUZIR_GORDURA/      │
+         │               │   MANTER_PESO)          │
+         │               │ data_inicio             │
+         │               │ data_fim                │
+         │               │ ativo                   │
+         │               │ created_at              │
+         │               └────────────────────────┘
          │
          │1              ┌──────────────────────┐
          └──────────────N│ AlimentoFavorito      │
@@ -140,7 +161,8 @@ O **api-nutricao** é uma API REST desenvolvida do zero para demonstrar competê
 | **Alimento** | `alimento` | Tabela nutricional com calorias, proteínas, carboidratos, gorduras, fibras | id, nome, categoria, calorias, proteina, carboidrato, gordura, fibra |
 | **Refeicao** | `refeicao` | Registro de refeição (CAFE_DA_MANHA, ALMOCO, JANTAR, LANCHE) | id, usuario, tipo, dataRefeicao, observacao |
 | **AlimentoRefeicao** | `refeicao_alimento` | Itens consumidos em cada refeição | id, refeicao, alimento, quantidade, calorias |
-| **MetaNutricional** | `meta_nutricional` | Metas diárias de calorias, proteínas, carboidratos e gorduras | id, usuario, tipo, valorMeta, dataInicio |
+| **MetaNutricional** | `meta_nutricional` | Metas nutricionais com periodicidade configurável | id, usuario, tipo, valorMeta, periodicidade, dataInicio, dataFim |
+| **Objetivo** | `objetivo` | Objetivo principal do usuário (ganhar massa, reduzir gordura, manter peso) | id, usuario, tipo, dataInicio, dataFim, ativo |
 | **RegistroDiario** | `registro_diario` | Acompanhamento diário: peso jejum, água (ml), passos | id, usuario, data, pesoJejum, aguaMl, passos |
 | **AlimentoFavorito** | `alimento_favorito` | Alimentos marcados como favoritos | id, usuario, alimento |
 
@@ -200,9 +222,19 @@ O **api-nutricao** é uma API REST desenvolvida do zero para demonstrar competê
 | Método | Rota | Descrição | Auth |
 |--------|------|-----------|------|
 | `GET` | `/v1/metas` | Listar metas do usuário | JWT |
-| `POST` | `/v1/metas` | Criar meta (calorias, proteína, carboidrato, gordura) | JWT |
-| `PUT` | `/v1/metas/{id}` | Atualizar meta | JWT |
+| `POST` | `/v1/metas` | Criar meta (calorias, proteína, carboidrato, gordura + periodicidade) | JWT |
+| `PUT` | `/v1/metas/{id}` | Atualizar meta (inclusive periodicidade) | JWT |
 | `DELETE` | `/v1/metas/{id}` | Remover meta | JWT |
+
+### Objetivos (`/v1/objetivos`)
+
+| Método | Rota | Descrição | Auth |
+|--------|------|-----------|------|
+| `GET` | `/v1/objetivos` | Listar objetivos do usuário | JWT |
+| `GET` | `/v1/objetivos/ativo` | Objetivo ativo atual | JWT |
+| `POST` | `/v1/objetivos` | Criar objetivo (ganhar massa, reduzir gordura, manter peso) | JWT |
+| `PUT` | `/v1/objetivos/{id}` | Atualizar objetivo | JWT |
+| `DELETE` | `/v1/objetivos/{id}` | Remover objetivo | JWT |
 
 ### Registro Diário (`/v1/registros`)
 
@@ -213,6 +245,8 @@ O **api-nutricao** é uma API REST desenvolvida do zero para demonstrar competê
 | `GET` | `/v1/registros/diario/historico` | Histórico por período | JWT |
 
 ### Dashboard (`/v1/dashboard`)
+
+> **Nota**: Endpoints de dashboard são referência para consumo pelo frontend. Não serão implementados neste projeto — o frontend deve consumir os endpoints de Metas, Registro Diário e Refeições para montar seus próprios dashboards.
 
 | Método | Rota | Descrição | Auth |
 |--------|------|-----------|------|
@@ -298,9 +332,10 @@ Os ciclos foram reestruturados para seguir TDD, começando pelas entidades e ser
 | 2.3 | **Teste** → Entidade Alimento | ✅ | `AlimentoTest.java`, `Alimento.java` |
 | 2.4 | **Teste** → Entidade Refeicao + AlimentoRefeicao | ✅ | `RefeicaoTest.java`, `Refeicao.java`, `AlimentoRefeicao.java` |
 | 2.5 | **Teste** → Entidade MetaNutricional | ✅ | `MetaNutricionalTest.java`, `MetaNutricional.java` |
-| 2.6 | **Teste** → Entidade RegistroDiario | ✅ | `RegistroDiarioTest.java`, `RegistroDiario.java` |
-| 2.7 | **Teste** → Entidade AlimentoFavorito | ✅ | `AlimentoFavoritoTest.java`, `AlimentoFavorito.java` |
-| 2.8 | Flyway V1: todas as tabelas | ❌ | `V1__create_tables.sql` |
+| 2.6 | **Teste** → Entidade Objetivo | ✅ | `ObjetivoTest.java`, `Objetivo.java` |
+| 2.7 | **Teste** → Entidade RegistroDiario | ✅ | `RegistroDiarioTest.java`, `RegistroDiario.java` |
+| 2.8 | **Teste** → Entidade AlimentoFavorito | ✅ | `AlimentoFavoritoTest.java`, `AlimentoFavorito.java` |
+| 2.9 | Flyway V1: todas as tabelas | ❌ | `V1__create_tables.sql` |
 
 ### Ciclo 3 — TDD: Repositories
 *Arquivos: 8 | Depende de: Ciclo 2*
@@ -312,10 +347,11 @@ Os ciclos foram reestruturados para seguir TDD, começando pelas entidades e ser
 | 3.3 | **Teste** → RefeicaoRepository (queries por período) | ✅ | `RefeicaoRepositoryTest.java`, `RefeicaoRepository.java` |
 | 3.4 | **Teste** → AlimentoSpecification | ✅ | `AlimentoSpecificationTest.java`, `AlimentoSpecification.java` |
 | 3.5 | **Teste** → MetaNutricionalRepository | ✅ | `MetaNutricionalRepositoryTest.java`, `MetaNutricionalRepository.java` |
-| 3.6 | **Teste** → RegistroDiarioRepository | ✅ | `RegistroDiarioRepositoryTest.java`, `RegistroDiarioRepository.java` |
+| 3.6 | **Teste** → ObjetivoRepository | ✅ | `ObjetivoRepositoryTest.java`, `ObjetivoRepository.java` |
+| 3.7 | **Teste** → RegistroDiarioRepository | ✅ | `RegistroDiarioRepositoryTest.java`, `RegistroDiarioRepository.java` |
 
 ### Ciclo 4 — TDD: Services e Autenticação
-*Arquivos: 12 | Depende de: Ciclo 3*
+*Arquivos: 16 | Depende de: Ciclo 3*
 
 | # | Tarefa | TDD? | Arquivos |
 |---|--------|------|----------|
@@ -324,9 +360,10 @@ Os ciclos foram reestruturados para seguir TDD, começando pelas entidades e ser
 | 4.3 | **Teste** → AlimentoService (CRUD, filtros) | ✅ | `AlimentoServiceTest.java`, `AlimentoService.java` |
 | 4.4 | **Teste** → RefeicaoService (calcular calorias, resumo) | ✅ | `RefeicaoServiceTest.java`, `RefeicaoService.java` |
 | 4.5 | **Teste** → MetaNutricionalService | ✅ | `MetaNutricionalServiceTest.java`, `MetaNutricionalService.java` |
-| 4.6 | **Teste** → RegistroDiarioService | ✅ | `RegistroDiarioServiceTest.java`, `RegistroDiarioService.java` |
-| 4.7 | SecurityConfig (SecurityFilterChain, CORS, BCrypt) | ❌ | `SecurityConfig.java` |
-| 4.8 | JwtAuthenticationFilter (OncePerRequestFilter) | ❌ | `JwtAuthenticationFilter.java` |
+| 4.6 | **Teste** → ObjetivoService | ✅ | `ObjetivoServiceTest.java`, `ObjetivoService.java` |
+| 4.7 | **Teste** → RegistroDiarioService | ✅ | `RegistroDiarioServiceTest.java`, `RegistroDiarioService.java` |
+| 4.8 | SecurityConfig (SecurityFilterChain, CORS, BCrypt) | ❌ | `SecurityConfig.java` |
+| 4.9 | JwtAuthenticationFilter (OncePerRequestFilter) | ❌ | `JwtAuthenticationFilter.java` |
 
 ### Ciclo 5 — TDD: Controllers (Auth + Usuários)
 *Arquivos: 8 | Depende de: Ciclo 4*
@@ -346,16 +383,16 @@ Os ciclos foram reestruturados para seguir TDD, começando pelas entidades e ser
 | 6.2 | **Teste** → AlimentoController (CRUD + favoritos) | ✅ | `AlimentoControllerTest.java`, `AlimentoController.java` |
 | 6.3 | DTOs de Alimento + Categoria | ❌ | `AlimentoRequest.java`, `AlimentoResponse.java`, `CategoriaRequest.java`, `CategoriaResponse.java` |
 
-### Ciclo 7 — TDD: Controllers (Refeições + Metas + Registro)
+### Ciclo 7 — TDD: Controllers (Refeições + Metas + Objetivos + Registro)
 *Arquivos: 12 | Depende de: Ciclo 6*
 
 | # | Tarefa | TDD? | Arquivos |
 |---|--------|------|----------|
 | 7.1 | **Teste** → RefeicaoController (CRUD + resumos) | ✅ | `RefeicaoControllerTest.java`, `RefeicaoController.java` |
 | 7.2 | **Teste** → MetaNutricionalController | ✅ | `MetaNutricionalControllerTest.java`, `MetaNutricionalController.java` |
-| 7.3 | **Teste** → RegistroDiarioController | ✅ | `RegistroDiarioControllerTest.java`, `RegistroDiarioController.java` |
-| 7.4 | **Teste** → DashboardController | ✅ | `DashboardControllerTest.java`, `DashboardController.java` |
-| 7.5 | DTOs de Refeição, Meta, Registro, Dashboard | ❌ | DTOs request/response |
+| 7.3 | **Teste** → ObjetivoController | ✅ | `ObjetivoControllerTest.java`, `ObjetivoController.java` |
+| 7.4 | **Teste** → RegistroDiarioController | ✅ | `RegistroDiarioControllerTest.java`, `RegistroDiarioController.java` |
+| 7.5 | DTOs de Refeição, Meta, Objetivo, Registro | ❌ | DTOs request/response |
 
 ### Ciclo 8 — Exception Handling, Documentação e Finalização
 *Arquivos: 8 | Depende de: Ciclo 7*
@@ -398,6 +435,7 @@ api-nutricao/
 │   │   │   │   │   ├── Refeicao.java
 │   │   │   │   │   ├── AlimentoRefeicao.java
 │   │   │   │   │   ├── MetaNutricional.java
+│   │   │   │   │   ├── Objetivo.java
 │   │   │   │   │   ├── RegistroDiario.java
 │   │   │   │   │   └── AlimentoFavorito.java
 │   │   │   │   ├── repository/
@@ -405,12 +443,14 @@ api-nutricao/
 │   │   │   │   │   ├── AlimentoRepository.java
 │   │   │   │   │   ├── RefeicaoRepository.java
 │   │   │   │   │   ├── MetaNutricionalRepository.java
+│   │   │   │   │   ├── ObjetivoRepository.java
 │   │   │   │   │   └── RegistroDiarioRepository.java
 │   │   │   │   └── service/
 │   │   │   │       ├── UsuarioService.java
 │   │   │   │       ├── AlimentoService.java
 │   │   │   │       ├── RefeicaoService.java
 │   │   │   │       ├── MetaNutricionalService.java
+│   │   │   │       ├── ObjetivoService.java
 │   │   │   │       └── RegistroDiarioService.java
 │   │   │   ├── api/
 │   │   │   │   ├── controller/
@@ -420,8 +460,8 @@ api-nutricao/
 │   │   │   │   │   ├── AlimentoController.java
 │   │   │   │   │   ├── RefeicaoController.java
 │   │   │   │   │   ├── MetaNutricionalController.java
+│   │   │   │   │   ├── ObjetivoController.java
 │   │   │   │   │   ├── RegistroDiarioController.java
-│   │   │   │   │   ├── DashboardController.java
 │   │   │   │   │   └── HealthController.java
 │   │   │   │   ├── dto/
 │   │   │   │   │   ├── request/
@@ -431,14 +471,18 @@ api-nutricao/
 │   │   │   │   │   │   ├── CategoriaRequest.java
 │   │   │   │   │   │   ├── AlimentoRequest.java
 │   │   │   │   │   │   ├── RefeicaoRequest.java
-│   │   │   │   │   │   └── ... (demais requests)
+│   │   │   │   │   │   ├── MetaRequest.java
+│   │   │   │   │   │   ├── ObjetivoRequest.java
+│   │   │   │   │   │   └── RegistroDiarioRequest.java
 │   │   │   │   │   └── response/
 │   │   │   │   │       ├── TokenResponse.java
 │   │   │   │   │       ├── UsuarioResponse.java
 │   │   │   │   │       ├── AlimentoResponse.java
 │   │   │   │   │       ├── RefeicaoResponse.java
+│   │   │   │   │       ├── MetaResponse.java
+│   │   │   │   │       ├── ObjetivoResponse.java
 │   │   │   │   │       ├── ResumoDiarioResponse.java
-│   │   │   │   │       └── ... (demais responses)
+│   │   │   │   │       └── RegistroDiarioResponse.java
 │   │   │   │   └── exception/
 │   │   │   │       ├── ApiExceptionHandler.java
 │   │   │   │       ├── Problema.java
@@ -482,7 +526,7 @@ api-nutricao/
 │           └── JwtUtilTest.java
 ```
 
-**Total estimado**: ~75 arquivos (vs 44 do plano anterior)
+**Total estimado**: ~82 arquivos (vs 44 do plano anterior)
 
 ---
 
