@@ -50,16 +50,16 @@ Seguindo os princípios de **Clean Architecture** e **outside-in TDD**:
 
 Os ciclos foram estruturados para seguir TDD, começando pelas entidades e serviços (domain layer) antes dos controllers (API layer).
 
-### Ciclo 1 — Projeto Base e Infraestrutura
+### Ciclo 1 — Projeto Base e Infraestrutura ✅
 *Arquivos: 8 | Depende de: N/A*
 
 | # | Tarefa | TDD? | Arquivos |
 |---|--------|------|----------|
-| 1.1 | Criar projeto Maven com Spring Boot 2.7.18 | ❌ | `pom.xml` |
-| 1.2 | Configurar application.yml + profiles dev/prod | ❌ | `application.yml`, `application-dev.yml`, `application-prod.yml` |
-| 1.3 | Classe principal ApiNutricaoApplication | ❌ | `ApiNutricaoApplication.java` |
-| 1.4 | Docker Compose (MySQL 8 + app) + Dockerfile | ❌ | `Dockerfile`, `docker-compose.yml` |
-| 1.5 | .gitignore + .editorconfig | ❌ | `.gitignore`, `.editorconfig` |
+| 1.1 | Criar projeto Maven com Spring Boot 2.7.18 | ❌ | `pom.xml` ✅ |
+| 1.2 | Configurar application.properties + profiles dev/prod/test | ❌ | `application.properties`, `application-dev.properties`, `application-prod.properties`, `application-test.properties` ✅ |
+| 1.3 | Classe principal ApiNutricaoApplication | ❌ | `ApiNutricaoApplication.java` ✅ |
+| 1.4 | Docker Compose (MySQL 8 + app) + Dockerfile | ❌ | `Dockerfile`, `docker-compose.yml` ✅ |
+| 1.5 | .gitignore + .editorconfig | ❌ | `.gitignore`, `.editorconfig` ✅ |
 
 ### Ciclo 2 — TDD: Entidades e Migrações
 *Arquivos: 10 | Depende de: Ciclo 1*
