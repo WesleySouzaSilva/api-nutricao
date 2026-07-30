@@ -101,4 +101,32 @@ class CategoriaAlimentoServiceTest {
 
         verify(categoriaAlimentoRepository).deleteById(1);
     }
+
+    @Test
+    void deletar_QuandoNaoExistir_DeveLancarExcecao() {
+        when(categoriaAlimentoRepository.existsById(99)).thenReturn(false);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> categoriaAlimentoService.deletar(99));
+    }
+
+    @Test
+    void atualizar_QuandoNaoExistir_DeveLancarExcecao() {
+        when(categoriaAlimentoRepository.findById(99)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class,
+                () -> categoriaAlimentoService.atualizar(99, new CategoriaAlimento()));
+    }
+
+    @Test
+    void atualizar_ComNomeJaExistente_DeveLancarExcecao() {
+        CategoriaAlimento atualizada = new CategoriaAlimento(1, "Legumes");
+        CategoriaAlimento outra = new CategoriaAlimento(2, "Legumes");
+
+        when(categoriaAlimentoRepository.findById(1)).thenReturn(Optional.of(categoria));
+        when(categoriaAlimentoRepository.findByNome("Legumes")).thenReturn(Optional.of(outra));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> categoriaAlimentoService.atualizar(1, atualizada));
+    }
 }

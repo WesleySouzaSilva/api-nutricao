@@ -64,6 +64,15 @@ class RegistroDiarioServiceTest {
     }
 
     @Test
+    void buscarPorId_QuandoNaoExistir_DeveRetornarVazio() {
+        when(registroDiarioRepository.findById(99)).thenReturn(Optional.empty());
+
+        Optional<RegistroDiario> result = registroDiarioService.buscarPorId(99);
+
+        assertFalse(result.isPresent());
+    }
+
+    @Test
     void buscarPorUsuarioEData_DeveRetornar() {
         LocalDate hoje = LocalDate.now();
         when(registroDiarioRepository.findByUsuarioIdAndData(1, hoje)).thenReturn(Optional.of(registro));
@@ -74,12 +83,30 @@ class RegistroDiarioServiceTest {
     }
 
     @Test
+    void buscarPorUsuarioEData_QuandoNaoExistir_DeveRetornarVazio() {
+        LocalDate hoje = LocalDate.now();
+        when(registroDiarioRepository.findByUsuarioIdAndData(99, hoje)).thenReturn(Optional.empty());
+
+        Optional<RegistroDiario> result = registroDiarioService.buscarPorUsuarioEData(99, hoje);
+
+        assertFalse(result.isPresent());
+    }
+
+    @Test
     void buscarPorUsuarioOrdenado_DeveRetornar() {
         when(registroDiarioRepository.findByUsuarioIdOrderByDataDesc(1)).thenReturn(Arrays.asList(registro));
 
         List<RegistroDiario> result = registroDiarioService.buscarPorUsuarioOrdenado(1);
 
         assertEquals(1, result.size());
+    }
+
+    @Test
+    void atualizar_QuandoNaoExistir_DeveLancarExcecao() {
+        when(registroDiarioRepository.findById(99)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class,
+                () -> registroDiarioService.atualizar(99, new RegistroDiario()));
     }
 
     @Test
@@ -96,11 +123,37 @@ class RegistroDiarioServiceTest {
     }
 
     @Test
+    void atualizar_QuandoExistir_ComTodosCampos_DeveAtualizar() {
+        RegistroDiario atualizado = new RegistroDiario();
+        atualizado.setProteinasConsumidas(new BigDecimal("150"));
+        atualizado.setCarboidratosConsumidos(new BigDecimal("300"));
+        atualizado.setGordurasConsumidas(new BigDecimal("50"));
+        atualizado.setObservacoes("Refeicao balanceada");
+        atualizado.setUsuario(new Usuario(1));
+        atualizado.setData(LocalDate.now());
+
+        when(registroDiarioRepository.findById(1)).thenReturn(Optional.of(registro));
+        when(registroDiarioRepository.save(any())).thenReturn(atualizado);
+
+        RegistroDiario result = registroDiarioService.atualizar(1, atualizado);
+
+        assertEquals(0, new BigDecimal("150").compareTo(result.getProteinasConsumidas()));
+    }
+
+    @Test
     void deletar_QuandoExistir_DeveRemover() {
         when(registroDiarioRepository.existsById(1)).thenReturn(true);
 
         registroDiarioService.deletar(1);
 
         verify(registroDiarioRepository).deleteById(1);
+    }
+
+    @Test
+    void deletar_QuandoNaoExistir_DeveLancarExcecao() {
+        when(registroDiarioRepository.existsById(99)).thenReturn(false);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> registroDiarioService.deletar(99));
     }
 }

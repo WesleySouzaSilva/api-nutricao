@@ -90,6 +90,15 @@ class UsuarioServiceTest {
     }
 
     @Test
+    void buscarPorEmail_QuandoNaoExistir_DeveRetornarVazio() {
+        when(usuarioRepository.findByEmail("naoexiste@email.com")).thenReturn(Optional.empty());
+
+        Optional<Usuario> result = usuarioService.buscarPorEmail("naoexiste@email.com");
+
+        assertFalse(result.isPresent());
+    }
+
+    @Test
     void listar_DeveRetornarTodos() {
         when(usuarioRepository.findAll()).thenReturn(Arrays.asList(usuario));
 
@@ -125,6 +134,26 @@ class UsuarioServiceTest {
     }
 
     @Test
+    void atualizar_ComEmailJaExistente_DeveLancarExcecao() {
+        Usuario atualizado = new Usuario();
+        atualizado.setNome("Joao Atualizado");
+        atualizado.setEmail("novo@email.com");
+        atualizado.setSenha("123");
+        atualizado.setSexo("MASCULINO");
+        atualizado.setMedida("KG");
+        atualizado.setTipoLogin("EMAIL");
+
+        Usuario outroUsuario = new Usuario();
+        outroUsuario.setEmail("novo@email.com");
+
+        when(usuarioRepository.findById(1)).thenReturn(Optional.of(usuario));
+        when(usuarioRepository.findByEmail("novo@email.com")).thenReturn(Optional.of(outroUsuario));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> usuarioService.atualizar(1, atualizado));
+    }
+
+    @Test
     void deletar_QuandoExistir_DeveRemover() {
         when(usuarioRepository.existsById(1)).thenReturn(true);
 
@@ -139,5 +168,15 @@ class UsuarioServiceTest {
 
         assertThrows(IllegalArgumentException.class, () -> usuarioService.deletar(99));
         verify(usuarioRepository, never()).deleteById(any());
+    }
+
+    @Test
+    void criar_QuandoBancoIndisponivel_DevePropagarExcecao() {
+        when(usuarioRepository.findByEmail(usuario.getEmail())).thenReturn(Optional.empty());
+        when(usuarioRepository.save(any())).thenThrow(new RuntimeException("Falha de conexao com o banco de dados"));
+
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> usuarioService.criar(usuario));
+        assertTrue(ex.getMessage().contains("Falha de conexao"));
     }
 }

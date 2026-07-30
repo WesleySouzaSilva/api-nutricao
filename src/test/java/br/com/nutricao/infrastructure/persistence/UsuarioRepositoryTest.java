@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 
 import br.com.nutricao.domain.model.Usuario;
@@ -59,5 +60,15 @@ class UsuarioRepositoryTest {
         Usuario usuario = usuarioRepository.save(criarUsuario());
         usuarioRepository.deleteById(usuario.getId());
         assertFalse(usuarioRepository.findById(usuario.getId()).isPresent());
+    }
+
+    @Test
+    void save_ComEmailDuplicado_DeveLancarExcecao() {
+        Usuario usuario = criarUsuario();
+        usuarioRepository.saveAndFlush(usuario);
+
+        Usuario duplicado = criarUsuario();
+        assertThrows(DataIntegrityViolationException.class,
+                () -> usuarioRepository.saveAndFlush(duplicado));
     }
 }

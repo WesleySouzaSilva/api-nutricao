@@ -71,6 +71,36 @@ class AlimentoFavoritoControllerTest {
     }
 
     @Test
+    void adicionar_ComIdsNulos_DeveRetornar201() throws Exception {
+        AlimentoFavoritoRequest request = new AlimentoFavoritoRequest();
+
+        AlimentoFavorito saved = new AlimentoFavorito();
+        saved.setId(2);
+        saved.setDataAdicao(LocalDateTime.now());
+
+        when(alimentoFavoritoService.adicionar(any(AlimentoFavorito.class))).thenReturn(saved);
+
+        mockMvc.perform(post("/api/v1/favoritos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(2));
+    }
+
+    @Test
+    void buscarPorUsuario_ComFavoritoSemVinculos_DeveRetornar200() throws Exception {
+        AlimentoFavorito semVinculo = new AlimentoFavorito();
+        semVinculo.setId(2);
+        semVinculo.setDataAdicao(LocalDateTime.now());
+
+        when(alimentoFavoritoService.buscarPorUsuario(2)).thenReturn(Arrays.asList(semVinculo));
+
+        mockMvc.perform(get("/api/v1/favoritos/usuario/2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(2));
+    }
+
+    @Test
     void buscarPorUsuario_DeveRetornar200() throws Exception {
         when(alimentoFavoritoService.buscarPorUsuario(1)).thenReturn(Arrays.asList(favorito));
 
@@ -85,5 +115,14 @@ class AlimentoFavoritoControllerTest {
 
         mockMvc.perform(delete("/api/v1/favoritos/usuario/1/alimento/1"))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void buscarPorUsuario_QuandoVazio_DeveRetornar200() throws Exception {
+        when(alimentoFavoritoService.buscarPorUsuario(99)).thenReturn(java.util.Collections.emptyList());
+
+        mockMvc.perform(get("/api/v1/favoritos/usuario/99"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
     }
 }

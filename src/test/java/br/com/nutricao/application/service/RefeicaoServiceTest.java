@@ -63,6 +63,15 @@ class RefeicaoServiceTest {
     }
 
     @Test
+    void buscarPorId_QuandoNaoExistir_DeveRetornarVazio() {
+        when(refeicaoRepository.findById(99)).thenReturn(Optional.empty());
+
+        Optional<Refeicao> result = refeicaoService.buscarPorId(99);
+
+        assertFalse(result.isPresent());
+    }
+
+    @Test
     void buscarPorUsuario_DeveRetornar() {
         when(refeicaoRepository.findByUsuarioIdOrderByDataRefeicaoDesc(1)).thenReturn(Arrays.asList(refeicao));
 
@@ -72,10 +81,31 @@ class RefeicaoServiceTest {
     }
 
     @Test
+    void buscarPorUsuario_ComUsuarioSemRefeicoes_DeveRetornarListaVazia() {
+        when(refeicaoRepository.findByUsuarioIdOrderByDataRefeicaoDesc(99)).thenReturn(Arrays.asList());
+
+        List<Refeicao> result = refeicaoService.buscarPorUsuario(99);
+
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
     void listar_DeveRetornarTodas() {
         when(refeicaoRepository.findAll()).thenReturn(Arrays.asList(refeicao));
 
         List<Refeicao> result = refeicaoService.listar();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void buscarPorUsuarioEPeriodo_DeveRetornar() {
+        LocalDateTime inicio = LocalDateTime.now().minusDays(1);
+        LocalDateTime fim = LocalDateTime.now();
+        when(refeicaoRepository.findByUsuarioIdAndDataRefeicaoBetweenOrderByDataRefeicaoDesc(1, inicio, fim))
+                .thenReturn(Arrays.asList(refeicao));
+
+        List<Refeicao> result = refeicaoService.buscarPorUsuarioEPeriodo(1, inicio, fim);
 
         assertEquals(1, result.size());
     }
@@ -89,11 +119,49 @@ class RefeicaoServiceTest {
     }
 
     @Test
+    void atualizar_QuandoExistir_DeveAtualizar() {
+        Refeicao atualizado = new Refeicao();
+        atualizado.setNome("Almoco Reforcado");
+
+        when(refeicaoRepository.findById(1)).thenReturn(Optional.of(refeicao));
+        when(refeicaoRepository.save(any())).thenReturn(atualizado);
+
+        Refeicao result = refeicaoService.atualizar(1, atualizado);
+
+        assertEquals("Almoco Reforcado", result.getNome());
+    }
+
+    @Test
+    void atualizar_QuandoExistir_ComTodosCampos_DeveAtualizar() {
+        Refeicao atualizado = new Refeicao();
+        Usuario usuario = new Usuario();
+        usuario.setId(1);
+        atualizado.setNome("Almoco Reforcado");
+        atualizado.setDataRefeicao(LocalDateTime.now());
+        atualizado.setUsuario(usuario);
+
+        when(refeicaoRepository.findById(1)).thenReturn(Optional.of(refeicao));
+        when(refeicaoRepository.save(any())).thenReturn(atualizado);
+
+        Refeicao result = refeicaoService.atualizar(1, atualizado);
+
+        assertEquals("Almoco Reforcado", result.getNome());
+    }
+
+    @Test
     void deletar_QuandoExistir_DeveRemover() {
         when(refeicaoRepository.existsById(1)).thenReturn(true);
 
         refeicaoService.deletar(1);
 
         verify(refeicaoRepository).deleteById(1);
+    }
+
+    @Test
+    void deletar_QuandoNaoExistir_DeveLancarExcecao() {
+        when(refeicaoRepository.existsById(99)).thenReturn(false);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> refeicaoService.deletar(99));
     }
 }

@@ -145,4 +145,54 @@ class AlimentoControllerTest {
         mockMvc.perform(delete("/api/v1/alimentos/1"))
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    void listar_SemFiltros_QuandoVazio_DeveRetornar200() throws Exception {
+        when(alimentoService.listar()).thenReturn(java.util.Collections.emptyList());
+
+        mockMvc.perform(get("/api/v1/alimentos"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+    }
+
+    @Test
+    void listar_ComCategoriaId_QuandoVazio_DeveRetornar200() throws Exception {
+        when(alimentoService.buscarPorCategoria(99)).thenReturn(java.util.Collections.emptyList());
+
+        mockMvc.perform(get("/api/v1/alimentos").param("categoriaId", "99"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+    }
+
+    @Test
+    void listar_ComNome_QuandoNaoExistir_DeveRetornar200() throws Exception {
+        when(alimentoService.buscarPorNome("NAOEXISTE")).thenReturn(java.util.Collections.emptyList());
+
+        mockMvc.perform(get("/api/v1/alimentos").param("nome", "NAOEXISTE"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+    }
+
+    @Test
+    void atualizar_QuandoNaoExistir_DeveRetornar400() throws Exception {
+        AlimentoRequest request = new AlimentoRequest();
+        request.setNome("Banana");
+
+        when(alimentoService.atualizar(eq(99), any(Alimento.class)))
+                .thenThrow(new IllegalArgumentException("Alimento nao encontrado: 99"));
+
+        mockMvc.perform(put("/api/v1/alimentos/99")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deletar_QuandoNaoExistir_DeveRetornar400() throws Exception {
+        doThrow(new IllegalArgumentException("Alimento nao encontrado: 99"))
+                .when(alimentoService).deletar(99);
+
+        mockMvc.perform(delete("/api/v1/alimentos/99"))
+                .andExpect(status().isBadRequest());
+    }
 }

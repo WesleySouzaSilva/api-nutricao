@@ -148,4 +148,36 @@ class MetaNutricionalControllerTest {
         mockMvc.perform(delete("/api/v1/metas-nutricionais/1"))
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    void listar_QuandoVazio_DeveRetornar200() throws Exception {
+        when(metaNutricionalService.listar()).thenReturn(java.util.Collections.emptyList());
+
+        mockMvc.perform(get("/api/v1/metas-nutricionais"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+    }
+
+    @Test
+    void atualizar_QuandoNaoExistir_DeveRetornar400() throws Exception {
+        MetaNutricionalRequest request = new MetaNutricionalRequest();
+        request.setCalorias(new BigDecimal("2500"));
+
+        when(metaNutricionalService.atualizar(eq(99), any(MetaNutricional.class)))
+                .thenThrow(new IllegalArgumentException("MetaNutricional nao encontrada: 99"));
+
+        mockMvc.perform(put("/api/v1/metas-nutricionais/99")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deletar_QuandoNaoExistir_DeveRetornar400() throws Exception {
+        doThrow(new IllegalArgumentException("MetaNutricional nao encontrada: 99"))
+                .when(metaNutricionalService).deletar(99);
+
+        mockMvc.perform(delete("/api/v1/metas-nutricionais/99"))
+                .andExpect(status().isBadRequest());
+    }
 }

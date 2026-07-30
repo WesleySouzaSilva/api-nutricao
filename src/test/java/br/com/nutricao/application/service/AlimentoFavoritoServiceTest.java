@@ -76,6 +76,15 @@ class AlimentoFavoritoServiceTest {
     }
 
     @Test
+    void existePorUsuarioEAlimento_QuandoNaoExistir_DeveRetornarFalse() {
+        when(alimentoFavoritoRepository.existsByUsuarioIdAndAlimentoId(99, 99)).thenReturn(false);
+
+        boolean result = alimentoFavoritoService.existePorUsuarioEAlimento(99, 99);
+
+        assertFalse(result);
+    }
+
+    @Test
     void remover_DeveChamarDelete() {
         alimentoFavoritoService.remover(1, 1);
 

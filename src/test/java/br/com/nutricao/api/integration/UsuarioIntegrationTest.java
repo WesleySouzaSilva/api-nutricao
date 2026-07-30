@@ -129,4 +129,14 @@ class UsuarioIntegrationTest {
                 "/api/v1/usuarios/" + id, Map.class);
         assertEquals(HttpStatus.NOT_FOUND, getResponse.getStatusCode());
     }
+
+    @Test
+    void criar_ComEmailDuplicado_DeveRetornar400() {
+        restTemplate.postForEntity("/api/v1/usuarios", usuarioRequest, Map.class);
+
+        ResponseEntity<Map> response = restTemplate.postForEntity(
+                "/api/v1/usuarios", usuarioRequest, Map.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
 }

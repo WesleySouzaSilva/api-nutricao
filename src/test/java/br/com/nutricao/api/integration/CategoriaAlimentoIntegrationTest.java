@@ -105,4 +105,14 @@ class CategoriaAlimentoIntegrationTest {
 
         assertEquals(HttpStatus.NO_CONTENT, deleteResponse.getStatusCode());
     }
+
+    @Test
+    void criar_ComNomeDuplicado_DeveRetornar400() {
+        restTemplate.postForEntity("/api/v1/categorias", categoriaRequest, Map.class);
+
+        ResponseEntity<Map> response = restTemplate.postForEntity(
+                "/api/v1/categorias", categoriaRequest, Map.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
 }

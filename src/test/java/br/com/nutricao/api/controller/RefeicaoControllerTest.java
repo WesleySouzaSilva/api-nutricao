@@ -88,6 +88,30 @@ class RefeicaoControllerTest {
     }
 
     @Test
+    void listar_ComTodosFiltros_DeveRetornar200() throws Exception {
+        when(refeicaoService.buscarPorUsuarioEPeriodo(eq(1), any(LocalDateTime.class), any(LocalDateTime.class)))
+                .thenReturn(Arrays.asList(refeicao));
+
+        mockMvc.perform(get("/api/v1/refeicoes")
+                .param("usuarioId", "1")
+                .param("inicio", "2024-01-01T00:00:00")
+                .param("fim", "2024-01-31T23:59:59"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1));
+    }
+
+    @Test
+    void listar_ComUsuarioEInicioSemFim_DeveRetornar200() throws Exception {
+        when(refeicaoService.buscarPorUsuario(1)).thenReturn(Arrays.asList(refeicao));
+
+        mockMvc.perform(get("/api/v1/refeicoes")
+                .param("usuarioId", "1")
+                .param("inicio", "2024-01-01T00:00:00"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1));
+    }
+
+    @Test
     void buscarPorId_QuandoExistir_DeveRetornar200() throws Exception {
         when(refeicaoService.buscarPorId(1)).thenReturn(Optional.of(refeicao));
 
@@ -128,5 +152,46 @@ class RefeicaoControllerTest {
 
         mockMvc.perform(delete("/api/v1/refeicoes/1"))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void listar_SemFiltros_QuandoVazio_DeveRetornar200() throws Exception {
+        when(refeicaoService.listar()).thenReturn(java.util.Collections.emptyList());
+
+        mockMvc.perform(get("/api/v1/refeicoes"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+    }
+
+    @Test
+    void listar_ComUsuarioId_QuandoVazio_DeveRetornar200() throws Exception {
+        when(refeicaoService.buscarPorUsuario(99)).thenReturn(java.util.Collections.emptyList());
+
+        mockMvc.perform(get("/api/v1/refeicoes").param("usuarioId", "99"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+    }
+
+    @Test
+    void atualizar_QuandoNaoExistir_DeveRetornar400() throws Exception {
+        RefeicaoRequest request = new RefeicaoRequest();
+        request.setNome("Cafe da Manha");
+
+        when(refeicaoService.atualizar(eq(99), any(Refeicao.class)))
+                .thenThrow(new IllegalArgumentException("Refeicao nao encontrada: 99"));
+
+        mockMvc.perform(put("/api/v1/refeicoes/99")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deletar_QuandoNaoExistir_DeveRetornar400() throws Exception {
+        doThrow(new IllegalArgumentException("Refeicao nao encontrada: 99"))
+                .when(refeicaoService).deletar(99);
+
+        mockMvc.perform(delete("/api/v1/refeicoes/99"))
+                .andExpect(status().isBadRequest());
     }
 }

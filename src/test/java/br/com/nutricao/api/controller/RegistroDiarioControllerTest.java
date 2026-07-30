@@ -104,6 +104,17 @@ class RegistroDiarioControllerTest {
     }
 
     @Test
+    void listar_ComUsuarioEInicioSemFim_DeveRetornar200() throws Exception {
+        when(registroDiarioService.buscarPorUsuarioOrdenado(1)).thenReturn(Arrays.asList(registro));
+
+        mockMvc.perform(get("/api/v1/registros-diarios")
+                .param("usuarioId", "1")
+                .param("inicio", "2024-01-01"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1));
+    }
+
+    @Test
     void buscarPorId_QuandoExistir_DeveRetornar200() throws Exception {
         when(registroDiarioService.buscarPorId(1)).thenReturn(Optional.of(registro));
 
@@ -144,5 +155,37 @@ class RegistroDiarioControllerTest {
 
         mockMvc.perform(delete("/api/v1/registros-diarios/1"))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void listar_QuandoVazio_DeveRetornar200() throws Exception {
+        when(registroDiarioService.listar()).thenReturn(java.util.Collections.emptyList());
+
+        mockMvc.perform(get("/api/v1/registros-diarios"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+    }
+
+    @Test
+    void atualizar_QuandoNaoExistir_DeveRetornar400() throws Exception {
+        RegistroDiarioRequest request = new RegistroDiarioRequest();
+        request.setCaloriasConsumidas(new BigDecimal("2500"));
+
+        when(registroDiarioService.atualizar(eq(99), any(RegistroDiario.class)))
+                .thenThrow(new IllegalArgumentException("RegistroDiario nao encontrado: 99"));
+
+        mockMvc.perform(put("/api/v1/registros-diarios/99")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deletar_QuandoNaoExistir_DeveRetornar400() throws Exception {
+        doThrow(new IllegalArgumentException("RegistroDiario nao encontrado: 99"))
+                .when(registroDiarioService).deletar(99);
+
+        mockMvc.perform(delete("/api/v1/registros-diarios/99"))
+                .andExpect(status().isBadRequest());
     }
 }

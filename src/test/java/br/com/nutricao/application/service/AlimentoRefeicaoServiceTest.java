@@ -96,4 +96,13 @@ class AlimentoRefeicaoServiceTest {
 
         assertTrue(result.isPresent());
     }
+
+    @Test
+    void buscarPorId_QuandoNaoExistir_DeveRetornarVazio() {
+        when(alimentoRefeicaoRepository.findById(99)).thenReturn(Optional.empty());
+
+        Optional<AlimentoRefeicao> result = alimentoRefeicaoService.buscarPorId(99);
+
+        assertFalse(result.isPresent());
+    }
 }

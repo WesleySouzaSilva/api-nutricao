@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 
 import br.com.nutricao.domain.model.CategoriaAlimento;
@@ -39,5 +40,14 @@ class CategoriaAlimentoRepositoryTest {
         CategoriaAlimento saved = categoriaAlimentoRepository.save(new CategoriaAlimento(null, "Legumes"));
         categoriaAlimentoRepository.deleteById(saved.getId());
         assertFalse(categoriaAlimentoRepository.findById(saved.getId()).isPresent());
+    }
+
+    @Test
+    void save_ComNomeDuplicado_DeveLancarExcecao() {
+        categoriaAlimentoRepository.saveAndFlush(new CategoriaAlimento(null, "Frutas"));
+
+        CategoriaAlimento duplicado = new CategoriaAlimento(null, "Frutas");
+        assertThrows(DataIntegrityViolationException.class,
+                () -> categoriaAlimentoRepository.saveAndFlush(duplicado));
     }
 }

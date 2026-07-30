@@ -145,4 +145,68 @@ class UsuarioControllerTest {
         mockMvc.perform(delete("/api/v1/usuarios/1"))
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    void criar_ComEmailDuplicado_DeveRetornar400() throws Exception {
+        UsuarioRequest request = new UsuarioRequest();
+        request.setNome("Joao");
+        request.setEmail("joao@email.com");
+        request.setSenha("123");
+        request.setSexo("MASCULINO");
+        request.setMedida("KG");
+        request.setTipoLogin("EMAIL");
+
+        when(usuarioService.criar(any(Usuario.class)))
+                .thenThrow(new IllegalArgumentException("Email ja cadastrado: joao@email.com"));
+
+        mockMvc.perform(post("/api/v1/usuarios")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void buscarPorEmail_QuandoNaoExistir_DeveRetornar404() throws Exception {
+        when(usuarioService.buscarPorEmail("naoexiste@email.com")).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/v1/usuarios/email/naoexiste@email.com"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void listar_QuandoVazio_DeveRetornar200() throws Exception {
+        when(usuarioService.listar()).thenReturn(java.util.Collections.emptyList());
+
+        mockMvc.perform(get("/api/v1/usuarios"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+    }
+
+    @Test
+    void atualizar_QuandoNaoExistir_DeveRetornar400() throws Exception {
+        UsuarioRequest request = new UsuarioRequest();
+        request.setNome("Joao Atualizado");
+        request.setEmail("joao@email.com");
+        request.setSenha("123");
+        request.setSexo("MASCULINO");
+        request.setMedida("KG");
+        request.setTipoLogin("EMAIL");
+
+        when(usuarioService.atualizar(eq(99), any(Usuario.class)))
+                .thenThrow(new IllegalArgumentException("Usuario nao encontrado: 99"));
+
+        mockMvc.perform(put("/api/v1/usuarios/99")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deletar_QuandoNaoExistir_DeveRetornar400() throws Exception {
+        doThrow(new IllegalArgumentException("Usuario nao encontrado: 99"))
+                .when(usuarioService).deletar(99);
+
+        mockMvc.perform(delete("/api/v1/usuarios/99"))
+                .andExpect(status().isBadRequest());
+    }
 }

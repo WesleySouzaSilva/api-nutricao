@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -63,12 +64,38 @@ class ObjetivoServiceTest {
     }
 
     @Test
+    void buscarPorId_QuandoNaoExistir_DeveRetornarVazio() {
+        when(objetivoRepository.findById(99)).thenReturn(Optional.empty());
+
+        Optional<Objetivo> result = objetivoService.buscarPorId(99);
+
+        assertFalse(result.isPresent());
+    }
+
+    @Test
     void buscarPorUsuario_DeveRetornar() {
         when(objetivoRepository.findByUsuarioId(1)).thenReturn(Arrays.asList(objetivo));
 
         List<Objetivo> result = objetivoService.buscarPorUsuario(1);
 
         assertEquals(1, result.size());
+    }
+
+    @Test
+    void listar_DeveRetornarTodas() {
+        when(objetivoRepository.findAll()).thenReturn(Arrays.asList(objetivo));
+
+        List<Objetivo> result = objetivoService.listar();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void atualizar_QuandoNaoExistir_DeveLancarExcecao() {
+        when(objetivoRepository.findById(99)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class,
+                () -> objetivoService.atualizar(99, new Objetivo()));
     }
 
     @Test
@@ -82,6 +109,24 @@ class ObjetivoServiceTest {
         Objetivo result = objetivoService.atualizar(1, atualizado);
 
         assertEquals("HIPERTROFIA", result.getTipo());
+    }
+
+    @Test
+    void atualizar_QuandoExistir_ComTodosCampos_DeveAtualizar() {
+        Objetivo atualizado = new Objetivo();
+        atualizado.setPesoAlvo(new BigDecimal("80"));
+        atualizado.setCaloriasDiarias(new BigDecimal("2500"));
+        atualizado.setDataInicio(LocalDate.now());
+        atualizado.setDataFim(LocalDate.now().plusDays(90));
+        atualizado.setDescricao("Ganhar massa magra");
+        atualizado.setUsuario(new Usuario(1));
+
+        when(objetivoRepository.findById(1)).thenReturn(Optional.of(objetivo));
+        when(objetivoRepository.save(any())).thenReturn(atualizado);
+
+        Objetivo result = objetivoService.atualizar(1, atualizado);
+
+        assertEquals(0, new BigDecimal("80").compareTo(result.getPesoAlvo()));
     }
 
     @Test

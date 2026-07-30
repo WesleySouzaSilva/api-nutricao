@@ -59,12 +59,30 @@ class AlimentoServiceTest {
     }
 
     @Test
+    void buscarPorId_QuandoNaoExistir_DeveRetornarVazio() {
+        when(alimentoRepository.findById(99)).thenReturn(Optional.empty());
+
+        Optional<Alimento> result = alimentoService.buscarPorId(99);
+
+        assertFalse(result.isPresent());
+    }
+
+    @Test
     void buscarPorCategoria_DeveRetornar() {
         when(alimentoRepository.findByCategoriaAlimentoId(1)).thenReturn(Arrays.asList(alimento));
 
         List<Alimento> result = alimentoService.buscarPorCategoria(1);
 
         assertEquals(1, result.size());
+    }
+
+    @Test
+    void buscarPorCategoria_ComCategoriaSemAlimentos_DeveRetornarListaVazia() {
+        when(alimentoRepository.findByCategoriaAlimentoId(99)).thenReturn(Arrays.asList());
+
+        List<Alimento> result = alimentoService.buscarPorCategoria(99);
+
+        assertTrue(result.isEmpty());
     }
 
     @Test
@@ -75,6 +93,15 @@ class AlimentoServiceTest {
 
         assertEquals(1, result.size());
         assertEquals("Maca", result.get(0).getNome());
+    }
+
+    @Test
+    void buscarPorNome_QuandoNaoExistir_DeveRetornarListaVazia() {
+        when(alimentoRepository.findByNomeContaining("XYZ")).thenReturn(Arrays.asList());
+
+        List<Alimento> result = alimentoService.buscarPorNome("XYZ");
+
+        assertTrue(result.isEmpty());
     }
 
     @Test
@@ -106,5 +133,21 @@ class AlimentoServiceTest {
         alimentoService.deletar(1);
 
         verify(alimentoRepository).deleteById(1);
+    }
+
+    @Test
+    void deletar_QuandoNaoExistir_DeveLancarExcecao() {
+        when(alimentoRepository.existsById(99)).thenReturn(false);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> alimentoService.deletar(99));
+    }
+
+    @Test
+    void atualizar_QuandoNaoExistir_DeveLancarExcecao() {
+        when(alimentoRepository.existsById(99)).thenReturn(false);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> alimentoService.atualizar(99, new Alimento()));
     }
 }

@@ -83,6 +83,33 @@ class MetaNutricionalServiceTest {
     }
 
     @Test
+    void buscarUltimaPorUsuario_QuandoNaoExistir_DeveRetornarVazio() {
+        when(metaNutricionalRepository.findFirstByUsuarioIdOrderByDataInicioDesc(99))
+                .thenReturn(Optional.empty());
+
+        Optional<MetaNutricional> result = metaNutricionalService.buscarUltimaPorUsuario(99);
+
+        assertFalse(result.isPresent());
+    }
+
+    @Test
+    void listar_DeveRetornarTodas() {
+        when(metaNutricionalRepository.findAll()).thenReturn(Arrays.asList(meta));
+
+        List<MetaNutricional> result = metaNutricionalService.listar();
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void atualizar_QuandoNaoExistir_DeveLancarExcecao() {
+        when(metaNutricionalRepository.findById(99)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class,
+                () -> metaNutricionalService.atualizar(99, new MetaNutricional()));
+    }
+
+    @Test
     void atualizar_QuandoExistir_DeveAtualizar() {
         MetaNutricional atualizada = new MetaNutricional();
         atualizada.setCalorias(new BigDecimal("3000"));
@@ -96,11 +123,37 @@ class MetaNutricionalServiceTest {
     }
 
     @Test
+    void atualizar_QuandoExistir_ComTodosCampos_DeveAtualizar() {
+        MetaNutricional atualizada = new MetaNutricional();
+        atualizada.setProteinas(new BigDecimal("150"));
+        atualizada.setCarboidratos(new BigDecimal("300"));
+        atualizada.setGorduras(new BigDecimal("50"));
+        atualizada.setDataInicio(LocalDate.now());
+        atualizada.setDataFim(LocalDate.now().plusDays(30));
+        atualizada.setUsuario(new Usuario(1));
+
+        when(metaNutricionalRepository.findById(1)).thenReturn(Optional.of(meta));
+        when(metaNutricionalRepository.save(any())).thenReturn(atualizada);
+
+        MetaNutricional result = metaNutricionalService.atualizar(1, atualizada);
+
+        assertEquals(0, new BigDecimal("150").compareTo(result.getProteinas()));
+    }
+
+    @Test
     void deletar_QuandoExistir_DeveRemover() {
         when(metaNutricionalRepository.existsById(1)).thenReturn(true);
 
         metaNutricionalService.deletar(1);
 
         verify(metaNutricionalRepository).deleteById(1);
+    }
+
+    @Test
+    void deletar_QuandoNaoExistir_DeveLancarExcecao() {
+        when(metaNutricionalRepository.existsById(99)).thenReturn(false);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> metaNutricionalService.deletar(99));
     }
 }

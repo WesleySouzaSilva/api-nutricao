@@ -143,6 +143,14 @@ class RefeicaoIntegrationTest {
     }
 
     @Test
+    void buscarPorId_QuandoNaoExistir_DeveRetornar404() {
+        ResponseEntity<Map> response = restTemplate.getForEntity(
+                "/api/v1/refeicoes/99999", Map.class);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
     void deletar_DeveRetornar204() {
         Integer usuarioId = criarUsuario();
 

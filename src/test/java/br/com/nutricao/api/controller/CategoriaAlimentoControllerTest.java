@@ -100,4 +100,50 @@ class CategoriaAlimentoControllerTest {
         mockMvc.perform(delete("/api/v1/categorias/1"))
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    void criar_ComNomeDuplicado_DeveRetornar400() throws Exception {
+        CategoriaAlimentoRequest request = new CategoriaAlimentoRequest();
+        request.setNome("Frutas");
+
+        when(categoriaAlimentoService.criar(any(CategoriaAlimento.class)))
+                .thenThrow(new IllegalArgumentException("Categoria ja existente: Frutas"));
+
+        mockMvc.perform(post("/api/v1/categorias")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void listar_QuandoVazio_DeveRetornar200() throws Exception {
+        when(categoriaAlimentoService.listar()).thenReturn(java.util.Collections.emptyList());
+
+        mockMvc.perform(get("/api/v1/categorias"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+    }
+
+    @Test
+    void atualizar_QuandoNaoExistir_DeveRetornar400() throws Exception {
+        CategoriaAlimentoRequest request = new CategoriaAlimentoRequest();
+        request.setNome("Legumes");
+
+        when(categoriaAlimentoService.atualizar(eq(99), any(CategoriaAlimento.class)))
+                .thenThrow(new IllegalArgumentException("Categoria nao encontrada: 99"));
+
+        mockMvc.perform(put("/api/v1/categorias/99")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deletar_QuandoNaoExistir_DeveRetornar400() throws Exception {
+        doThrow(new IllegalArgumentException("Categoria nao encontrada: 99"))
+                .when(categoriaAlimentoService).deletar(99);
+
+        mockMvc.perform(delete("/api/v1/categorias/99"))
+                .andExpect(status().isBadRequest());
+    }
 }

@@ -130,4 +130,36 @@ class ObjetivoControllerTest {
         mockMvc.perform(delete("/api/v1/objetivos/1"))
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    void listar_QuandoVazio_DeveRetornar200() throws Exception {
+        when(objetivoService.listar()).thenReturn(java.util.Collections.emptyList());
+
+        mockMvc.perform(get("/api/v1/objetivos"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+    }
+
+    @Test
+    void atualizar_QuandoNaoExistir_DeveRetornar400() throws Exception {
+        ObjetivoRequest request = new ObjetivoRequest();
+        request.setTipo("HIPERTROFIA");
+
+        when(objetivoService.atualizar(eq(99), any(Objetivo.class)))
+                .thenThrow(new IllegalArgumentException("Objetivo nao encontrado: 99"));
+
+        mockMvc.perform(put("/api/v1/objetivos/99")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deletar_QuandoNaoExistir_DeveRetornar400() throws Exception {
+        doThrow(new IllegalArgumentException("Objetivo nao encontrado: 99"))
+                .when(objetivoService).deletar(99);
+
+        mockMvc.perform(delete("/api/v1/objetivos/99"))
+                .andExpect(status().isBadRequest());
+    }
 }
