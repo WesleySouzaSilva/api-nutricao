@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import br.com.nutricao.domain.model.Usuario;
 import br.com.nutricao.infrastructure.persistence.UsuarioRepository;
@@ -23,6 +24,9 @@ class UsuarioServiceTest {
 
     @Mock
     private UsuarioRepository usuarioRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UsuarioService usuarioService;
@@ -44,12 +48,14 @@ class UsuarioServiceTest {
     @Test
     void criar_ComEmailNovo_DeveSalvar() {
         when(usuarioRepository.findByEmail(usuario.getEmail())).thenReturn(Optional.empty());
-        when(usuarioRepository.save(usuario)).thenReturn(usuario);
+        when(passwordEncoder.encode(any())).thenReturn("senha-encoded");
+        when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
 
         Usuario result = usuarioService.criar(usuario);
 
         assertNotNull(result);
         assertEquals("joao@email.com", result.getEmail());
+        verify(passwordEncoder).encode("123");
         verify(usuarioRepository).save(usuario);
     }
 
@@ -118,11 +124,13 @@ class UsuarioServiceTest {
         atualizado.setTipoLogin("EMAIL");
 
         when(usuarioRepository.findById(1)).thenReturn(Optional.of(usuario));
+        when(passwordEncoder.encode(any())).thenReturn("senha-encoded");
         when(usuarioRepository.save(any())).thenReturn(atualizado);
 
         Usuario result = usuarioService.atualizar(1, atualizado);
 
         assertEquals("Joao Atualizado", result.getNome());
+        verify(passwordEncoder).encode("123");
     }
 
     @Test
@@ -173,6 +181,7 @@ class UsuarioServiceTest {
     @Test
     void criar_QuandoBancoIndisponivel_DevePropagarExcecao() {
         when(usuarioRepository.findByEmail(usuario.getEmail())).thenReturn(Optional.empty());
+        when(passwordEncoder.encode(any())).thenReturn("senha-encoded");
         when(usuarioRepository.save(any())).thenThrow(new RuntimeException("Falha de conexao com o banco de dados"));
 
         RuntimeException ex = assertThrows(RuntimeException.class,

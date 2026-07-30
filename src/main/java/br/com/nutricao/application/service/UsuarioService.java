@@ -3,6 +3,7 @@ package br.com.nutricao.application.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +14,11 @@ import br.com.nutricao.infrastructure.persistence.UsuarioRepository;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -23,6 +26,7 @@ public class UsuarioService {
         if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email ja cadastrado: " + usuario.getEmail());
         }
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         return usuarioRepository.save(usuario);
     }
 
@@ -48,6 +52,7 @@ public class UsuarioService {
             throw new IllegalArgumentException("Email ja cadastrado: " + usuario.getEmail());
         }
 
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         usuario.setId(id);
         usuario.setDataCadastro(existente.getDataCadastro());
         return usuarioRepository.save(usuario);
