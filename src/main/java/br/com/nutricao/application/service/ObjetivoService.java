@@ -31,6 +31,10 @@ public class ObjetivoService {
         return objetivoRepository.findByUsuarioId(usuarioId);
     }
 
+    public List<Objetivo> listar() {
+        return objetivoRepository.findAll();
+    }
+
     @Transactional
     public Objetivo atualizar(Integer id, Objetivo objetivo) {
         if (!objetivoRepository.existsById(id)) {

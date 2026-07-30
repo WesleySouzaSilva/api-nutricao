@@ -40,6 +40,10 @@ public class RegistroDiarioService {
         return registroDiarioRepository.findByUsuarioIdAndDataBetweenOrderByDataDesc(usuarioId, inicio, fim);
     }
 
+    public List<RegistroDiario> listar() {
+        return registroDiarioRepository.findAll();
+    }
+
     @Transactional
     public RegistroDiario atualizar(Integer id, RegistroDiario registro) {
         if (!registroDiarioRepository.existsById(id)) {

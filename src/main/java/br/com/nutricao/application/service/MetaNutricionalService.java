@@ -35,6 +35,10 @@ public class MetaNutricionalService {
         return metaNutricionalRepository.findFirstByUsuarioIdOrderByDataInicioDesc(usuarioId);
     }
 
+    public List<MetaNutricional> listar() {
+        return metaNutricionalRepository.findAll();
+    }
+
     @Transactional
     public MetaNutricional atualizar(Integer id, MetaNutricional meta) {
         if (!metaNutricionalRepository.existsById(id)) {

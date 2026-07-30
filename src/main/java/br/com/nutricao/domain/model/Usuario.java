@@ -62,4 +62,8 @@ public class Usuario implements Serializable {
 
     @Column(name = "token_id", length = 2000)
     private String tokenId;
+
+    public Usuario(Integer id) {
+        this.id = id;
+    }
 }
