@@ -37,11 +37,16 @@ public class ObjetivoService {
 
     @Transactional
     public Objetivo atualizar(Integer id, Objetivo objetivo) {
-        if (!objetivoRepository.existsById(id)) {
-            throw new IllegalArgumentException("Objetivo nao encontrado: " + id);
-        }
-        objetivo.setId(id);
-        return objetivoRepository.save(objetivo);
+        Objetivo existente = objetivoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Objetivo nao encontrado: " + id));
+        if (objetivo.getTipo() != null) existente.setTipo(objetivo.getTipo());
+        if (objetivo.getPesoAlvo() != null) existente.setPesoAlvo(objetivo.getPesoAlvo());
+        if (objetivo.getCaloriasDiarias() != null) existente.setCaloriasDiarias(objetivo.getCaloriasDiarias());
+        if (objetivo.getDataInicio() != null) existente.setDataInicio(objetivo.getDataInicio());
+        if (objetivo.getDataFim() != null) existente.setDataFim(objetivo.getDataFim());
+        if (objetivo.getDescricao() != null) existente.setDescricao(objetivo.getDescricao());
+        if (objetivo.getUsuario() != null) existente.setUsuario(objetivo.getUsuario());
+        return objetivoRepository.save(existente);
     }
 
     @Transactional

@@ -41,11 +41,16 @@ public class MetaNutricionalService {
 
     @Transactional
     public MetaNutricional atualizar(Integer id, MetaNutricional meta) {
-        if (!metaNutricionalRepository.existsById(id)) {
-            throw new IllegalArgumentException("MetaNutricional nao encontrada: " + id);
-        }
-        meta.setId(id);
-        return metaNutricionalRepository.save(meta);
+        MetaNutricional existente = metaNutricionalRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("MetaNutricional nao encontrada: " + id));
+        if (meta.getCalorias() != null) existente.setCalorias(meta.getCalorias());
+        if (meta.getProteinas() != null) existente.setProteinas(meta.getProteinas());
+        if (meta.getCarboidratos() != null) existente.setCarboidratos(meta.getCarboidratos());
+        if (meta.getGorduras() != null) existente.setGorduras(meta.getGorduras());
+        if (meta.getDataInicio() != null) existente.setDataInicio(meta.getDataInicio());
+        if (meta.getDataFim() != null) existente.setDataFim(meta.getDataFim());
+        if (meta.getUsuario() != null) existente.setUsuario(meta.getUsuario());
+        return metaNutricionalRepository.save(existente);
     }
 
     @Transactional

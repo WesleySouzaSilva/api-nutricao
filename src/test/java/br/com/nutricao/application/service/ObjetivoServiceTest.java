@@ -76,7 +76,7 @@ class ObjetivoServiceTest {
         Objetivo atualizado = new Objetivo();
         atualizado.setTipo("HIPERTROFIA");
 
-        when(objetivoRepository.existsById(1)).thenReturn(true);
+        when(objetivoRepository.findById(1)).thenReturn(Optional.of(objetivo));
         when(objetivoRepository.save(any())).thenReturn(atualizado);
 
         Objetivo result = objetivoService.atualizar(1, atualizado);

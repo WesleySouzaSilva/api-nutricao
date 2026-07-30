@@ -87,7 +87,7 @@ class MetaNutricionalServiceTest {
         MetaNutricional atualizada = new MetaNutricional();
         atualizada.setCalorias(new BigDecimal("3000"));
 
-        when(metaNutricionalRepository.existsById(1)).thenReturn(true);
+        when(metaNutricionalRepository.findById(1)).thenReturn(Optional.of(meta));
         when(metaNutricionalRepository.save(any())).thenReturn(atualizada);
 
         MetaNutricional result = metaNutricionalService.atualizar(1, atualizada);

@@ -87,7 +87,7 @@ class RegistroDiarioServiceTest {
         RegistroDiario atualizado = new RegistroDiario();
         atualizado.setCaloriasConsumidas(new BigDecimal("2500"));
 
-        when(registroDiarioRepository.existsById(1)).thenReturn(true);
+        when(registroDiarioRepository.findById(1)).thenReturn(Optional.of(registro));
         when(registroDiarioRepository.save(any())).thenReturn(atualizado);
 
         RegistroDiario result = registroDiarioService.atualizar(1, atualizado);

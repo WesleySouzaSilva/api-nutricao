@@ -49,6 +49,7 @@ public class UsuarioService {
         }
 
         usuario.setId(id);
+        usuario.setDataCadastro(existente.getDataCadastro());
         return usuarioRepository.save(usuario);
     }
 

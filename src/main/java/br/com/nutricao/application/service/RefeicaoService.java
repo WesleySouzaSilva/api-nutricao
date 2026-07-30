@@ -42,11 +42,12 @@ public class RefeicaoService {
 
     @Transactional
     public Refeicao atualizar(Integer id, Refeicao refeicao) {
-        if (!refeicaoRepository.existsById(id)) {
-            throw new IllegalArgumentException("Refeicao nao encontrada: " + id);
-        }
-        refeicao.setId(id);
-        return refeicaoRepository.save(refeicao);
+        Refeicao existente = refeicaoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Refeicao nao encontrada: " + id));
+        if (refeicao.getNome() != null) existente.setNome(refeicao.getNome());
+        if (refeicao.getDataRefeicao() != null) existente.setDataRefeicao(refeicao.getDataRefeicao());
+        if (refeicao.getUsuario() != null) existente.setUsuario(refeicao.getUsuario());
+        return refeicaoRepository.save(existente);
     }
 
     @Transactional

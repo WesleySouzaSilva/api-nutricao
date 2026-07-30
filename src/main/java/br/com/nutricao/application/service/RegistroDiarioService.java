@@ -46,11 +46,16 @@ public class RegistroDiarioService {
 
     @Transactional
     public RegistroDiario atualizar(Integer id, RegistroDiario registro) {
-        if (!registroDiarioRepository.existsById(id)) {
-            throw new IllegalArgumentException("RegistroDiario nao encontrado: " + id);
-        }
-        registro.setId(id);
-        return registroDiarioRepository.save(registro);
+        RegistroDiario existente = registroDiarioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("RegistroDiario nao encontrado: " + id));
+        if (registro.getData() != null) existente.setData(registro.getData());
+        if (registro.getCaloriasConsumidas() != null) existente.setCaloriasConsumidas(registro.getCaloriasConsumidas());
+        if (registro.getProteinasConsumidas() != null) existente.setProteinasConsumidas(registro.getProteinasConsumidas());
+        if (registro.getCarboidratosConsumidos() != null) existente.setCarboidratosConsumidos(registro.getCarboidratosConsumidos());
+        if (registro.getGordurasConsumidas() != null) existente.setGordurasConsumidas(registro.getGordurasConsumidas());
+        if (registro.getObservacoes() != null) existente.setObservacoes(registro.getObservacoes());
+        if (registro.getUsuario() != null) existente.setUsuario(registro.getUsuario());
+        return registroDiarioRepository.save(existente);
     }
 
     @Transactional

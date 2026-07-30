@@ -82,7 +82,7 @@ class RefeicaoServiceTest {
 
     @Test
     void atualizar_QuandoNaoExistir_DeveLancarExcecao() {
-        when(refeicaoRepository.existsById(99)).thenReturn(false);
+        when(refeicaoRepository.findById(99)).thenReturn(Optional.empty());
 
         assertThrows(IllegalArgumentException.class,
                 () -> refeicaoService.atualizar(99, new Refeicao()));
