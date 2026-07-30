@@ -61,7 +61,7 @@ Os ciclos foram estruturados para seguir TDD, começando pelas entidades e servi
 | 1.4 | Docker Compose (MySQL 8 + app) + Dockerfile | ❌ | `Dockerfile`, `docker-compose.yml` ✅ |
 | 1.5 | .gitignore + .editorconfig | ❌ | `.gitignore`, `.editorconfig` ✅ |
 
-### Ciclo 2 — TDD: Entidades e Migrações
+### Ciclo 2 — TDD: Entidades e Migrações ✅
 *Arquivos: 10 | Depende de: Ciclo 1*
 
 | # | Tarefa | TDD? | Arquivos |
@@ -74,7 +74,7 @@ Os ciclos foram estruturados para seguir TDD, começando pelas entidades e servi
 | 2.6 | **Teste** → Entidade Objetivo | ✅ | `ObjetivoTest.java`, `Objetivo.java` |
 | 2.7 | **Teste** → Entidade RegistroDiario | ✅ | `RegistroDiarioTest.java`, `RegistroDiario.java` |
 | 2.8 | **Teste** → Entidade AlimentoFavorito | ✅ | `AlimentoFavoritoTest.java`, `AlimentoFavorito.java` |
-| 2.9 | Flyway V1: todas as tabelas | ❌ | `V1__create_tables.sql` |
+| 2.9 | Flyway V1: todas as tabelas | ❌ | `V1__create_tables.sql` ✅ |
 
 ### Ciclo 3 — TDD: Repositories
 *Arquivos: 8 | Depende de: Ciclo 2*
