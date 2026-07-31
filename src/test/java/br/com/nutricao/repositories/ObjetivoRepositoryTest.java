@@ -1,4 +1,4 @@
-package br.com.nutricao.infrastructure.persistence;
+package br.com.nutricao.repositories;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import br.com.nutricao.domain.model.Objetivo;
-import br.com.nutricao.domain.model.Usuario;
+import br.com.nutricao.domain.Objetivo;
+import br.com.nutricao.domain.Usuario;
 
 @DataJpaTest
 @ActiveProfiles("test")

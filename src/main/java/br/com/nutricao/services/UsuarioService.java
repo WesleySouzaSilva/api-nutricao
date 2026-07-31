@@ -1,4 +1,4 @@
-package br.com.nutricao.application.service;
+package br.com.nutricao.services;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,10 +7,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
-import br.com.nutricao.api.exception.NegocioException;
-import br.com.nutricao.domain.model.Usuario;
-import br.com.nutricao.infrastructure.persistence.UsuarioRepository;
+import br.com.nutricao.services.exception.entidades.EntidadeNaoEncontradaException;
+import br.com.nutricao.services.exception.NegocioException;
+import br.com.nutricao.domain.Usuario;
+import br.com.nutricao.repositories.UsuarioRepository;
 
 @Service
 public class UsuarioService {

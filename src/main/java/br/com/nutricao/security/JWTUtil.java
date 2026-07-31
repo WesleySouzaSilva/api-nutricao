@@ -1,4 +1,4 @@
-package br.com.nutricao.config;
+package br.com.nutricao.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -6,12 +6,12 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 
 import java.util.Date;
 
-public class JwtUtil {
+public class JWTUtil {
 
     private final String secret;
     private final long expirationMs;
 
-    public JwtUtil(String secret, long expirationMs) {
+    public JWTUtil(String secret, long expirationMs) {
         this.secret = secret;
         this.expirationMs = expirationMs;
     }

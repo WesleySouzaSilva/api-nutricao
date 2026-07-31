@@ -1,4 +1,4 @@
-package br.com.nutricao.application.service;
+package br.com.nutricao.services;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -15,11 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
-import br.com.nutricao.domain.model.Alimento;
-import br.com.nutricao.domain.model.AlimentoRefeicao;
-import br.com.nutricao.domain.model.Refeicao;
-import br.com.nutricao.infrastructure.persistence.AlimentoRefeicaoRepository;
+import br.com.nutricao.services.exception.entidades.EntidadeNaoEncontradaException;
+import br.com.nutricao.domain.Alimento;
+import br.com.nutricao.domain.AlimentoRefeicao;
+import br.com.nutricao.domain.Refeicao;
+import br.com.nutricao.repositories.AlimentoRefeicaoRepository;
 
 @ExtendWith(MockitoExtension.class)
 class AlimentoRefeicaoServiceTest {

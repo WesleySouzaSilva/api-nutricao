@@ -1,4 +1,4 @@
-package br.com.nutricao.application.dto;
+package br.com.nutricao.domain.dto.visualizacao;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

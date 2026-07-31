@@ -1,4 +1,4 @@
-package br.com.nutricao.api.controller;
+package br.com.nutricao.controller;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -21,11 +21,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
-import br.com.nutricao.application.dto.RegistroDiarioRequest;
-import br.com.nutricao.application.service.RegistroDiarioService;
-import br.com.nutricao.domain.model.RegistroDiario;
-import br.com.nutricao.domain.model.Usuario;
+import br.com.nutricao.services.exception.entidades.EntidadeNaoEncontradaException;
+import br.com.nutricao.domain.dto.insercao.RegistroDiarioRequest;
+import br.com.nutricao.services.RegistroDiarioService;
+import br.com.nutricao.domain.RegistroDiario;
+import br.com.nutricao.domain.Usuario;
 
 @WebMvcTest(RegistroDiarioController.class)
 @AutoConfigureMockMvc(addFilters = false)

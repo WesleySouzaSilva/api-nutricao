@@ -1,4 +1,4 @@
-package br.com.nutricao.api.exception;
+package br.com.nutricao.services.exception;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import br.com.nutricao.api.exception.Problema.Campo;
+import br.com.nutricao.services.exception.Problema.Campo;
 
 class ProblemaTest {
 

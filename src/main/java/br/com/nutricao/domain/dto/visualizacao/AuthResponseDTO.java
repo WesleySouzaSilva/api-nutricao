@@ -1,6 +1,6 @@
-package br.com.nutricao.application.dto;
+package br.com.nutricao.domain.dto.visualizacao;
 
-public class AuthResponse {
+public class AuthResponseDTO {
 
     private Integer id;
     private String nome;
@@ -10,10 +10,10 @@ public class AuthResponse {
     private String sexo;
     private String mensagem;
 
-    public AuthResponse() {
+    public AuthResponseDTO() {
     }
 
-    public AuthResponse(Integer id, String nome, String email, String token, String tipo,
+    public AuthResponseDTO(Integer id, String nome, String email, String token, String tipo,
                         String sexo, String mensagem) {
         this.id = id;
         this.nome = nome;

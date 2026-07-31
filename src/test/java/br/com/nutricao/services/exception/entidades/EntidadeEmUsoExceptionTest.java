@@ -1,8 +1,10 @@
-package br.com.nutricao.api.exception;
+package br.com.nutricao.services.exception.entidades;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+
+import br.com.nutricao.services.exception.NegocioException;
 
 class EntidadeEmUsoExceptionTest {
 

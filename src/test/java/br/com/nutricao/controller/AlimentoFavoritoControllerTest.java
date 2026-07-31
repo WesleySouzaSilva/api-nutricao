@@ -1,4 +1,4 @@
-package br.com.nutricao.api.controller;
+package br.com.nutricao.controller;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -19,11 +19,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.nutricao.application.dto.AlimentoFavoritoRequest;
-import br.com.nutricao.application.service.AlimentoFavoritoService;
-import br.com.nutricao.domain.model.Alimento;
-import br.com.nutricao.domain.model.AlimentoFavorito;
-import br.com.nutricao.domain.model.Usuario;
+import br.com.nutricao.domain.dto.insercao.AlimentoFavoritoRequest;
+import br.com.nutricao.services.AlimentoFavoritoService;
+import br.com.nutricao.domain.Alimento;
+import br.com.nutricao.domain.AlimentoFavorito;
+import br.com.nutricao.domain.Usuario;
 
 @WebMvcTest(AlimentoFavoritoController.class)
 @AutoConfigureMockMvc(addFilters = false)

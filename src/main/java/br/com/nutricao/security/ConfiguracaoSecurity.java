@@ -1,4 +1,4 @@
-package br.com.nutricao.config;
+package br.com.nutricao.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -16,39 +16,39 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import br.com.nutricao.infrastructure.persistence.UsuarioRepository;
+import br.com.nutricao.repositories.UsuarioRepository;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class ConfiguracaoSecurity {
 
     private final UsuarioRepository usuarioRepository;
 
-    public SecurityConfig(UsuarioRepository usuarioRepository) {
+    public ConfiguracaoSecurity(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
     @Bean
-    public JwtUtil jwtUtil(
+    public JWTUtil jwtUtil(
             @Value("${jwt.secret:nutricao-api-secret-key-dev-2024}") String secret,
             @Value("${jwt.expiration-ms:86400000}") long expirationMs) {
-        return new JwtUtil(secret, expirationMs);
+        return new JWTUtil(secret, expirationMs);
     }
 
     @Bean
-    public UserDetailsServiceImpl userDetailsService() {
-        return new UserDetailsServiceImpl(usuarioRepository);
+    public UsuarioDetailsService userDetailsService() {
+        return new UsuarioDetailsService(usuarioRepository);
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(JwtUtil jwtUtil,
-                                                           UserDetailsServiceImpl userDetailsService) {
-        return new JwtAuthenticationFilter(jwtUtil, userDetailsService);
+    public FiltroSecurity jwtAuthenticationFilter(JWTUtil jwtUtil,
+                                                           UsuarioDetailsService userDetailsService) {
+        return new FiltroSecurity(jwtUtil, userDetailsService);
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,
-                                           JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
+                                           FiltroSecurity jwtAuthenticationFilter) throws Exception {
         http.csrf().disable()
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
@@ -68,7 +68,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder,
-                                                         UserDetailsServiceImpl userDetailsService) {
+                                                         UsuarioDetailsService userDetailsService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder);

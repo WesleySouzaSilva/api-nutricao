@@ -1,4 +1,4 @@
-package br.com.nutricao.application.service;
+package br.com.nutricao.services;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -15,10 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
-import br.com.nutricao.api.exception.NegocioException;
-import br.com.nutricao.domain.model.CategoriaAlimento;
-import br.com.nutricao.infrastructure.persistence.CategoriaAlimentoRepository;
+import br.com.nutricao.services.exception.entidades.EntidadeNaoEncontradaException;
+import br.com.nutricao.services.exception.NegocioException;
+import br.com.nutricao.domain.CategoriaAlimento;
+import br.com.nutricao.repositories.CategoriaAlimentoRepository;
 
 @ExtendWith(MockitoExtension.class)
 class CategoriaAlimentoServiceTest {

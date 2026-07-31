@@ -1,4 +1,4 @@
-package br.com.nutricao.api.controller;
+package br.com.nutricao.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.nutricao.application.dto.RefeicaoRequest;
-import br.com.nutricao.application.dto.RefeicaoResponse;
-import br.com.nutricao.application.service.RefeicaoService;
-import br.com.nutricao.domain.model.Refeicao;
-import br.com.nutricao.domain.model.Usuario;
+import br.com.nutricao.domain.dto.insercao.RefeicaoRequest;
+import br.com.nutricao.domain.dto.visualizacao.RefeicaoResponse;
+import br.com.nutricao.services.RefeicaoService;
+import br.com.nutricao.domain.Refeicao;
+import br.com.nutricao.domain.Usuario;
 
 @RestController
 @RequestMapping("/api/v1/refeicoes")

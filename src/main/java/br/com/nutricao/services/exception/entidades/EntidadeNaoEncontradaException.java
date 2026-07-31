@@ -1,4 +1,6 @@
-package br.com.nutricao.api.exception;
+package br.com.nutricao.services.exception.entidades;
+
+import br.com.nutricao.services.exception.NegocioException;
 
 public class EntidadeNaoEncontradaException extends NegocioException {
 

@@ -1,16 +1,16 @@
-package br.com.nutricao.config;
+package br.com.nutricao.security;
 
-import br.com.nutricao.domain.model.Usuario;
-import br.com.nutricao.infrastructure.persistence.UsuarioRepository;
+import br.com.nutricao.domain.Usuario;
+import br.com.nutricao.repositories.UsuarioRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UsuarioDetailsService implements UserDetailsService {
 
     private final UsuarioRepository usuarioRepository;
 
-    public UserDetailsServiceImpl(UsuarioRepository usuarioRepository) {
+    public UsuarioDetailsService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 

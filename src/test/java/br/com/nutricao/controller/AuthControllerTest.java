@@ -1,4 +1,4 @@
-package br.com.nutricao.api.controller;
+package br.com.nutricao.controller;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -18,12 +18,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.nutricao.application.dto.AuthRequest;
-import br.com.nutricao.application.dto.LoginToken;
-import br.com.nutricao.config.JwtUtil;
-import br.com.nutricao.config.UserDetailsServiceImpl;
-import br.com.nutricao.config.UsuarioDetails;
-import br.com.nutricao.domain.model.Usuario;
+import br.com.nutricao.domain.dto.visualizacao.Login;
+import br.com.nutricao.domain.dto.visualizacao.LoginToken;
+import br.com.nutricao.security.JWTUtil;
+import br.com.nutricao.security.UsuarioDetailsService;
+import br.com.nutricao.security.UsuarioDetails;
+import br.com.nutricao.domain.Usuario;
 
 @WebMvcTest(AuthController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -36,10 +36,10 @@ class AuthControllerTest {
     private AuthenticationManager authenticationManager;
 
     @MockBean
-    private JwtUtil jwtUtil;
+    private JWTUtil jwtUtil;
 
     @MockBean
-    private UserDetailsServiceImpl userDetailsService;
+    private UsuarioDetailsService userDetailsService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -56,7 +56,7 @@ class AuthControllerTest {
 
     @Test
     void login_ComCredenciaisValidas_DeveRetornarToken() throws Exception {
-        AuthRequest request = new AuthRequest("user@email.com", "senha123");
+        Login request = new Login("user@email.com", "senha123");
         Usuario usuario = criarUsuario();
         UsuarioDetails userDetails = new UsuarioDetails(usuario);
 
@@ -77,7 +77,7 @@ class AuthControllerTest {
 
     @Test
     void login_ComEmailInexistente_DeveRetornar400() throws Exception {
-        AuthRequest request = new AuthRequest("inexistente@email.com", "senha123");
+        Login request = new Login("inexistente@email.com", "senha123");
 
         when(userDetailsService.loadUserByUsername("inexistente@email.com"))
                 .thenThrow(new UsernameNotFoundException("Usuario nao encontrado"));
@@ -91,7 +91,7 @@ class AuthControllerTest {
 
     @Test
     void login_ComSenhaInvalida_DeveRetornar400() throws Exception {
-        AuthRequest request = new AuthRequest("user@email.com", "senha-errada");
+        Login request = new Login("user@email.com", "senha-errada");
         Usuario usuario = criarUsuario();
         UsuarioDetails userDetails = new UsuarioDetails(usuario);
 

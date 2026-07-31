@@ -1,4 +1,4 @@
-package br.com.nutricao.application.service;
+package br.com.nutricao.services;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -7,9 +7,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
-import br.com.nutricao.domain.model.RegistroDiario;
-import br.com.nutricao.infrastructure.persistence.RegistroDiarioRepository;
+import br.com.nutricao.services.exception.entidades.EntidadeNaoEncontradaException;
+import br.com.nutricao.domain.RegistroDiario;
+import br.com.nutricao.repositories.RegistroDiarioRepository;
 
 @Service
 public class RegistroDiarioService {

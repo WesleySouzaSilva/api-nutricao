@@ -1,4 +1,4 @@
-package br.com.nutricao.api.handler;
+package br.com.nutricao.services.exception;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -17,10 +17,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.WebRequest;
 
-import br.com.nutricao.api.exception.EntidadeEmUsoException;
-import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
-import br.com.nutricao.api.exception.NegocioException;
-import br.com.nutricao.api.exception.Problema;
+import br.com.nutricao.services.exception.entidades.EntidadeEmUsoException;
+import br.com.nutricao.services.exception.entidades.EntidadeNaoEncontradaException;
+import br.com.nutricao.services.exception.NegocioException;
+import br.com.nutricao.services.exception.Problema;
 
 class ApiExceptionHandlerTest {
 

@@ -1,11 +1,5 @@
-package br.com.nutricao.api.controller;
+package br.com.nutricao.controller;
 
-import br.com.nutricao.application.dto.AuthRequest;
-import br.com.nutricao.application.dto.AuthResponse;
-import br.com.nutricao.application.dto.LoginToken;
-import br.com.nutricao.config.JwtUtil;
-import br.com.nutricao.config.UsuarioDetails;
-import br.com.nutricao.config.UserDetailsServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,23 +10,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.nutricao.domain.dto.visualizacao.AuthResponseDTO;
+import br.com.nutricao.domain.dto.visualizacao.Login;
+import br.com.nutricao.domain.dto.visualizacao.LoginToken;
+import br.com.nutricao.security.JWTUtil;
+import br.com.nutricao.security.UsuarioDetails;
+import br.com.nutricao.security.UsuarioDetailsService;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
-    private final UserDetailsServiceImpl userDetailsService;
+    private final JWTUtil jwtUtil;
+    private final UsuarioDetailsService userDetailsService;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil,
-                          UserDetailsServiceImpl userDetailsService) {
+    public AuthController(AuthenticationManager authenticationManager, JWTUtil jwtUtil,
+                          UsuarioDetailsService userDetailsService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody Login request) {
         try {
             var userDetails = (UsuarioDetails) userDetailsService.loadUserByUsername(request.getEmail());
 
@@ -42,28 +43,28 @@ public class AuthController {
             var usuario = userDetails.getUsuario();
             String token = jwtUtil.generateToken(usuario.getEmail());
 
-            AuthResponse response = new AuthResponse(usuario.getId(), usuario.getNome(), usuario.getEmail(),
+            AuthResponseDTO response = new AuthResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(),
                     token, "Bearer", usuario.getSexo(), "Token gerado com sucesso!");
 
             return ResponseEntity.ok(response);
 
         } catch (UsernameNotFoundException e) {
-            AuthResponse response = new AuthResponse(null, "", request.getEmail(), "", "",
+            AuthResponseDTO response = new AuthResponseDTO(null, "", request.getEmail(), "", "",
                     "", "ERRO: E-mail nao encontrado na base de dados");
             return ResponseEntity.badRequest().body(response);
 
         } catch (BadCredentialsException e) {
-            AuthResponse response = new AuthResponse(null, "", request.getEmail(), "", "",
+            AuthResponseDTO response = new AuthResponseDTO(null, "", request.getEmail(), "", "",
                     "", "ERRO: Senha incorreta para o e-mail fornecido");
             return ResponseEntity.badRequest().body(response);
         }
     }
 
     @PostMapping("/login/token_id")
-    public ResponseEntity<AuthResponse> loginToken(@RequestBody LoginToken loginToken) {
+    public ResponseEntity<AuthResponseDTO> loginToken(@RequestBody LoginToken loginToken) {
         try {
             if (loginToken.getTokenId() == null || loginToken.getTokenId().isBlank()) {
-                AuthResponse response = new AuthResponse(null, "", "", "", "", "",
+                AuthResponseDTO response = new AuthResponseDTO(null, "", "", "", "", "",
                         "ERRO: Token ID nao informado");
                 return ResponseEntity.badRequest().body(response);
             }
@@ -73,13 +74,13 @@ public class AuthController {
 
             String token = jwtUtil.generateToken(usuario.getEmail());
 
-            AuthResponse response = new AuthResponse(usuario.getId(), usuario.getNome(), usuario.getEmail(),
+            AuthResponseDTO response = new AuthResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(),
                     token, "Bearer", usuario.getSexo(), "Token gerado com sucesso!");
 
             return ResponseEntity.ok(response);
 
         } catch (UsernameNotFoundException e) {
-            AuthResponse response = new AuthResponse(null, "", "", "", "", "",
+            AuthResponseDTO response = new AuthResponseDTO(null, "", "", "", "", "",
                     "ERRO: Token invalido");
             return ResponseEntity.badRequest().body(response);
         }

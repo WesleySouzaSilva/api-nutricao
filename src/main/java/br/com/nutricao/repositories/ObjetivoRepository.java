@@ -1,10 +1,10 @@
-package br.com.nutricao.infrastructure.persistence;
+package br.com.nutricao.repositories;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import br.com.nutricao.domain.model.Objetivo;
+import br.com.nutricao.domain.Objetivo;
 
 public interface ObjetivoRepository extends JpaRepository<Objetivo, Integer> {
     List<Objetivo> findByUsuarioId(Integer usuarioId);

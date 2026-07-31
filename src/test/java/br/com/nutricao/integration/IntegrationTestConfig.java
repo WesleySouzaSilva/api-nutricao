@@ -1,4 +1,4 @@
-package br.com.nutricao.api.integration;
+package br.com.nutricao.integration;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;

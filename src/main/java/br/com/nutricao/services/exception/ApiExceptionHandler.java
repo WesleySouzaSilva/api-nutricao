@@ -1,4 +1,4 @@
-package br.com.nutricao.api.handler;
+package br.com.nutricao.services.exception;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import br.com.nutricao.api.exception.EntidadeEmUsoException;
-import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
-import br.com.nutricao.api.exception.NegocioException;
-import br.com.nutricao.api.exception.Problema;
-import br.com.nutricao.api.exception.TipoProblema;
-import br.com.nutricao.api.exception.Problema.ProblemaBuilder;
+import br.com.nutricao.services.exception.entidades.EntidadeEmUsoException;
+import br.com.nutricao.services.exception.entidades.EntidadeNaoEncontradaException;
+import br.com.nutricao.services.exception.NegocioException;
+import br.com.nutricao.services.exception.Problema;
+import br.com.nutricao.services.exception.TipoProblema;
+import br.com.nutricao.services.exception.Problema.ProblemaBuilder;
 
 @RestControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {

@@ -1,4 +1,4 @@
-package br.com.nutricao.api.exception;
+package br.com.nutricao.services.exception;
 
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-package br.com.nutricao.config;
+package br.com.nutricao.security;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -6,7 +6,7 @@ import java.util.Collections;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import br.com.nutricao.domain.model.Usuario;
+import br.com.nutricao.domain.Usuario;
 
 public class UsuarioDetails implements UserDetails {
 

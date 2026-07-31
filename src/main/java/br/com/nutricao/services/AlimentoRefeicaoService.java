@@ -1,4 +1,4 @@
-package br.com.nutricao.application.service;
+package br.com.nutricao.services;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
-import br.com.nutricao.domain.model.AlimentoRefeicao;
-import br.com.nutricao.infrastructure.persistence.AlimentoRefeicaoRepository;
+import br.com.nutricao.services.exception.entidades.EntidadeNaoEncontradaException;
+import br.com.nutricao.domain.AlimentoRefeicao;
+import br.com.nutricao.repositories.AlimentoRefeicaoRepository;
 
 @Service
 public class AlimentoRefeicaoService {

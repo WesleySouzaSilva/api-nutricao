@@ -1,4 +1,4 @@
-package br.com.nutricao.api.controller;
+package br.com.nutricao.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.nutricao.application.dto.AlimentoFavoritoRequest;
-import br.com.nutricao.application.dto.AlimentoFavoritoResponse;
-import br.com.nutricao.application.service.AlimentoFavoritoService;
-import br.com.nutricao.domain.model.Alimento;
-import br.com.nutricao.domain.model.AlimentoFavorito;
-import br.com.nutricao.domain.model.Usuario;
+import br.com.nutricao.domain.dto.insercao.AlimentoFavoritoRequest;
+import br.com.nutricao.domain.dto.visualizacao.AlimentoFavoritoResponse;
+import br.com.nutricao.services.AlimentoFavoritoService;
+import br.com.nutricao.domain.Alimento;
+import br.com.nutricao.domain.AlimentoFavorito;
+import br.com.nutricao.domain.Usuario;
 
 @RestController
 @RequestMapping("/api/v1/favoritos")

@@ -1,4 +1,4 @@
-package br.com.nutricao.api.controller;
+package br.com.nutricao.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.nutricao.application.dto.MetaNutricionalRequest;
-import br.com.nutricao.application.dto.MetaNutricionalResponse;
-import br.com.nutricao.application.service.MetaNutricionalService;
-import br.com.nutricao.domain.model.MetaNutricional;
-import br.com.nutricao.domain.model.Usuario;
+import br.com.nutricao.domain.dto.insercao.MetaNutricionalRequest;
+import br.com.nutricao.domain.dto.visualizacao.MetaNutricionalResponse;
+import br.com.nutricao.services.MetaNutricionalService;
+import br.com.nutricao.domain.MetaNutricional;
+import br.com.nutricao.domain.Usuario;
 
 @RestController
 @RequestMapping("/api/v1/metas-nutricionais")

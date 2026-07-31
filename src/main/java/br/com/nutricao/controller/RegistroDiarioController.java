@@ -1,4 +1,4 @@
-package br.com.nutricao.api.controller;
+package br.com.nutricao.controller;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.nutricao.application.dto.RegistroDiarioRequest;
-import br.com.nutricao.application.dto.RegistroDiarioResponse;
-import br.com.nutricao.application.service.RegistroDiarioService;
-import br.com.nutricao.domain.model.RegistroDiario;
-import br.com.nutricao.domain.model.Usuario;
+import br.com.nutricao.domain.dto.insercao.RegistroDiarioRequest;
+import br.com.nutricao.domain.dto.visualizacao.RegistroDiarioResponse;
+import br.com.nutricao.services.RegistroDiarioService;
+import br.com.nutricao.domain.RegistroDiario;
+import br.com.nutricao.domain.Usuario;
 
 @RestController
 @RequestMapping("/api/v1/registros-diarios")

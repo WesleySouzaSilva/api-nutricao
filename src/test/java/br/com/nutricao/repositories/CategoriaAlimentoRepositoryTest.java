@@ -1,4 +1,4 @@
-package br.com.nutricao.infrastructure.persistence;
+package br.com.nutricao.repositories;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 
-import br.com.nutricao.domain.model.CategoriaAlimento;
+import br.com.nutricao.domain.CategoriaAlimento;
 
 @DataJpaTest
 @ActiveProfiles("test")

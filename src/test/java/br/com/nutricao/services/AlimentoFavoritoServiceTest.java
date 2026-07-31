@@ -1,4 +1,4 @@
-package br.com.nutricao.application.service;
+package br.com.nutricao.services;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -14,10 +14,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import br.com.nutricao.domain.model.Alimento;
-import br.com.nutricao.domain.model.AlimentoFavorito;
-import br.com.nutricao.domain.model.Usuario;
-import br.com.nutricao.infrastructure.persistence.AlimentoFavoritoRepository;
+import br.com.nutricao.domain.Alimento;
+import br.com.nutricao.domain.AlimentoFavorito;
+import br.com.nutricao.domain.Usuario;
+import br.com.nutricao.repositories.AlimentoFavoritoRepository;
 
 @ExtendWith(MockitoExtension.class)
 class AlimentoFavoritoServiceTest {

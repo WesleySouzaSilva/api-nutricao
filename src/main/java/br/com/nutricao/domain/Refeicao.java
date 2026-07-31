@@ -1,4 +1,4 @@
-package br.com.nutricao.domain.model;
+package br.com.nutricao.domain;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

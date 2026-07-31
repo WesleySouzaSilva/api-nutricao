@@ -1,12 +1,12 @@
-package br.com.nutricao.config;
+package br.com.nutricao.security;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class JwtUtilTest {
+class JWTUtilTest {
 
-    private final JwtUtil jwtUtil = new JwtUtil("test-secret-key", 3600000);
+    private final JWTUtil jwtUtil = new JWTUtil("test-secret-key", 3600000);
 
     @Test
     void generateToken_DeveRetornarTokenValido() {

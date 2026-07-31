@@ -1,12 +1,12 @@
-package br.com.nutricao.application.service;
+package br.com.nutricao.services;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.nutricao.domain.model.AlimentoFavorito;
-import br.com.nutricao.infrastructure.persistence.AlimentoFavoritoRepository;
+import br.com.nutricao.domain.AlimentoFavorito;
+import br.com.nutricao.repositories.AlimentoFavoritoRepository;
 
 @Service
 public class AlimentoFavoritoService {

@@ -1,4 +1,4 @@
-package br.com.nutricao.api.controller;
+package br.com.nutricao.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.nutricao.application.dto.CategoriaAlimentoRequest;
-import br.com.nutricao.application.dto.CategoriaAlimentoResponse;
-import br.com.nutricao.application.service.CategoriaAlimentoService;
-import br.com.nutricao.domain.model.CategoriaAlimento;
+import br.com.nutricao.domain.dto.insercao.CategoriaAlimentoRequest;
+import br.com.nutricao.domain.dto.visualizacao.CategoriaAlimentoResponse;
+import br.com.nutricao.services.CategoriaAlimentoService;
+import br.com.nutricao.domain.CategoriaAlimento;
 
 @RestController
 @RequestMapping("/api/v1/categorias")

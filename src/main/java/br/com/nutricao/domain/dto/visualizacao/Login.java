@@ -1,14 +1,14 @@
-package br.com.nutricao.application.dto;
+package br.com.nutricao.domain.dto.visualizacao;
 
-public class AuthRequest {
+public class Login {
 
     private String email;
     private String senha;
 
-    public AuthRequest() {
+    public Login() {
     }
 
-    public AuthRequest(String email, String senha) {
+    public Login(String email, String senha) {
         this.email = email;
         this.senha = senha;
     }

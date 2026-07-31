@@ -1,4 +1,4 @@
-package br.com.nutricao.api.integration;
+package br.com.nutricao.integration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
