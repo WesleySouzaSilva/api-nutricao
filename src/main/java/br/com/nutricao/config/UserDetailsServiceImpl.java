@@ -2,7 +2,6 @@ package br.com.nutricao.config;
 
 import br.com.nutricao.domain.model.Usuario;
 import br.com.nutricao.infrastructure.persistence.UsuarioRepository;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,10 +19,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario nao encontrado: " + email));
 
-        return User.builder()
-                .username(usuario.getEmail())
-                .password(usuario.getSenha())
-                .roles("USER")
-                .build();
+        return new UsuarioDetails(usuario);
+    }
+
+    public UserDetails loadUserByTokenId(String tokenId) throws UsernameNotFoundException {
+        Usuario usuario = usuarioRepository.findByTokenId(tokenId)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario nao encontrado para o token informado"));
+
+        return new UsuarioDetails(usuario);
     }
 }
