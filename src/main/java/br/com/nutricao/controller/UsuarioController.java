@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import br.com.nutricao.controller.documentacao.UsuarioControllerSwagger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,7 +23,7 @@ import br.com.nutricao.domain.Usuario;
 
 @RestController
 @RequestMapping("/api/v1/usuarios")
-public class UsuarioController {
+public class UsuarioController implements UsuarioControllerSwagger {
 
     private final UsuarioService usuarioService;
 

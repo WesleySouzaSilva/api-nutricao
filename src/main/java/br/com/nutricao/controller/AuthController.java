@@ -1,5 +1,6 @@
 package br.com.nutricao.controller;
 
+import br.com.nutricao.controller.documentacao.AuthControllerSwagger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,7 +20,7 @@ import br.com.nutricao.security.UsuarioDetailsService;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-public class AuthController {
+public class AuthController implements AuthControllerSwagger {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;

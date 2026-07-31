@@ -1,5 +1,6 @@
 package br.com.nutricao.controller;
 
+import br.com.nutricao.controller.documentacao.ObjetivoControllerSwagger;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,7 @@ import br.com.nutricao.domain.Usuario;
 
 @RestController
 @RequestMapping("/api/v1/objetivos")
-public class ObjetivoController {
+public class ObjetivoController implements ObjetivoControllerSwagger {
 
     private final ObjetivoService objetivoService;
 

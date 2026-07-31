@@ -54,6 +54,7 @@ public class ConfiguracaoSecurity {
             .authorizeHttpRequests(auth -> auth
                 .antMatchers("/api/v1/auth/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/usuarios").permitAll()
+                .antMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated()
             )
             .authenticationProvider(authenticationProvider(passwordEncoder(), userDetailsService()))

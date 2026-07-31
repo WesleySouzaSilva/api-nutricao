@@ -3,6 +3,7 @@ package br.com.nutricao.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import br.com.nutricao.controller.documentacao.AlimentoRefeicaoControllerSwagger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,7 +23,7 @@ import br.com.nutricao.domain.Refeicao;
 
 @RestController
 @RequestMapping("/api/v1/alimentos-refeicao")
-public class AlimentoRefeicaoController {
+public class AlimentoRefeicaoController implements AlimentoRefeicaoControllerSwagger {
 
     private final AlimentoRefeicaoService alimentoRefeicaoService;
 

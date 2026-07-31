@@ -1,5 +1,6 @@
 package br.com.nutricao.controller;
 
+import br.com.nutricao.controller.documentacao.AlimentoControllerSwagger;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,7 @@ import br.com.nutricao.domain.CategoriaAlimento;
 
 @RestController
 @RequestMapping("/api/v1/alimentos")
-public class AlimentoController {
+public class AlimentoController implements AlimentoControllerSwagger {
 
     private final AlimentoService alimentoService;
 

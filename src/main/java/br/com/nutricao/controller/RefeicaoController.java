@@ -1,5 +1,6 @@
 package br.com.nutricao.controller;
 
+import br.com.nutricao.controller.documentacao.RefeicaoControllerSwagger;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,7 @@ import br.com.nutricao.domain.Usuario;
 
 @RestController
 @RequestMapping("/api/v1/refeicoes")
-public class RefeicaoController {
+public class RefeicaoController implements RefeicaoControllerSwagger {
 
     private final RefeicaoService refeicaoService;
 

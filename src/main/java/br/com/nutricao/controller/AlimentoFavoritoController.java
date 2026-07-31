@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import br.com.nutricao.controller.documentacao.AlimentoFavoritoControllerSwagger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,7 +24,7 @@ import br.com.nutricao.domain.Usuario;
 
 @RestController
 @RequestMapping("/api/v1/favoritos")
-public class AlimentoFavoritoController {
+public class AlimentoFavoritoController implements AlimentoFavoritoControllerSwagger {
 
     private final AlimentoFavoritoService alimentoFavoritoService;
 

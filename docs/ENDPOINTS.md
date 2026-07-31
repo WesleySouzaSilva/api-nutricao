@@ -1,94 +1,155 @@
 # Endpoints da API
 
-## Autenticação (`/v1/auth`)
+> **Swagger UI**: `http://localhost:8080/swagger-ui/index.html` — documentacao interativa OpenAPI 3.0
 
-| Método | Rota | Descrição | Auth |
+## Autenticacao (`/api/v1/auth`)
+
+| Metodo | Rota | Descricao | Auth |
 |--------|------|-----------|------|
-| `POST` | `/v1/auth/register` | Cadastrar novo usuário | Aberto |
-| `POST` | `/v1/auth/login` | Login (email + senha) → JWT | Aberto |
+| `POST` | `/api/v1/auth/login` | Login (email + senha) -> JWT | Aberto |
+| `POST` | `/api/v1/auth/login/token_id` | Validar token JWT | Aberto |
 
-## Usuários (`/v1/usuarios`)
+## Usuarios (`/api/v1/usuarios`)
 
-| Método | Rota | Descrição | Auth |
+| Metodo | Rota | Descricao | Auth |
 |--------|------|-----------|------|
-| `GET` | `/v1/usuarios/me` | Perfil do usuário logado | JWT |
-| `PUT` | `/v1/usuarios/me` | Atualizar perfil | JWT |
-| `DELETE` | `/v1/usuarios/me` | Excluir conta | JWT |
+| `POST` | `/api/v1/usuarios` | Cadastrar novo usuario | Aberto |
+| `GET` | `/api/v1/usuarios` | Listar todos os usuarios | JWT |
+| `GET` | `/api/v1/usuarios/{id}` | Buscar usuario por ID | JWT |
+| `GET` | `/api/v1/usuarios/email/{email}` | Buscar usuario por email | JWT |
+| `PUT` | `/api/v1/usuarios/{id}` | Atualizar usuario | JWT |
+| `DELETE` | `/api/v1/usuarios/{id}` | Excluir usuario | JWT |
 
-## Categorias (`/v1/categorias`)
+## Categorias de Alimentos (`/api/v1/categorias`)
 
-| Método | Rota | Descrição | Auth |
+| Metodo | Rota | Descricao | Auth |
 |--------|------|-----------|------|
-| `GET` | `/v1/categorias` | Listar todas as categorias | JWT |
-| `POST` | `/v1/categorias` | Criar nova categoria | JWT |
-| `DELETE` | `/v1/categorias/{id}` | Remover categoria | JWT |
+| `GET` | `/api/v1/categorias` | Listar categorias (paginado) | JWT |
+| `GET` | `/api/v1/categorias/{id}` | Buscar categoria por ID | JWT |
+| `POST` | `/api/v1/categorias` | Criar nova categoria | JWT |
+| `PUT` | `/api/v1/categorias/{id}` | Atualizar categoria | JWT |
+| `DELETE` | `/api/v1/categorias/{id}` | Remover categoria | JWT |
 
-## Alimentos (`/v1/alimentos`)
+## Alimentos (`/api/v1/alimentos`)
 
-| Método | Rota | Descrição | Auth |
+| Metodo | Rota | Descricao | Auth |
 |--------|------|-----------|------|
-| `GET` | `/v1/alimentos` | Listar (paginado, filtro por nome/categoria) | JWT |
-| `GET` | `/v1/alimentos/{id}` | Detalhe completo com informação nutricional | JWT |
-| `POST` | `/v1/alimentos` | Cadastrar novo alimento | JWT |
-| `PUT` | `/v1/alimentos/{id}` | Atualizar alimento | JWT |
-| `DELETE` | `/v1/alimentos/{id}` | Remover alimento | JWT |
-| `GET` | `/v1/alimentos/favoritos` | Listar alimentos favoritos do usuário | JWT |
-| `POST` | `/v1/alimentos/{id}/favoritar` | Favoritar/desfavoritar alimento | JWT |
+| `GET` | `/api/v1/alimentos` | Listar (paginado, filtrar por nome/categoria) | JWT |
+| `GET` | `/api/v1/alimentos/{id}` | Buscar alimento por ID com info nutricional | JWT |
+| `POST` | `/api/v1/alimentos` | Cadastrar novo alimento | JWT |
+| `PUT` | `/api/v1/alimentos/{id}` | Atualizar alimento | JWT |
+| `DELETE` | `/api/v1/alimentos/{id}` | Remover alimento | JWT |
 
-## Refeições (`/v1/refeicoes`)
+### Parametros de filtro (alimentos)
+| Parametro | Tipo | Descricao |
+|-----------|------|------------|
+| `nome` | String | Filtro por nome (LIKE, case-insensitive) |
+| `categoriaAlimento` | Integer | Filtro por ID da categoria |
+| `page` | Integer | Numero da pagina (0-based) |
+| `size` | Integer | Tamanho da pagina (default: 10) |
+| `sort` | String | Ordenacao (ex: `nome,asc`) |
 
-| Método | Rota | Descrição | Auth |
+## Alimentos Favoritos (`/api/v1/favoritos`)
+
+| Metodo | Rota | Descricao | Auth |
 |--------|------|-----------|------|
-| `GET` | `/v1/refeicoes` | Listar refeições do usuário (filtro por data) | JWT |
-| `GET` | `/v1/refeicoes/{id}` | Detalhe da refeição com alimentos consumidos | JWT |
-| `POST` | `/v1/refeicoes` | Registrar refeição com lista de alimentos + quantidades | JWT |
-| `PUT` | `/v1/refeicoes/{id}` | Atualizar refeição | JWT |
-| `DELETE` | `/v1/refeicoes/{id}` | Remover refeição | JWT |
-| `GET` | `/v1/refeicoes/resumo/diario` | Resumo nutricional do dia (totais + por refeição) | JWT |
-| `GET` | `/v1/refeicoes/resumo/semanal` | Resumo nutricional dos últimos 7 dias | JWT |
+| `POST` | `/api/v1/favoritos` | Adicionar alimento aos favoritos | JWT |
+| `GET` | `/api/v1/favoritos/usuario/{usuarioId}` | Listar favoritos do usuario | JWT |
+| `DELETE` | `/api/v1/favoritos/usuario/{usuarioId}/alimento/{alimentoId}` | Remover dos favoritos | JWT |
 
-## Metas Nutricionais (`/v1/metas`)
+## Refeicoes (`/api/v1/refeicoes`)
 
-| Método | Rota | Descrição | Auth |
+| Metodo | Rota | Descricao | Auth |
 |--------|------|-----------|------|
-| `GET` | `/v1/metas` | Listar metas do usuário | JWT |
-| `POST` | `/v1/metas` | Criar meta (calorias, proteína, carboidrato, gordura + periodicidade) | JWT |
-| `PUT` | `/v1/metas/{id}` | Atualizar meta (inclusive periodicidade) | JWT |
-| `DELETE` | `/v1/metas/{id}` | Remover meta | JWT |
+| `GET` | `/api/v1/refeicoes` | Listar refeicoes (paginado, filtrar por usuario/data) | JWT |
+| `GET` | `/api/v1/refeicoes/{id}` | Buscar refeicao por ID | JWT |
+| `POST` | `/api/v1/refeicoes` | Criar nova refeicao | JWT |
+| `PUT` | `/api/v1/refeicoes/{id}` | Atualizar refeicao | JWT |
+| `DELETE` | `/api/v1/refeicoes/{id}` | Remover refeicao | JWT |
 
-## Objetivos (`/v1/objetivos`)
+### Parametros de filtro (refeicoes)
+| Parametro | Tipo | Descricao |
+|-----------|------|------------|
+| `usuarioId` | Integer | Filtro por ID do usuario |
+| `dataInicio` | LocalDate | Data inicial (ISO: yyyy-MM-dd) |
+| `dataFim` | LocalDate | Data final (ISO: yyyy-MM-dd) |
+| `page` | Integer | Numero da pagina (0-based) |
+| `size` | Integer | Tamanho da pagina (default: 10) |
+| `sort` | String | Ordenacao (ex: `dataHora,desc`) |
 
-| Método | Rota | Descrição | Auth |
+## Alimentos da Refeicao (`/api/v1/alimentos-refeicao`)
+
+| Metodo | Rota | Descricao | Auth |
 |--------|------|-----------|------|
-| `GET` | `/v1/objetivos` | Listar objetivos do usuário | JWT |
-| `GET` | `/v1/objetivos/ativo` | Objetivo ativo atual | JWT |
-| `POST` | `/v1/objetivos` | Criar objetivo (ganhar massa, reduzir gordura, manter peso) | JWT |
-| `PUT` | `/v1/objetivos/{id}` | Atualizar objetivo | JWT |
-| `DELETE` | `/v1/objetivos/{id}` | Remover objetivo | JWT |
+| `POST` | `/api/v1/alimentos-refeicao` | Adicionar alimento a uma refeicao | JWT |
+| `GET` | `/api/v1/alimentos-refeicao/refeicao/{refeicaoId}` | Listar alimentos de uma refeicao | JWT |
+| `DELETE` | `/api/v1/alimentos-refeicao/{id}` | Remover alimento da refeicao | JWT |
+| `DELETE` | `/api/v1/alimentos-refeicao/refeicao/{refeicaoId}` | Remover todos os alimentos de uma refeicao | JWT |
 
-## Registro Diário (`/v1/registros`)
+## Metas Nutricionais (`/api/v1/metas-nutricionais`)
 
-| Método | Rota | Descrição | Auth |
+| Metodo | Rota | Descricao | Auth |
 |--------|------|-----------|------|
-| `POST` | `/v1/registros/diario` | Registrar peso/água/passos do dia | JWT |
-| `GET` | `/v1/registros/diario/hoje` | Último registro do dia | JWT |
-| `GET` | `/v1/registros/diario/historico` | Histórico por período | JWT |
+| `GET` | `/api/v1/metas-nutricionais` | Listar metas (paginado, filtrar por usuario/data) | JWT |
+| `GET` | `/api/v1/metas-nutricionais/{id}` | Buscar meta por ID | JWT |
+| `GET` | `/api/v1/metas-nutricionais/usuario/{usuarioId}` | Listar metas de um usuario | JWT |
+| `GET` | `/api/v1/metas-nutricionais/usuario/{usuarioId}/ultima` | Buscar ultima meta do usuario | JWT |
+| `POST` | `/api/v1/metas-nutricionais` | Criar nova meta nutricional | JWT |
+| `PUT` | `/api/v1/metas-nutricionais/{id}` | Atualizar meta | JWT |
+| `DELETE` | `/api/v1/metas-nutricionais/{id}` | Remover meta | JWT |
 
-## Dashboard (`/v1/dashboard`)
+### Parametros de filtro (metas nutricionais)
+| Parametro | Tipo | Descricao |
+|-----------|------|------------|
+| `usuarioId` | Integer | Filtro por ID do usuario |
+| `dataInicio` | LocalDate | Data inicial (ISO: yyyy-MM-dd) |
+| `dataFim` | LocalDate | Data final (ISO: yyyy-MM-dd) |
+| `page` | Integer | Numero da pagina (0-based) |
+| `size` | Integer | Tamanho da pagina (default: 10) |
+| `sort` | String | Ordenacao |
 
-> **Nota**: Endpoints de dashboard são referência para consumo pelo frontend. Não serão implementados neste projeto — o frontend deve consumir os endpoints de Metas, Registro Diário e Refeições para montar seus próprios dashboards.
+## Objetivos (`/api/v1/objetivos`)
 
-| Método | Rota | Descrição | Auth |
+| Metodo | Rota | Descricao | Auth |
 |--------|------|-----------|------|
-| `GET` | `/v1/dashboard/hoje` | Progresso de hoje vs metas (calorias consumidas, água, passos) | JWT |
-| `GET` | `/v1/dashboard/semanal` | Evolução dos últimos 7 dias (gráfico de consumo vs meta) | JWT |
+| `GET` | `/api/v1/objetivos` | Listar objetivos (paginado, filtrar por usuario/tipo/data) | JWT |
+| `GET` | `/api/v1/objetivos/{id}` | Buscar objetivo por ID | JWT |
+| `GET` | `/api/v1/objetivos/usuario/{usuarioId}` | Listar objetivos de um usuario | JWT |
+| `POST` | `/api/v1/objetivos` | Criar novo objetivo | JWT |
+| `PUT` | `/api/v1/objetivos/{id}` | Atualizar objetivo | JWT |
+| `DELETE` | `/api/v1/objetivos/{id}` | Remover objetivo | JWT |
 
-## Health Check
+### Parametros de filtro (objetivos)
+| Parametro | Tipo | Descricao |
+|-----------|------|------------|
+| `usuarioId` | Integer | Filtro por ID do usuario |
+| `tipo` | String | Tipo do objetivo |
+| `dataInicio` | LocalDate | Data inicial (ISO: yyyy-MM-dd) |
+| `dataFim` | LocalDate | Data final (ISO: yyyy-MM-dd) |
+| `page` | Integer | Numero da pagina (0-based) |
+| `size` | Integer | Tamanho da pagina (default: 10) |
+| `sort` | String | Ordenacao |
 
-| Método | Rota | Descrição | Auth |
+## Registros Diarios (`/api/v1/registros-diarios`)
+
+| Metodo | Rota | Descricao | Auth |
 |--------|------|-----------|------|
-| `GET` | `/v1/health` | Health check da aplicação | Aberto |
+| `GET` | `/api/v1/registros-diarios` | Listar registros (paginado, filtrar por usuario/data) | JWT |
+| `GET` | `/api/v1/registros-diarios/{id}` | Buscar registro por ID | JWT |
+| `POST` | `/api/v1/registros-diarios` | Criar novo registro diario | JWT |
+| `PUT` | `/api/v1/registros-diarios/{id}` | Atualizar registro | JWT |
+| `DELETE` | `/api/v1/registros-diarios/{id}` | Remover registro | JWT |
+
+### Parametros de filtro (registros diarios)
+| Parametro | Tipo | Descricao |
+|-----------|------|------------|
+| `usuarioId` | Integer | Filtro por ID do usuario |
+| `dataInicio` | LocalDate | Data inicial (ISO: yyyy-MM-dd) |
+| `dataFim` | LocalDate | Data final (ISO: yyyy-MM-dd) |
+| `page` | Integer | Numero da pagina (0-based) |
+| `size` | Integer | Tamanho da pagina (default: 10) |
+| `sort` | String | Ordenacao (ex: `dataRegistro,desc`) |
 
 ---
 
-[← Voltar ao README principal](../README.md)
+[<- Voltar ao README principal](../README.md)
