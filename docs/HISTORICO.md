@@ -1,6 +1,8 @@
 # Histórico do Projeto
 
-Este projeto é fruto de uma jornada de aprendizado contínua desde **2023**, quando adquiri a **Formação Especialista Spring REST** da [AlgaWorks](https://www.algaworks.com/), curso que me proporcionou uma base sólida em construção de APIs REST profissionais com Spring Boot. Junto a essa formação, cursei também a **Formação Especialista JPA**, aprofundando meus conhecimentos em mapeamento objeto-relacional, otimização de consultas e gerenciamento de entidades.
+Este projeto é fruto de uma jornada de aprendizado contínua desde **2023**, quando adquiri a **Formação Especialista Spring REST** da [AlgaWorks](https://www.algaworks.com/). Durante o curso, estudei com base no repositório oficial das aulas no GitHub — [curso-especialista-spring-rest](https://github.com/algaworks/curso-especialista-spring-rest) — que contém todo o código desenvolvido ao longo da formação, incluindo os módulos de segurança com **HTTP Basic Authentication** e **OAuth2**, que na época era o modelo de autenticação mais utilizado no mercado.
+
+Além da formação em REST, cursei também a **Formação Especialista JPA**, aprofundando meus conhecimentos em mapeamento objeto-relacional, otimização de consultas e gerenciamento de entidades.
 
 Com os conceitos aprendidos — especialmente do Especialista Spring REST — desenvolvi uma **API profissional para um cliente real** (projeto de referência **api-mbs**), aplicando na prática:
 

@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: nutricao-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: nutricao_dev
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - nutricao-network
+
+  api:
+    build: .
+    container_name: nutricao-api
+    depends_on:
+      - mysql
+    environment:
+      DATA_BASE: mysql
+      SPRING_PROFILES_ACTIVE: dev
+    ports:
+      - "8080:8080"
+    networks:
+      - nutricao-network
+
+volumes:
+  mysql_data:
+
+networks:
+  nutricao-network:
+    driver: bridge
