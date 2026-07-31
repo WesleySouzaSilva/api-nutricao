@@ -1,8 +1,9 @@
 package br.com.nutricao.controller;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,10 +37,10 @@ public class CategoriaAlimentoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoriaAlimentoResponse>> listar() {
-        List<CategoriaAlimentoResponse> list = categoriaAlimentoService.listar().stream()
-                .map(this::toResponse).collect(Collectors.toList());
-        return ResponseEntity.ok(list);
+    public ResponseEntity<Page<CategoriaAlimentoResponse>> listar(Pageable pageable) {
+        Page<CategoriaAlimento> page = categoriaAlimentoService.listarPaginado(pageable);
+        Page<CategoriaAlimentoResponse> responsePage = page.map(this::toResponse);
+        return ResponseEntity.ok(responsePage);
     }
 
     @GetMapping("/{id}")

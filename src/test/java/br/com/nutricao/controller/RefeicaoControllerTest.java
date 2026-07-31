@@ -14,6 +14,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.nutricao.services.exception.entidades.EntidadeNaoEncontradaException;
+import br.com.nutricao.domain.dto.filtro.RefeicaoCamposFiltro;
 import br.com.nutricao.domain.dto.insercao.RefeicaoRequest;
 import br.com.nutricao.services.RefeicaoService;
 import br.com.nutricao.domain.Refeicao;
@@ -72,44 +76,51 @@ class RefeicaoControllerTest {
 
     @Test
     void listar_SemFiltros_DeveRetornar200() throws Exception {
-        when(refeicaoService.listar()).thenReturn(Arrays.asList(refeicao));
+        Page<Refeicao> page = new PageImpl<>(Arrays.asList(refeicao));
+        when(refeicaoService.listarTodosFiltro(any(RefeicaoCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/refeicoes"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1));
+                .andExpect(jsonPath("$.content[0].id").value(1));
     }
 
     @Test
     void listar_ComUsuarioId_DeveRetornar200() throws Exception {
-        when(refeicaoService.buscarPorUsuario(1)).thenReturn(Arrays.asList(refeicao));
+        Page<Refeicao> page = new PageImpl<>(Arrays.asList(refeicao));
+        when(refeicaoService.listarTodosFiltro(any(RefeicaoCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/refeicoes").param("usuarioId", "1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1));
+                .andExpect(jsonPath("$.content[0].id").value(1));
     }
 
     @Test
     void listar_ComTodosFiltros_DeveRetornar200() throws Exception {
-        when(refeicaoService.buscarPorUsuarioEPeriodo(eq(1), any(LocalDateTime.class), any(LocalDateTime.class)))
-                .thenReturn(Arrays.asList(refeicao));
+        Page<Refeicao> page = new PageImpl<>(Arrays.asList(refeicao));
+        when(refeicaoService.listarTodosFiltro(any(RefeicaoCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/refeicoes")
                 .param("usuarioId", "1")
-                .param("inicio", "2024-01-01T00:00:00")
-                .param("fim", "2024-01-31T23:59:59"))
+                .param("dataRefeicaoInicio", "2024-01-01T00:00:00")
+                .param("dataRefeicaoFim", "2024-01-31T23:59:59"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1));
+                .andExpect(jsonPath("$.content[0].id").value(1));
     }
 
     @Test
     void listar_ComUsuarioEInicioSemFim_DeveRetornar200() throws Exception {
-        when(refeicaoService.buscarPorUsuario(1)).thenReturn(Arrays.asList(refeicao));
+        Page<Refeicao> page = new PageImpl<>(Arrays.asList(refeicao));
+        when(refeicaoService.listarTodosFiltro(any(RefeicaoCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/refeicoes")
                 .param("usuarioId", "1")
-                .param("inicio", "2024-01-01T00:00:00"))
+                .param("dataRefeicaoInicio", "2024-01-01T00:00:00"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1));
+                .andExpect(jsonPath("$.content[0].id").value(1));
     }
 
     @Test
@@ -157,20 +168,24 @@ class RefeicaoControllerTest {
 
     @Test
     void listar_SemFiltros_QuandoVazio_DeveRetornar200() throws Exception {
-        when(refeicaoService.listar()).thenReturn(java.util.Collections.emptyList());
+        Page<Refeicao> page = new PageImpl<>(java.util.Collections.emptyList());
+        when(refeicaoService.listarTodosFiltro(any(RefeicaoCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/refeicoes"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[]"));
+                .andExpect(jsonPath("$.content").isEmpty());
     }
 
     @Test
     void listar_ComUsuarioId_QuandoVazio_DeveRetornar200() throws Exception {
-        when(refeicaoService.buscarPorUsuario(99)).thenReturn(java.util.Collections.emptyList());
+        Page<Refeicao> page = new PageImpl<>(java.util.Collections.emptyList());
+        when(refeicaoService.listarTodosFiltro(any(RefeicaoCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/refeicoes").param("usuarioId", "99"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[]"));
+                .andExpect(jsonPath("$.content").isEmpty());
     }
 
     @Test

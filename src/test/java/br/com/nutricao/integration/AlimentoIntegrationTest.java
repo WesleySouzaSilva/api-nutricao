@@ -3,6 +3,7 @@ package br.com.nutricao.integration;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -69,11 +70,12 @@ class AlimentoIntegrationTest {
         assertNotNull(postResponse.getBody().get("id"));
         assertEquals("Banana", postResponse.getBody().get("nome"));
 
-        ResponseEntity<Map[]> listaResponse = restTemplate.getForEntity(
-                "/api/v1/alimentos", Map[].class);
+        ResponseEntity<Map> listaResponse = restTemplate.getForEntity(
+                "/api/v1/alimentos", Map.class);
 
         assertEquals(HttpStatus.OK, listaResponse.getStatusCode());
-        assertTrue(listaResponse.getBody().length > 0);
+        List<Map> content = (List<Map>) listaResponse.getBody().get("content");
+        assertTrue(content.size() > 0);
     }
 
     @Test
@@ -107,11 +109,12 @@ class AlimentoIntegrationTest {
 
         restTemplate.postForEntity("/api/v1/alimentos", alimentoRequest, Map.class);
 
-        ResponseEntity<Map[]> response = restTemplate.getForEntity(
-                "/api/v1/alimentos?nome=Bana", Map[].class);
+        ResponseEntity<Map> response = restTemplate.getForEntity(
+                "/api/v1/alimentos?nome=Bana", Map.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody().length > 0);
+        List<Map> content = (List<Map>) response.getBody().get("content");
+        assertTrue(content.size() > 0);
     }
 
     @Test

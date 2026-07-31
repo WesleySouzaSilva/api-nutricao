@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -72,11 +73,12 @@ class RefeicaoIntegrationTest {
         assertNotNull(postResponse.getBody().get("id"));
         assertEquals("Cafe da Manha", postResponse.getBody().get("nome"));
 
-        ResponseEntity<Map[]> listaResponse = restTemplate.getForEntity(
-                "/api/v1/refeicoes", Map[].class);
+        ResponseEntity<Map> listaResponse = restTemplate.getForEntity(
+                "/api/v1/refeicoes", Map.class);
 
         assertEquals(HttpStatus.OK, listaResponse.getStatusCode());
-        assertTrue(listaResponse.getBody().length > 0);
+        List<Map> content = (List<Map>) listaResponse.getBody().get("content");
+        assertTrue(content.size() > 0);
     }
 
     @Test
@@ -90,11 +92,12 @@ class RefeicaoIntegrationTest {
 
         restTemplate.postForEntity("/api/v1/refeicoes", refeicaoRequest, Map.class);
 
-        ResponseEntity<Map[]> response = restTemplate.getForEntity(
-                "/api/v1/refeicoes?usuarioId=" + usuarioId, Map[].class);
+        ResponseEntity<Map> response = restTemplate.getForEntity(
+                "/api/v1/refeicoes?usuarioId=" + usuarioId, Map.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody().length > 0);
+        List<Map> content = (List<Map>) response.getBody().get("content");
+        assertTrue(content.size() > 0);
     }
 
     @Test
