@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
 import br.com.nutricao.domain.model.RegistroDiario;
 import br.com.nutricao.domain.model.Usuario;
 import br.com.nutricao.infrastructure.persistence.RegistroDiarioRepository;
@@ -105,7 +106,7 @@ class RegistroDiarioServiceTest {
     void atualizar_QuandoNaoExistir_DeveLancarExcecao() {
         when(registroDiarioRepository.findById(99)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntidadeNaoEncontradaException.class,
                 () -> registroDiarioService.atualizar(99, new RegistroDiario()));
     }
 
@@ -153,7 +154,7 @@ class RegistroDiarioServiceTest {
     void deletar_QuandoNaoExistir_DeveLancarExcecao() {
         when(registroDiarioRepository.existsById(99)).thenReturn(false);
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntidadeNaoEncontradaException.class,
                 () -> registroDiarioService.deletar(99));
     }
 }

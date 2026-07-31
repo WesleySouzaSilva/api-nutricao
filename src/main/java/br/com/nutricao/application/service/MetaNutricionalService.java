@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
 import br.com.nutricao.domain.model.MetaNutricional;
 import br.com.nutricao.infrastructure.persistence.MetaNutricionalRepository;
 
@@ -42,7 +43,7 @@ public class MetaNutricionalService {
     @Transactional
     public MetaNutricional atualizar(Integer id, MetaNutricional meta) {
         MetaNutricional existente = metaNutricionalRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("MetaNutricional nao encontrada: " + id));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("MetaNutricional nao encontrada: " + id));
         if (meta.getCalorias() != null) existente.setCalorias(meta.getCalorias());
         if (meta.getProteinas() != null) existente.setProteinas(meta.getProteinas());
         if (meta.getCarboidratos() != null) existente.setCarboidratos(meta.getCarboidratos());
@@ -56,7 +57,7 @@ public class MetaNutricionalService {
     @Transactional
     public void deletar(Integer id) {
         if (!metaNutricionalRepository.existsById(id)) {
-            throw new IllegalArgumentException("MetaNutricional nao encontrada: " + id);
+            throw new EntidadeNaoEncontradaException("MetaNutricional nao encontrada: " + id);
         }
         metaNutricionalRepository.deleteById(id);
     }

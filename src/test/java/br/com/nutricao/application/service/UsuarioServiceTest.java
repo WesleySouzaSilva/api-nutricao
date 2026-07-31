@@ -16,6 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
+import br.com.nutricao.api.exception.NegocioException;
 import br.com.nutricao.domain.model.Usuario;
 import br.com.nutricao.infrastructure.persistence.UsuarioRepository;
 
@@ -63,7 +65,7 @@ class UsuarioServiceTest {
     void criar_ComEmailExistente_DeveLancarExcecao() {
         when(usuarioRepository.findByEmail(usuario.getEmail())).thenReturn(Optional.of(usuario));
 
-        assertThrows(IllegalArgumentException.class, () -> usuarioService.criar(usuario));
+        assertThrows(NegocioException.class, () -> usuarioService.criar(usuario));
         verify(usuarioRepository, never()).save(any());
     }
 
@@ -137,7 +139,7 @@ class UsuarioServiceTest {
     void atualizar_QuandoNaoExistir_DeveLancarExcecao() {
         when(usuarioRepository.findById(99)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntidadeNaoEncontradaException.class,
                 () -> usuarioService.atualizar(99, new Usuario()));
     }
 
@@ -157,7 +159,7 @@ class UsuarioServiceTest {
         when(usuarioRepository.findById(1)).thenReturn(Optional.of(usuario));
         when(usuarioRepository.findByEmail("novo@email.com")).thenReturn(Optional.of(outroUsuario));
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(NegocioException.class,
                 () -> usuarioService.atualizar(1, atualizado));
     }
 
@@ -174,7 +176,7 @@ class UsuarioServiceTest {
     void deletar_QuandoNaoExistir_DeveLancarExcecao() {
         when(usuarioRepository.existsById(99)).thenReturn(false);
 
-        assertThrows(IllegalArgumentException.class, () -> usuarioService.deletar(99));
+        assertThrows(EntidadeNaoEncontradaException.class, () -> usuarioService.deletar(99));
         verify(usuarioRepository, never()).deleteById(any());
     }
 

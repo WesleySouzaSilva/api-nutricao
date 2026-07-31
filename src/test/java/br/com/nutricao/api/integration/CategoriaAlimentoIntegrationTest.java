@@ -107,12 +107,12 @@ class CategoriaAlimentoIntegrationTest {
     }
 
     @Test
-    void criar_ComNomeDuplicado_DeveRetornar400() {
+    void criar_ComNomeDuplicado_DeveRetornar422() {
         restTemplate.postForEntity("/api/v1/categorias", categoriaRequest, Map.class);
 
         ResponseEntity<Map> response = restTemplate.postForEntity(
                 "/api/v1/categorias", categoriaRequest, Map.class);
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
     }
 }

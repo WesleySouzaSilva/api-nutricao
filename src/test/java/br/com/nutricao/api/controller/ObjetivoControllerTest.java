@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
 import br.com.nutricao.application.dto.ObjetivoRequest;
 import br.com.nutricao.application.service.ObjetivoService;
 import br.com.nutricao.domain.model.Objetivo;
@@ -141,25 +142,25 @@ class ObjetivoControllerTest {
     }
 
     @Test
-    void atualizar_QuandoNaoExistir_DeveRetornar400() throws Exception {
+    void atualizar_QuandoNaoExistir_DeveRetornar404() throws Exception {
         ObjetivoRequest request = new ObjetivoRequest();
         request.setTipo("HIPERTROFIA");
 
         when(objetivoService.atualizar(eq(99), any(Objetivo.class)))
-                .thenThrow(new IllegalArgumentException("Objetivo nao encontrado: 99"));
+                .thenThrow(new EntidadeNaoEncontradaException("Objetivo nao encontrado: 99"));
 
         mockMvc.perform(put("/api/v1/objetivos/99")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 
     @Test
-    void deletar_QuandoNaoExistir_DeveRetornar400() throws Exception {
-        doThrow(new IllegalArgumentException("Objetivo nao encontrado: 99"))
+    void deletar_QuandoNaoExistir_DeveRetornar404() throws Exception {
+        doThrow(new EntidadeNaoEncontradaException("Objetivo nao encontrado: 99"))
                 .when(objetivoService).deletar(99);
 
         mockMvc.perform(delete("/api/v1/objetivos/99"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 }

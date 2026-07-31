@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
 import br.com.nutricao.domain.model.Refeicao;
 import br.com.nutricao.infrastructure.persistence.RefeicaoRepository;
 
@@ -43,7 +44,7 @@ public class RefeicaoService {
     @Transactional
     public Refeicao atualizar(Integer id, Refeicao refeicao) {
         Refeicao existente = refeicaoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Refeicao nao encontrada: " + id));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Refeicao nao encontrada: " + id));
         if (refeicao.getNome() != null) existente.setNome(refeicao.getNome());
         if (refeicao.getDataRefeicao() != null) existente.setDataRefeicao(refeicao.getDataRefeicao());
         if (refeicao.getUsuario() != null) existente.setUsuario(refeicao.getUsuario());
@@ -53,7 +54,7 @@ public class RefeicaoService {
     @Transactional
     public void deletar(Integer id) {
         if (!refeicaoRepository.existsById(id)) {
-            throw new IllegalArgumentException("Refeicao nao encontrada: " + id);
+            throw new EntidadeNaoEncontradaException("Refeicao nao encontrada: " + id);
         }
         refeicaoRepository.deleteById(id);
     }

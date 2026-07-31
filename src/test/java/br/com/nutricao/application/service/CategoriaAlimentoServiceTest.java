@@ -15,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
+import br.com.nutricao.api.exception.NegocioException;
 import br.com.nutricao.domain.model.CategoriaAlimento;
 import br.com.nutricao.infrastructure.persistence.CategoriaAlimentoRepository;
 
@@ -49,7 +51,7 @@ class CategoriaAlimentoServiceTest {
     void criar_ComNomeExistente_DeveLancarExcecao() {
         when(categoriaAlimentoRepository.findByNome("Frutas")).thenReturn(Optional.of(categoria));
 
-        assertThrows(IllegalArgumentException.class, () -> categoriaAlimentoService.criar(categoria));
+        assertThrows(NegocioException.class, () -> categoriaAlimentoService.criar(categoria));
         verify(categoriaAlimentoRepository, never()).save(any());
     }
 
@@ -106,7 +108,7 @@ class CategoriaAlimentoServiceTest {
     void deletar_QuandoNaoExistir_DeveLancarExcecao() {
         when(categoriaAlimentoRepository.existsById(99)).thenReturn(false);
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntidadeNaoEncontradaException.class,
                 () -> categoriaAlimentoService.deletar(99));
     }
 
@@ -114,7 +116,7 @@ class CategoriaAlimentoServiceTest {
     void atualizar_QuandoNaoExistir_DeveLancarExcecao() {
         when(categoriaAlimentoRepository.findById(99)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntidadeNaoEncontradaException.class,
                 () -> categoriaAlimentoService.atualizar(99, new CategoriaAlimento()));
     }
 
@@ -126,7 +128,7 @@ class CategoriaAlimentoServiceTest {
         when(categoriaAlimentoRepository.findById(1)).thenReturn(Optional.of(categoria));
         when(categoriaAlimentoRepository.findByNome("Legumes")).thenReturn(Optional.of(outra));
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(NegocioException.class,
                 () -> categoriaAlimentoService.atualizar(1, atualizada));
     }
 }

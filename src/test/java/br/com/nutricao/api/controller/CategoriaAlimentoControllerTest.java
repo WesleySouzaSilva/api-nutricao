@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
+import br.com.nutricao.api.exception.NegocioException;
 import br.com.nutricao.application.dto.CategoriaAlimentoRequest;
 import br.com.nutricao.application.service.CategoriaAlimentoService;
 import br.com.nutricao.domain.model.CategoriaAlimento;
@@ -102,17 +104,17 @@ class CategoriaAlimentoControllerTest {
     }
 
     @Test
-    void criar_ComNomeDuplicado_DeveRetornar400() throws Exception {
+    void criar_ComNomeDuplicado_DeveRetornar422() throws Exception {
         CategoriaAlimentoRequest request = new CategoriaAlimentoRequest();
         request.setNome("Frutas");
 
         when(categoriaAlimentoService.criar(any(CategoriaAlimento.class)))
-                .thenThrow(new IllegalArgumentException("Categoria ja existente: Frutas"));
+                .thenThrow(new NegocioException("Categoria ja existente: Frutas"));
 
         mockMvc.perform(post("/api/v1/categorias")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -125,25 +127,25 @@ class CategoriaAlimentoControllerTest {
     }
 
     @Test
-    void atualizar_QuandoNaoExistir_DeveRetornar400() throws Exception {
+    void atualizar_QuandoNaoExistir_DeveRetornar404() throws Exception {
         CategoriaAlimentoRequest request = new CategoriaAlimentoRequest();
         request.setNome("Legumes");
 
         when(categoriaAlimentoService.atualizar(eq(99), any(CategoriaAlimento.class)))
-                .thenThrow(new IllegalArgumentException("Categoria nao encontrada: 99"));
+                .thenThrow(new EntidadeNaoEncontradaException("Categoria nao encontrada: 99"));
 
         mockMvc.perform(put("/api/v1/categorias/99")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 
     @Test
-    void deletar_QuandoNaoExistir_DeveRetornar400() throws Exception {
-        doThrow(new IllegalArgumentException("Categoria nao encontrada: 99"))
+    void deletar_QuandoNaoExistir_DeveRetornar404() throws Exception {
+        doThrow(new EntidadeNaoEncontradaException("Categoria nao encontrada: 99"))
                 .when(categoriaAlimentoService).deletar(99);
 
         mockMvc.perform(delete("/api/v1/categorias/99"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 }

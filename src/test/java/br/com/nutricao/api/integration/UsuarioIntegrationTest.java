@@ -131,12 +131,12 @@ class UsuarioIntegrationTest {
     }
 
     @Test
-    void criar_ComEmailDuplicado_DeveRetornar400() {
+    void criar_ComEmailDuplicado_DeveRetornar422() {
         restTemplate.postForEntity("/api/v1/usuarios", usuarioRequest, Map.class);
 
         ResponseEntity<Map> response = restTemplate.postForEntity(
                 "/api/v1/usuarios", usuarioRequest, Map.class);
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
     }
 }

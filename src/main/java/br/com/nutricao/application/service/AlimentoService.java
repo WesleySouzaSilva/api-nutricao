@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
 import br.com.nutricao.domain.model.Alimento;
 import br.com.nutricao.infrastructure.persistence.AlimentoRepository;
 
@@ -42,7 +43,7 @@ public class AlimentoService {
     @Transactional
     public Alimento atualizar(Integer id, Alimento alimento) {
         if (!alimentoRepository.existsById(id)) {
-            throw new IllegalArgumentException("Alimento nao encontrado: " + id);
+            throw new EntidadeNaoEncontradaException("Alimento nao encontrado: " + id);
         }
         alimento.setId(id);
         return alimentoRepository.save(alimento);
@@ -51,7 +52,7 @@ public class AlimentoService {
     @Transactional
     public void deletar(Integer id) {
         if (!alimentoRepository.existsById(id)) {
-            throw new IllegalArgumentException("Alimento nao encontrado: " + id);
+            throw new EntidadeNaoEncontradaException("Alimento nao encontrado: " + id);
         }
         alimentoRepository.deleteById(id);
     }

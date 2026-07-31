@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
 import br.com.nutricao.application.dto.AlimentoRefeicaoRequest;
 import br.com.nutricao.application.service.AlimentoRefeicaoService;
 import br.com.nutricao.domain.model.Alimento;
@@ -133,12 +134,12 @@ class AlimentoRefeicaoControllerTest {
     }
 
     @Test
-    void deletar_QuandoNaoExistir_DeveRetornar400() throws Exception {
-        doThrow(new IllegalArgumentException("Vinculo AlimentoRefeicao nao encontrado: 99"))
+    void deletar_QuandoNaoExistir_DeveRetornar404() throws Exception {
+        doThrow(new EntidadeNaoEncontradaException("Vinculo AlimentoRefeicao nao encontrado: 99"))
                 .when(alimentoRefeicaoService).deletar(99);
 
         mockMvc.perform(delete("/api/v1/alimentos-refeicao/99"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 
     @Test

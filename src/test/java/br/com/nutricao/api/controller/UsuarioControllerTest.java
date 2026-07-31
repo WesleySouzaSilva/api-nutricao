@@ -22,6 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
+import br.com.nutricao.api.exception.NegocioException;
 import br.com.nutricao.application.dto.UsuarioRequest;
 import br.com.nutricao.application.service.UsuarioService;
 import br.com.nutricao.domain.model.Usuario;
@@ -147,7 +149,7 @@ class UsuarioControllerTest {
     }
 
     @Test
-    void criar_ComEmailDuplicado_DeveRetornar400() throws Exception {
+    void criar_ComEmailDuplicado_DeveRetornar422() throws Exception {
         UsuarioRequest request = new UsuarioRequest();
         request.setNome("Joao");
         request.setEmail("joao@email.com");
@@ -157,12 +159,12 @@ class UsuarioControllerTest {
         request.setTipoLogin("EMAIL");
 
         when(usuarioService.criar(any(Usuario.class)))
-                .thenThrow(new IllegalArgumentException("Email ja cadastrado: joao@email.com"));
+                .thenThrow(new NegocioException("Email ja cadastrado: joao@email.com"));
 
         mockMvc.perform(post("/api/v1/usuarios")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -183,7 +185,7 @@ class UsuarioControllerTest {
     }
 
     @Test
-    void atualizar_QuandoNaoExistir_DeveRetornar400() throws Exception {
+    void atualizar_QuandoNaoExistir_DeveRetornar404() throws Exception {
         UsuarioRequest request = new UsuarioRequest();
         request.setNome("Joao Atualizado");
         request.setEmail("joao@email.com");
@@ -193,20 +195,20 @@ class UsuarioControllerTest {
         request.setTipoLogin("EMAIL");
 
         when(usuarioService.atualizar(eq(99), any(Usuario.class)))
-                .thenThrow(new IllegalArgumentException("Usuario nao encontrado: 99"));
+                .thenThrow(new EntidadeNaoEncontradaException("Usuario nao encontrado: 99"));
 
         mockMvc.perform(put("/api/v1/usuarios/99")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 
     @Test
-    void deletar_QuandoNaoExistir_DeveRetornar400() throws Exception {
-        doThrow(new IllegalArgumentException("Usuario nao encontrado: 99"))
+    void deletar_QuandoNaoExistir_DeveRetornar404() throws Exception {
+        doThrow(new EntidadeNaoEncontradaException("Usuario nao encontrado: 99"))
                 .when(usuarioService).deletar(99);
 
         mockMvc.perform(delete("/api/v1/usuarios/99"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 }

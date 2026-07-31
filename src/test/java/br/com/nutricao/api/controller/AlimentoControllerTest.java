@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
 import br.com.nutricao.application.dto.AlimentoRequest;
 import br.com.nutricao.application.dto.AlimentoResponse;
 import br.com.nutricao.application.dto.CategoriaAlimentoResponse;
@@ -174,25 +175,25 @@ class AlimentoControllerTest {
     }
 
     @Test
-    void atualizar_QuandoNaoExistir_DeveRetornar400() throws Exception {
+    void atualizar_QuandoNaoExistir_DeveRetornar404() throws Exception {
         AlimentoRequest request = new AlimentoRequest();
         request.setNome("Banana");
 
         when(alimentoService.atualizar(eq(99), any(Alimento.class)))
-                .thenThrow(new IllegalArgumentException("Alimento nao encontrado: 99"));
+                .thenThrow(new EntidadeNaoEncontradaException("Alimento nao encontrado: 99"));
 
         mockMvc.perform(put("/api/v1/alimentos/99")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 
     @Test
-    void deletar_QuandoNaoExistir_DeveRetornar400() throws Exception {
-        doThrow(new IllegalArgumentException("Alimento nao encontrado: 99"))
+    void deletar_QuandoNaoExistir_DeveRetornar404() throws Exception {
+        doThrow(new EntidadeNaoEncontradaException("Alimento nao encontrado: 99"))
                 .when(alimentoService).deletar(99);
 
         mockMvc.perform(delete("/api/v1/alimentos/99"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 }

@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
 import br.com.nutricao.domain.model.RegistroDiario;
 import br.com.nutricao.infrastructure.persistence.RegistroDiarioRepository;
 
@@ -47,7 +48,7 @@ public class RegistroDiarioService {
     @Transactional
     public RegistroDiario atualizar(Integer id, RegistroDiario registro) {
         RegistroDiario existente = registroDiarioRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("RegistroDiario nao encontrado: " + id));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("RegistroDiario nao encontrado: " + id));
         if (registro.getData() != null) existente.setData(registro.getData());
         if (registro.getCaloriasConsumidas() != null) existente.setCaloriasConsumidas(registro.getCaloriasConsumidas());
         if (registro.getProteinasConsumidas() != null) existente.setProteinasConsumidas(registro.getProteinasConsumidas());
@@ -61,7 +62,7 @@ public class RegistroDiarioService {
     @Transactional
     public void deletar(Integer id) {
         if (!registroDiarioRepository.existsById(id)) {
-            throw new IllegalArgumentException("RegistroDiario nao encontrado: " + id);
+            throw new EntidadeNaoEncontradaException("RegistroDiario nao encontrado: " + id);
         }
         registroDiarioRepository.deleteById(id);
     }

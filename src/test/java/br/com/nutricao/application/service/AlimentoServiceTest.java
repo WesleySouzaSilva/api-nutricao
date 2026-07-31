@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
 import br.com.nutricao.domain.model.Alimento;
 import br.com.nutricao.domain.model.CategoriaAlimento;
 import br.com.nutricao.infrastructure.persistence.AlimentoRepository;
@@ -139,7 +140,7 @@ class AlimentoServiceTest {
     void deletar_QuandoNaoExistir_DeveLancarExcecao() {
         when(alimentoRepository.existsById(99)).thenReturn(false);
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntidadeNaoEncontradaException.class,
                 () -> alimentoService.deletar(99));
     }
 
@@ -147,7 +148,7 @@ class AlimentoServiceTest {
     void atualizar_QuandoNaoExistir_DeveLancarExcecao() {
         when(alimentoRepository.existsById(99)).thenReturn(false);
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntidadeNaoEncontradaException.class,
                 () -> alimentoService.atualizar(99, new Alimento()));
     }
 }

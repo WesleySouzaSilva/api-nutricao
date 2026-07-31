@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
 import br.com.nutricao.domain.model.Objetivo;
 import br.com.nutricao.infrastructure.persistence.ObjetivoRepository;
 
@@ -38,7 +39,7 @@ public class ObjetivoService {
     @Transactional
     public Objetivo atualizar(Integer id, Objetivo objetivo) {
         Objetivo existente = objetivoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Objetivo nao encontrado: " + id));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Objetivo nao encontrado: " + id));
         if (objetivo.getTipo() != null) existente.setTipo(objetivo.getTipo());
         if (objetivo.getPesoAlvo() != null) existente.setPesoAlvo(objetivo.getPesoAlvo());
         if (objetivo.getCaloriasDiarias() != null) existente.setCaloriasDiarias(objetivo.getCaloriasDiarias());
@@ -52,7 +53,7 @@ public class ObjetivoService {
     @Transactional
     public void deletar(Integer id) {
         if (!objetivoRepository.existsById(id)) {
-            throw new IllegalArgumentException("Objetivo nao encontrado: " + id);
+            throw new EntidadeNaoEncontradaException("Objetivo nao encontrado: " + id);
         }
         objetivoRepository.deleteById(id);
     }

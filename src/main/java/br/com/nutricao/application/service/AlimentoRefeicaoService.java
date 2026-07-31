@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
 import br.com.nutricao.domain.model.AlimentoRefeicao;
 import br.com.nutricao.infrastructure.persistence.AlimentoRefeicaoRepository;
 
@@ -39,7 +40,7 @@ public class AlimentoRefeicaoService {
     @Transactional
     public void deletar(Integer id) {
         if (!alimentoRefeicaoRepository.existsById(id)) {
-            throw new IllegalArgumentException("Vinculo AlimentoRefeicao nao encontrado: " + id);
+            throw new EntidadeNaoEncontradaException("Vinculo AlimentoRefeicao nao encontrado: " + id);
         }
         alimentoRefeicaoRepository.deleteById(id);
     }

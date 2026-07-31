@@ -7,6 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
+import br.com.nutricao.api.exception.NegocioException;
 import br.com.nutricao.domain.model.Usuario;
 import br.com.nutricao.infrastructure.persistence.UsuarioRepository;
 
@@ -24,7 +26,7 @@ public class UsuarioService {
     @Transactional
     public Usuario criar(Usuario usuario) {
         if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email ja cadastrado: " + usuario.getEmail());
+            throw new NegocioException("Email ja cadastrado: " + usuario.getEmail());
         }
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         return usuarioRepository.save(usuario);
@@ -45,11 +47,11 @@ public class UsuarioService {
     @Transactional
     public Usuario atualizar(Integer id, Usuario usuario) {
         Usuario existente = usuarioRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Usuario nao encontrado: " + id));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuario nao encontrado: " + id));
 
         if (!existente.getEmail().equals(usuario.getEmail())
                 && usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email ja cadastrado: " + usuario.getEmail());
+            throw new NegocioException("Email ja cadastrado: " + usuario.getEmail());
         }
 
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
@@ -61,7 +63,7 @@ public class UsuarioService {
     @Transactional
     public void deletar(Integer id) {
         if (!usuarioRepository.existsById(id)) {
-            throw new IllegalArgumentException("Usuario nao encontrado: " + id);
+            throw new EntidadeNaoEncontradaException("Usuario nao encontrado: " + id);
         }
         usuarioRepository.deleteById(id);
     }

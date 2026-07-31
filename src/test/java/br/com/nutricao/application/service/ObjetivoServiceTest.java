@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import br.com.nutricao.api.exception.EntidadeNaoEncontradaException;
 import br.com.nutricao.domain.model.Objetivo;
 import br.com.nutricao.domain.model.Usuario;
 import br.com.nutricao.infrastructure.persistence.ObjetivoRepository;
@@ -94,7 +95,7 @@ class ObjetivoServiceTest {
     void atualizar_QuandoNaoExistir_DeveLancarExcecao() {
         when(objetivoRepository.findById(99)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntidadeNaoEncontradaException.class,
                 () -> objetivoService.atualizar(99, new Objetivo()));
     }
 
@@ -142,6 +143,6 @@ class ObjetivoServiceTest {
     void deletar_QuandoNaoExistir_DeveLancarExcecao() {
         when(objetivoRepository.existsById(99)).thenReturn(false);
 
-        assertThrows(IllegalArgumentException.class, () -> objetivoService.deletar(99));
+        assertThrows(EntidadeNaoEncontradaException.class, () -> objetivoService.deletar(99));
     }
 }
