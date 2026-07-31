@@ -3,6 +3,8 @@ package br.com.nutricao.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +40,10 @@ public class CategoriaAlimentoService {
 
     public List<CategoriaAlimento> listar() {
         return categoriaAlimentoRepository.findAll();
+    }
+
+    public Page<CategoriaAlimento> listarPaginado(Pageable pageable) {
+        return categoriaAlimentoRepository.findAll(pageable);
     }
 
     @Transactional

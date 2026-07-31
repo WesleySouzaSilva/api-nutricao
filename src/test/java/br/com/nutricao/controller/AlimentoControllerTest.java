@@ -13,6 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,9 +23,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.nutricao.services.exception.entidades.EntidadeNaoEncontradaException;
+import br.com.nutricao.domain.dto.filtro.AlimentoCamposFiltro;
 import br.com.nutricao.domain.dto.insercao.AlimentoRequest;
-import br.com.nutricao.domain.dto.visualizacao.AlimentoResponse;
-import br.com.nutricao.domain.dto.visualizacao.CategoriaAlimentoResponse;
 import br.com.nutricao.services.AlimentoService;
 import br.com.nutricao.domain.Alimento;
 import br.com.nutricao.domain.CategoriaAlimento;
@@ -77,29 +79,35 @@ class AlimentoControllerTest {
 
     @Test
     void listar_SemFiltros_DeveRetornar200() throws Exception {
-        when(alimentoService.listar()).thenReturn(Arrays.asList(alimento));
+        Page<Alimento> page = new PageImpl<>(Arrays.asList(alimento));
+        when(alimentoService.listarTodosFiltro(any(AlimentoCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/alimentos"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1));
+                .andExpect(jsonPath("$.content[0].id").value(1));
     }
 
     @Test
     void listar_ComCategoriaId_DeveRetornar200() throws Exception {
-        when(alimentoService.buscarPorCategoria(1)).thenReturn(Arrays.asList(alimento));
+        Page<Alimento> page = new PageImpl<>(Arrays.asList(alimento));
+        when(alimentoService.listarTodosFiltro(any(AlimentoCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
-        mockMvc.perform(get("/api/v1/alimentos").param("categoriaId", "1"))
+        mockMvc.perform(get("/api/v1/alimentos").param("categoriaAlimentoId", "1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1));
+                .andExpect(jsonPath("$.content[0].id").value(1));
     }
 
     @Test
     void listar_ComNome_DeveRetornar200() throws Exception {
-        when(alimentoService.buscarPorNome("Banana")).thenReturn(Arrays.asList(alimento));
+        Page<Alimento> page = new PageImpl<>(Arrays.asList(alimento));
+        when(alimentoService.listarTodosFiltro(any(AlimentoCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/alimentos").param("nome", "Banana"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1));
+                .andExpect(jsonPath("$.content[0].id").value(1));
     }
 
     @Test
@@ -149,29 +157,35 @@ class AlimentoControllerTest {
 
     @Test
     void listar_SemFiltros_QuandoVazio_DeveRetornar200() throws Exception {
-        when(alimentoService.listar()).thenReturn(java.util.Collections.emptyList());
+        Page<Alimento> page = new PageImpl<>(java.util.Collections.emptyList());
+        when(alimentoService.listarTodosFiltro(any(AlimentoCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/alimentos"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[]"));
+                .andExpect(jsonPath("$.content").isEmpty());
     }
 
     @Test
     void listar_ComCategoriaId_QuandoVazio_DeveRetornar200() throws Exception {
-        when(alimentoService.buscarPorCategoria(99)).thenReturn(java.util.Collections.emptyList());
+        Page<Alimento> page = new PageImpl<>(java.util.Collections.emptyList());
+        when(alimentoService.listarTodosFiltro(any(AlimentoCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
-        mockMvc.perform(get("/api/v1/alimentos").param("categoriaId", "99"))
+        mockMvc.perform(get("/api/v1/alimentos").param("categoriaAlimentoId", "99"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[]"));
+                .andExpect(jsonPath("$.content").isEmpty());
     }
 
     @Test
     void listar_ComNome_QuandoNaoExistir_DeveRetornar200() throws Exception {
-        when(alimentoService.buscarPorNome("NAOEXISTE")).thenReturn(java.util.Collections.emptyList());
+        Page<Alimento> page = new PageImpl<>(java.util.Collections.emptyList());
+        when(alimentoService.listarTodosFiltro(any(AlimentoCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/alimentos").param("nome", "NAOEXISTE"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[]"));
+                .andExpect(jsonPath("$.content").isEmpty());
     }
 
     @Test

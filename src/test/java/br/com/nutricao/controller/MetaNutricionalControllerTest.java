@@ -15,6 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.nutricao.services.exception.entidades.EntidadeNaoEncontradaException;
+import br.com.nutricao.domain.dto.filtro.MetaNutricionalCamposFiltro;
 import br.com.nutricao.domain.dto.insercao.MetaNutricionalRequest;
 import br.com.nutricao.services.MetaNutricionalService;
 import br.com.nutricao.domain.MetaNutricional;
@@ -74,11 +78,13 @@ class MetaNutricionalControllerTest {
 
     @Test
     void listar_DeveRetornar200() throws Exception {
-        when(metaNutricionalService.listar()).thenReturn(Arrays.asList(meta));
+        Page<MetaNutricional> page = new PageImpl<>(Arrays.asList(meta));
+        when(metaNutricionalService.listarTodosFiltro(any(MetaNutricionalCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/metas-nutricionais"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1));
+                .andExpect(jsonPath("$.content[0].id").value(1));
     }
 
     @Test
@@ -152,11 +158,13 @@ class MetaNutricionalControllerTest {
 
     @Test
     void listar_QuandoVazio_DeveRetornar200() throws Exception {
-        when(metaNutricionalService.listar()).thenReturn(java.util.Collections.emptyList());
+        Page<MetaNutricional> page = new PageImpl<>(java.util.Collections.emptyList());
+        when(metaNutricionalService.listarTodosFiltro(any(MetaNutricionalCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/metas-nutricionais"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[]"));
+                .andExpect(jsonPath("$.content").isEmpty());
     }
 
     @Test

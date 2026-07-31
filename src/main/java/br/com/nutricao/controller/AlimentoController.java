@@ -3,6 +3,8 @@ package br.com.nutricao.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,9 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.nutricao.domain.dto.filtro.AlimentoCamposFiltro;
 import br.com.nutricao.domain.dto.insercao.AlimentoRequest;
 import br.com.nutricao.domain.dto.visualizacao.AlimentoResponse;
 import br.com.nutricao.domain.dto.visualizacao.CategoriaAlimentoResponse;
@@ -39,19 +41,10 @@ public class AlimentoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AlimentoResponse>> listar(
-            @RequestParam(required = false) Integer categoriaId,
-            @RequestParam(required = false) String nome) {
-        List<Alimento> result;
-        if (categoriaId != null) {
-            result = alimentoService.buscarPorCategoria(categoriaId);
-        } else if (nome != null) {
-            result = alimentoService.buscarPorNome(nome);
-        } else {
-            result = alimentoService.listar();
-        }
-        List<AlimentoResponse> list = result.stream().map(this::toResponse).collect(Collectors.toList());
-        return ResponseEntity.ok(list);
+    public ResponseEntity<Page<AlimentoResponse>> listar(AlimentoCamposFiltro filtro, Pageable pageable) {
+        Page<Alimento> page = alimentoService.listarTodosFiltro(filtro, pageable);
+        Page<AlimentoResponse> responsePage = page.map(this::toResponse);
+        return ResponseEntity.ok(responsePage);
     }
 
     @GetMapping("/{id}")

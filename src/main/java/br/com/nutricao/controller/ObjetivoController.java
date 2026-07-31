@@ -3,6 +3,8 @@ package br.com.nutricao.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.nutricao.domain.dto.filtro.ObjetivoCamposFiltro;
 import br.com.nutricao.domain.dto.insercao.ObjetivoRequest;
 import br.com.nutricao.domain.dto.visualizacao.ObjetivoResponse;
 import br.com.nutricao.services.ObjetivoService;
@@ -37,10 +40,10 @@ public class ObjetivoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ObjetivoResponse>> listar() {
-        List<ObjetivoResponse> list = objetivoService.listar().stream()
-                .map(this::toResponse).collect(Collectors.toList());
-        return ResponseEntity.ok(list);
+    public ResponseEntity<Page<ObjetivoResponse>> listar(ObjetivoCamposFiltro filtro, Pageable pageable) {
+        Page<Objetivo> page = objetivoService.listarTodosFiltro(filtro, pageable);
+        Page<ObjetivoResponse> responsePage = page.map(this::toResponse);
+        return ResponseEntity.ok(responsePage);
     }
 
     @GetMapping("/{id}")

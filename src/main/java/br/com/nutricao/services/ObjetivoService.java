@@ -3,12 +3,17 @@ package br.com.nutricao.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.nutricao.services.exception.entidades.EntidadeNaoEncontradaException;
 import br.com.nutricao.domain.Objetivo;
+import br.com.nutricao.domain.dto.filtro.ObjetivoCamposFiltro;
 import br.com.nutricao.repositories.ObjetivoRepository;
+import br.com.nutricao.specification.ObjetivoFiltro;
 
 @Service
 public class ObjetivoService {
@@ -34,6 +39,11 @@ public class ObjetivoService {
 
     public List<Objetivo> listar() {
         return objetivoRepository.findAll();
+    }
+
+    public Page<Objetivo> listarTodosFiltro(ObjetivoCamposFiltro filtro, Pageable pageable) {
+        Specification<Objetivo> spec = ObjetivoFiltro.filtrar(filtro);
+        return objetivoRepository.findAll(spec, pageable);
     }
 
     @Transactional

@@ -3,6 +3,7 @@ package br.com.nutricao.integration;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -49,11 +50,12 @@ class CategoriaAlimentoIntegrationTest {
         assertNotNull(postResponse.getBody().get("id"));
         assertEquals(categoriaRequest.get("nome"), postResponse.getBody().get("nome"));
 
-        ResponseEntity<Map[]> listaResponse = restTemplate.getForEntity(
-                "/api/v1/categorias", Map[].class);
+        ResponseEntity<Map> listaResponse = restTemplate.getForEntity(
+                "/api/v1/categorias", Map.class);
 
         assertEquals(HttpStatus.OK, listaResponse.getStatusCode());
-        assertTrue(listaResponse.getBody().length > 0);
+        List<Map> content = (List<Map>) listaResponse.getBody().get("content");
+        assertTrue(content.size() > 0);
     }
 
     @Test

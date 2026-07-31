@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -85,11 +86,12 @@ class RegistroDiarioIntegrationTest {
 
         restTemplate.postForEntity("/api/v1/registros-diarios", request, Map.class);
 
-        ResponseEntity<Map[]> response = restTemplate.getForEntity(
-                "/api/v1/registros-diarios", Map[].class);
+        ResponseEntity<Map> response = restTemplate.getForEntity(
+                "/api/v1/registros-diarios", Map.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody().length > 0);
+        List<Map> content = (List<Map>) response.getBody().get("content");
+        assertTrue(content.size() > 0);
     }
 
     @Test
@@ -103,12 +105,13 @@ class RegistroDiarioIntegrationTest {
 
         restTemplate.postForEntity("/api/v1/registros-diarios", request, Map.class);
 
-        ResponseEntity<Map[]> response = restTemplate.getForEntity(
+        ResponseEntity<Map> response = restTemplate.getForEntity(
                 "/api/v1/registros-diarios?usuarioId=" + usuarioId
-                + "&inicio=2024-01-01&fim=2024-12-31", Map[].class);
+                + "&dataInicio=2024-01-01&dataFim=2024-12-31", Map.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody().length > 0);
+        List<Map> content = (List<Map>) response.getBody().get("content");
+        assertTrue(content.size() > 0);
     }
 
     @Test

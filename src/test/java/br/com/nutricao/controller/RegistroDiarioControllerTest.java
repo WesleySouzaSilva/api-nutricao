@@ -15,6 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.nutricao.services.exception.entidades.EntidadeNaoEncontradaException;
+import br.com.nutricao.domain.dto.filtro.RegistroDiarioCamposFiltro;
 import br.com.nutricao.domain.dto.insercao.RegistroDiarioRequest;
 import br.com.nutricao.services.RegistroDiarioService;
 import br.com.nutricao.domain.RegistroDiario;
@@ -75,44 +79,51 @@ class RegistroDiarioControllerTest {
 
     @Test
     void listar_SemFiltros_DeveRetornar200() throws Exception {
-        when(registroDiarioService.listar()).thenReturn(Arrays.asList(registro));
+        Page<RegistroDiario> page = new PageImpl<>(Arrays.asList(registro));
+        when(registroDiarioService.listarTodosFiltro(any(RegistroDiarioCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/registros-diarios"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1));
+                .andExpect(jsonPath("$.content[0].id").value(1));
     }
 
     @Test
     void listar_ComUsuarioId_DeveRetornar200() throws Exception {
-        when(registroDiarioService.buscarPorUsuarioOrdenado(1)).thenReturn(Arrays.asList(registro));
+        Page<RegistroDiario> page = new PageImpl<>(Arrays.asList(registro));
+        when(registroDiarioService.listarTodosFiltro(any(RegistroDiarioCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/registros-diarios").param("usuarioId", "1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1));
+                .andExpect(jsonPath("$.content[0].id").value(1));
     }
 
     @Test
     void listar_ComUsuarioEPeriodo_DeveRetornar200() throws Exception {
-        when(registroDiarioService.buscarPorUsuarioEPeriodo(eq(1), any(LocalDate.class), any(LocalDate.class)))
-                .thenReturn(Arrays.asList(registro));
+        Page<RegistroDiario> page = new PageImpl<>(Arrays.asList(registro));
+        when(registroDiarioService.listarTodosFiltro(any(RegistroDiarioCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/registros-diarios")
                 .param("usuarioId", "1")
-                .param("inicio", "2024-01-01")
-                .param("fim", "2024-01-31"))
+                .param("dataInicio", "2024-01-01")
+                .param("dataFim", "2024-01-31"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1));
+                .andExpect(jsonPath("$.content[0].id").value(1));
     }
 
     @Test
     void listar_ComUsuarioEInicioSemFim_DeveRetornar200() throws Exception {
-        when(registroDiarioService.buscarPorUsuarioOrdenado(1)).thenReturn(Arrays.asList(registro));
+        Page<RegistroDiario> page = new PageImpl<>(Arrays.asList(registro));
+        when(registroDiarioService.listarTodosFiltro(any(RegistroDiarioCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/registros-diarios")
                 .param("usuarioId", "1")
-                .param("inicio", "2024-01-01"))
+                .param("dataInicio", "2024-01-01"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1));
+                .andExpect(jsonPath("$.content[0].id").value(1));
     }
 
     @Test
@@ -160,11 +171,13 @@ class RegistroDiarioControllerTest {
 
     @Test
     void listar_QuandoVazio_DeveRetornar200() throws Exception {
-        when(registroDiarioService.listar()).thenReturn(java.util.Collections.emptyList());
+        Page<RegistroDiario> page = new PageImpl<>(java.util.Collections.emptyList());
+        when(registroDiarioService.listarTodosFiltro(any(RegistroDiarioCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/registros-diarios"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[]"));
+                .andExpect(jsonPath("$.content").isEmpty());
     }
 
     @Test

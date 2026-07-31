@@ -15,6 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.nutricao.services.exception.entidades.EntidadeNaoEncontradaException;
+import br.com.nutricao.domain.dto.filtro.ObjetivoCamposFiltro;
 import br.com.nutricao.domain.dto.insercao.ObjetivoRequest;
 import br.com.nutricao.services.ObjetivoService;
 import br.com.nutricao.domain.Objetivo;
@@ -73,11 +77,13 @@ class ObjetivoControllerTest {
 
     @Test
     void listar_DeveRetornar200() throws Exception {
-        when(objetivoService.listar()).thenReturn(Arrays.asList(objetivo));
+        Page<Objetivo> page = new PageImpl<>(Arrays.asList(objetivo));
+        when(objetivoService.listarTodosFiltro(any(ObjetivoCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/objetivos"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1));
+                .andExpect(jsonPath("$.content[0].id").value(1));
     }
 
     @Test
@@ -134,11 +140,13 @@ class ObjetivoControllerTest {
 
     @Test
     void listar_QuandoVazio_DeveRetornar200() throws Exception {
-        when(objetivoService.listar()).thenReturn(java.util.Collections.emptyList());
+        Page<Objetivo> page = new PageImpl<>(java.util.Collections.emptyList());
+        when(objetivoService.listarTodosFiltro(any(ObjetivoCamposFiltro.class), any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/v1/objetivos"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[]"));
+                .andExpect(jsonPath("$.content").isEmpty());
     }
 
     @Test

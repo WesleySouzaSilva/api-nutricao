@@ -12,6 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
@@ -56,11 +59,12 @@ class CategoriaAlimentoControllerTest {
 
     @Test
     void listar_DeveRetornar200() throws Exception {
-        when(categoriaAlimentoService.listar()).thenReturn(Arrays.asList(new CategoriaAlimento(1, "Frutas")));
+        Page<CategoriaAlimento> page = new PageImpl<>(Arrays.asList(new CategoriaAlimento(1, "Frutas")));
+        when(categoriaAlimentoService.listarPaginado(any(Pageable.class))).thenReturn(page);
 
         mockMvc.perform(get("/api/v1/categorias"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1));
+                .andExpect(jsonPath("$.content[0].id").value(1));
     }
 
     @Test
@@ -119,11 +123,12 @@ class CategoriaAlimentoControllerTest {
 
     @Test
     void listar_QuandoVazio_DeveRetornar200() throws Exception {
-        when(categoriaAlimentoService.listar()).thenReturn(java.util.Collections.emptyList());
+        Page<CategoriaAlimento> page = new PageImpl<>(java.util.Collections.emptyList());
+        when(categoriaAlimentoService.listarPaginado(any(Pageable.class))).thenReturn(page);
 
         mockMvc.perform(get("/api/v1/categorias"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[]"));
+                .andExpect(jsonPath("$.content").isEmpty());
     }
 
     @Test
