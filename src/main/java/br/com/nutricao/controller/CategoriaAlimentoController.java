@@ -2,6 +2,7 @@ package br.com.nutricao.controller;
 
 import java.util.stream.Collectors;
 
+import br.com.nutricao.controller.documentacao.CategoriaAlimentoControllerSwagger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ import br.com.nutricao.domain.CategoriaAlimento;
 
 @RestController
 @RequestMapping("/api/v1/categorias")
-public class CategoriaAlimentoController {
+public class CategoriaAlimentoController implements CategoriaAlimentoControllerSwagger {
 
     private final CategoriaAlimentoService categoriaAlimentoService;
 

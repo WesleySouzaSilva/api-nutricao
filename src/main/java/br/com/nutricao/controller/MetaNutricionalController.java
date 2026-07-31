@@ -1,5 +1,6 @@
 package br.com.nutricao.controller;
 
+import br.com.nutricao.controller.documentacao.MetaNutricionalControllerSwagger;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,7 @@ import br.com.nutricao.domain.Usuario;
 
 @RestController
 @RequestMapping("/api/v1/metas-nutricionais")
-public class MetaNutricionalController {
+public class MetaNutricionalController implements MetaNutricionalControllerSwagger {
 
     private final MetaNutricionalService metaNutricionalService;
 

@@ -2,7 +2,7 @@
 
 API REST para controle alimentar e nutricional — projeto portfólio demonstrando boas práticas com **Spring Boot**, **TDD**, **Clean Architecture** e **padrões profissionais de desenvolvimento**.
 
-> **Status**: Em desenvolvimento — Planejamento e estruturação inicial (PR #1)
+> **Status**: Em desenvolvimento — Ciclo 11: Documentacao e Seed de Dados (PR #7)
 > **Stack**: Java 11 | Spring Boot 2.7.18 | MySQL 8 | Flyway | JWT | Docker
 
 ---
@@ -79,7 +79,7 @@ O **api-nutricao** é uma API REST desenvolvida do zero para demonstrar competê
 | **Banco** | MySQL | 8.0+ | Consistente com ecossistema |
 | **Migration** | Flyway | 9.x | Controle de versão do schema |
 | **Autenticação** | auth0 java-jwt | 4.4.0 | HMAC256, stateless |
-| **Documentação** | SpringDoc OpenAPI | 1.8.0 | Sucessor do SpringFox, compatível com SB 2.x |
+| **Documentação** | SpringDoc OpenAPI | 1.7.0 | Sucessor do SpringFox, compatível com SB 2.x |
 | **Mapping** | ModelMapper | 3.2.1 | Conversão entidade ↔ DTO |
 | **Testes** | JUnit 5 + Mockito | Última | TDD desde o início |
 | **Container** | Docker + Compose | Última | Ambiente reproduzível |
@@ -94,7 +94,7 @@ Consulte o documento [`docs/ENTIDADES.md`](docs/ENTIDADES.md) para diagrama ER c
 
 ## 🌐 Endpoints da API
 
-Consulte o documento [`docs/ENDPOINTS.md`](docs/ENDPOINTS.md) para a lista completa de endpoints (28 no total, 9 controllers).
+Consulte o documento [`docs/ENDPOINTS.md`](docs/ENDPOINTS.md) para a lista completa de endpoints (10 controllers).
 
 ---
 
@@ -218,12 +218,13 @@ Exemplo:
 
 ## 📌 Próximos Passos
 
-1. ✅ **PR #1** — Documentação e planejamento inicial (você está aqui)
-2. ⏳ **PR #2** — Ciclo 1: Projeto base + infraestrutura (pom.xml, Docker, configs)
-3. ⏳ **PR #3** — Ciclo 2: Entidades + migrações (TDD)
-4. ⏳ **PR #4** — Ciclo 3: Repositories (TDD)
-5. ⏳ **PR #5-6** — Ciclo 4-5: Services + Autenticação (TDD)
-6. ⏳ **PR #7-9** — Ciclo 6-8: Controllers + Exception Handling + Final
+1. ✅ **PR #1** — Documentacao e planejamento inicial
+2. ✅ **PR #2** — Ciclo 1-2: Projeto base + entidades + migracoes (TDD)
+3. ✅ **PR #3** — Ciclo 3: Repositories (TDD)
+4. ✅ **PR #4** — Ciclo 4: Services + Autenticacao JWT (TDD)
+5. ✅ **PR #5** — Ciclo 5-7: Controllers + Validacao + Testes de integracao
+6. ✅ **PR #6** — Ciclo 9-10: Exception Handling + Paginacao e Filtros com Specification
+7. 🔄 **PR #7** — Ciclo 11: Documentacao OpenAPI + Seed de dados (atual)
 
 ---
 
