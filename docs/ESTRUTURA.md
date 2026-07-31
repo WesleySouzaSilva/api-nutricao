@@ -21,29 +21,62 @@ api-nutricao/
 │   │   │   ├── ApiNutricaoApplication.java
 │   │   │   ├── config/
 │   │   │   │   ├── SecurityConfig.java
-│   │   │   │   └── OpenApiConfig.java
+│   │   │   │   ├── JwtUtil.java
+│   │   │   │   ├── JwtAuthenticationFilter.java
+│   │   │   │   ├── UserDetailsServiceImpl.java
+│   │   │   │   └── UsuarioDetails.java
 │   │   │   ├── domain/
-│   │   │   │   ├── model/
-│   │   │   │   │   ├── Usuario.java
-│   │   │   │   │   ├── CategoriaAlimento.java
-│   │   │   │   │   ├── Alimento.java
-│   │   │   │   │   ├── Refeicao.java
-│   │   │   │   │   ├── AlimentoRefeicao.java
-│   │   │   │   │   ├── MetaNutricional.java
-│   │   │   │   │   ├── Objetivo.java
-│   │   │   │   │   ├── RegistroDiario.java
-│   │   │   │   │   └── AlimentoFavorito.java
-│   │   │   │   ├── repository/
-│   │   │   │   │   ├── UsuarioRepository.java
-│   │   │   │   │   ├── AlimentoRepository.java
-│   │   │   │   │   ├── RefeicaoRepository.java
-│   │   │   │   │   ├── MetaNutricionalRepository.java
-│   │   │   │   │   ├── ObjetivoRepository.java
-│   │   │   │   │   └── RegistroDiarioRepository.java
+│   │   │   │   └── model/
+│   │   │   │       ├── Usuario.java
+│   │   │   │       ├── CategoriaAlimento.java
+│   │   │   │       ├── Alimento.java
+│   │   │   │       ├── Refeicao.java
+│   │   │   │       ├── AlimentoRefeicao.java
+│   │   │   │       ├── AlimentoFavorito.java
+│   │   │   │       ├── MetaNutricional.java
+│   │   │   │       ├── Objetivo.java
+│   │   │   │       └── RegistroDiario.java
+│   │   │   ├── infrastructure/
+│   │   │   │   └── persistence/
+│   │   │   │       ├── UsuarioRepository.java
+│   │   │   │       ├── CategoriaAlimentoRepository.java
+│   │   │   │       ├── AlimentoRepository.java
+│   │   │   │       ├── RefeicaoRepository.java
+│   │   │   │       ├── AlimentoRefeicaoRepository.java
+│   │   │   │       ├── AlimentoFavoritoRepository.java
+│   │   │   │       ├── MetaNutricionalRepository.java
+│   │   │   │       ├── ObjetivoRepository.java
+│   │   │   │       └── RegistroDiarioRepository.java
+│   │   │   ├── application/
+│   │   │   │   ├── dto/
+│   │   │   │   │   ├── UsuarioRequest.java
+│   │   │   │   │   ├── UsuarioResponse.java
+│   │   │   │   │   ├── CategoriaAlimentoRequest.java
+│   │   │   │   │   ├── CategoriaAlimentoResponse.java
+│   │   │   │   │   ├── AlimentoRequest.java
+│   │   │   │   │   ├── AlimentoResponse.java
+│   │   │   │   │   ├── RefeicaoRequest.java
+│   │   │   │   │   ├── RefeicaoResponse.java
+│   │   │   │   │   ├── AlimentoRefeicaoRequest.java
+│   │   │   │   │   ├── AlimentoRefeicaoResponse.java
+│   │   │   │   │   ├── AlimentoFavoritoRequest.java
+│   │   │   │   │   ├── AlimentoFavoritoResponse.java
+│   │   │   │   │   ├── MetaNutricionalRequest.java
+│   │   │   │   │   ├── MetaNutricionalResponse.java
+│   │   │   │   │   ├── ObjetivoRequest.java
+│   │   │   │   │   ├── ObjetivoResponse.java
+│   │   │   │   │   ├── RegistroDiarioRequest.java
+│   │   │   │   │   ├── RegistroDiarioResponse.java
+│   │   │   │   │   ├── AuthRequest.java
+│   │   │   │   │   ├── AuthResponse.java
+│   │   │   │   │   └── LoginToken.java
 │   │   │   │   └── service/
 │   │   │   │       ├── UsuarioService.java
+│   │   │   │       ├── CategoriaAlimentoService.java
 │   │   │   │       ├── AlimentoService.java
 │   │   │   │       ├── RefeicaoService.java
+│   │   │   │       ├── AlimentoRefeicaoService.java
+│   │   │   │       ├── AlimentoFavoritoService.java
 │   │   │   │       ├── MetaNutricionalService.java
 │   │   │   │       ├── ObjetivoService.java
 │   │   │   │       └── RegistroDiarioService.java
@@ -51,53 +84,31 @@ api-nutricao/
 │   │   │   │   ├── controller/
 │   │   │   │   │   ├── AuthController.java
 │   │   │   │   │   ├── UsuarioController.java
-│   │   │   │   │   ├── CategoriaController.java
+│   │   │   │   │   ├── CategoriaAlimentoController.java
 │   │   │   │   │   ├── AlimentoController.java
 │   │   │   │   │   ├── RefeicaoController.java
+│   │   │   │   │   ├── AlimentoRefeicaoController.java
+│   │   │   │   │   ├── AlimentoFavoritoController.java
 │   │   │   │   │   ├── MetaNutricionalController.java
 │   │   │   │   │   ├── ObjetivoController.java
-│   │   │   │   │   ├── RegistroDiarioController.java
-│   │   │   │   │   └── HealthController.java
-│   │   │   │   ├── dto/
-│   │   │   │   │   ├── request/
-│   │   │   │   │   │   ├── LoginRequest.java
-│   │   │   │   │   │   ├── UsuarioCreateRequest.java
-│   │   │   │   │   │   ├── UsuarioUpdateRequest.java
-│   │   │   │   │   │   ├── CategoriaRequest.java
-│   │   │   │   │   │   ├── AlimentoRequest.java
-│   │   │   │   │   │   ├── RefeicaoRequest.java
-│   │   │   │   │   │   ├── MetaRequest.java
-│   │   │   │   │   │   ├── ObjetivoRequest.java
-│   │   │   │   │   │   └── RegistroDiarioRequest.java
-│   │   │   │   │   └── response/
-│   │   │   │   │       ├── TokenResponse.java
-│   │   │   │   │       ├── UsuarioResponse.java
-│   │   │   │   │       ├── AlimentoResponse.java
-│   │   │   │   │       ├── RefeicaoResponse.java
-│   │   │   │   │       ├── MetaResponse.java
-│   │   │   │   │       ├── ObjetivoResponse.java
-│   │   │   │   │       ├── ResumoDiarioResponse.java
-│   │   │   │   │       └── RegistroDiarioResponse.java
-│   │   │   │   └── exception/
-│   │   │   │       ├── ApiExceptionHandler.java
-│   │   │   │       ├── Problema.java
-│   │   │   │       ├── TipoProblema.java
-│   │   │   │       ├── EntidadeNaoEncontradaException.java
-│   │   │   │       ├── EntidadeEmUsoException.java
-│   │   │   │       └── NegocioException.java
-│   │   │   ├── security/
-│   │   │   │   ├── JwtUtil.java
-│   │   │   │   └── JwtAuthenticationFilter.java
-│   │   │   └── infrastructure/
-│   │   │       └── specification/
-│   │   │           └── AlimentoSpecification.java
+│   │   │   │   │   └── RegistroDiarioController.java
+│   │   │   │   ├── exception/
+│   │   │   │   │   ├── NegocioException.java
+│   │   │   │   │   ├── EntidadeNaoEncontradaException.java
+│   │   │   │   │   ├── EntidadeEmUsoException.java
+│   │   │   │   │   ├── Problema.java
+│   │   │   │   │   └── TipoProblema.java
+│   │   │   │   └── handler/
+│   │   │   │       └── ApiExceptionHandler.java
+│   │   │   └── (vazio: security/, infrastructure/ — removidos pois
+│   │   │       JWT foi movido para config/ e Specification nao existe)
 │   │   └── resources/
-│   │       ├── application.yml
-│   │       ├── application-dev.yml
-│   │       ├── application-prod.yml
+│   │       ├── application.properties
+│   │       ├── application-dev.properties
+│   │       ├── application-prod.properties
+│   │       ├── application-test.properties
 │   │       └── db/migration/
-│   │           ├── V1__create_tables.sql
-│   │           └── V2__seed_alimentos.sql
+│   │           └── V1__create_tables.sql
 │   └── test/java/br/com/nutricao/
 │       ├── domain/model/
 │       │   ├── UsuarioTest.java
@@ -105,39 +116,65 @@ api-nutricao/
 │       │   ├── AlimentoTest.java
 │       │   ├── RefeicaoTest.java
 │       │   ├── AlimentoRefeicaoTest.java
+│       │   ├── AlimentoFavoritoTest.java
 │       │   ├── MetaNutricionalTest.java
 │       │   ├── ObjetivoTest.java
-│       │   ├── RegistroDiarioTest.java
-│       │   └── AlimentoFavoritoTest.java
-│       ├── domain/repository/
+│       │   └── RegistroDiarioTest.java
+│       ├── infrastructure/persistence/
 │       │   ├── UsuarioRepositoryTest.java
+│       │   ├── CategoriaAlimentoRepositoryTest.java
 │       │   ├── AlimentoRepositoryTest.java
 │       │   ├── RefeicaoRepositoryTest.java
+│       │   ├── AlimentoRefeicaoRepositoryTest.java
+│       │   ├── AlimentoFavoritoRepositoryTest.java
 │       │   ├── MetaNutricionalRepositoryTest.java
 │       │   ├── ObjetivoRepositoryTest.java
 │       │   └── RegistroDiarioRepositoryTest.java
-│       ├── domain/service/
+│       ├── application/service/
 │       │   ├── UsuarioServiceTest.java
+│       │   ├── CategoriaAlimentoServiceTest.java
 │       │   ├── AlimentoServiceTest.java
 │       │   ├── RefeicaoServiceTest.java
+│       │   ├── AlimentoRefeicaoServiceTest.java
+│       │   ├── AlimentoFavoritoServiceTest.java
 │       │   ├── MetaNutricionalServiceTest.java
 │       │   ├── ObjetivoServiceTest.java
 │       │   └── RegistroDiarioServiceTest.java
 │       ├── api/controller/
 │       │   ├── AuthControllerTest.java
 │       │   ├── UsuarioControllerTest.java
-│       │   ├── CategoriaControllerTest.java
+│       │   ├── CategoriaAlimentoControllerTest.java
 │       │   ├── AlimentoControllerTest.java
 │       │   ├── RefeicaoControllerTest.java
+│       │   ├── AlimentoRefeicaoControllerTest.java
+│       │   ├── AlimentoFavoritoControllerTest.java
 │       │   ├── MetaNutricionalControllerTest.java
 │       │   ├── ObjetivoControllerTest.java
 │       │   └── RegistroDiarioControllerTest.java
-│       └── security/
-│           ├── JwtUtilTest.java
-│           └── JwtAuthenticationFilterTest.java
+│       ├── api/integration/
+│       │   ├── IntegrationTestConfig.java
+│       │   ├── UsuarioIntegrationTest.java
+│       │   ├── CategoriaAlimentoIntegrationTest.java
+│       │   ├── AlimentoIntegrationTest.java
+│       │   ├── RefeicaoIntegrationTest.java
+│       │   ├── AlimentoRefeicaoIntegrationTest.java
+│       │   ├── AlimentoFavoritoIntegrationTest.java
+│       │   ├── MetaNutricionalIntegrationTest.java
+│       │   ├── ObjetivoIntegrationTest.java
+│       │   └── RegistroDiarioIntegrationTest.java
+│       ├── api/exception/
+│       │   ├── NegocioExceptionTest.java
+│       │   ├── EntidadeNaoEncontradaExceptionTest.java
+│       │   ├── EntidadeEmUsoExceptionTest.java
+│       │   ├── ProblemaTest.java
+│       │   └── TipoProblemaTest.java
+│       ├── api/handler/
+│       │   └── ApiExceptionHandlerTest.java
+│       └── config/
+│           └── JwtUtilTest.java
 ```
 
-**Total estimado**: ~82 arquivos.
+**Total real**: ~107 arquivos Java (69 main + 54 test).
 
 ---
 
