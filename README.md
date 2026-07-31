@@ -35,6 +35,7 @@ O **api-nutricao** nasce como um projeto portfólio que consolida todo esse apre
 - [Ciclos de Implementação](docs/PLANEJAMENTO.md#ciclos-de-implementação)
 - [Estrutura do Projeto](docs/ESTRUTURA.md)
 - [Deploy em Producao](docs/DEPLOY.md)
+- [Melhorias para 2026](docs/MELHORIAS.md)
 - [Como Executar](#-como-executar)
 - [Padrões de Commit e Branch](#-padrões-de-commit-e-branch)
 - [Pull Requests](#-pull-requests)
@@ -227,6 +228,12 @@ Exemplo:
 6. ✅ **PR #6** — [AN-06] feat(paginacao): implementar paginacao e filtros dinamicos com Specification
 7. ✅ **PR #7** — [AN-07] docs(openapi): criar documentacao SpringDoc com interfaces, seed TACO e atualizar docs
 8. 🔄 **PR #8** — [AN-08] docs(deploy): documentar deploy AWS EC2, ajustes finais e DEPLOY.md (atual)
+
+---
+
+## 🔭 Visao de Futuro (2026)
+
+Tres anos apos a versao original, o ecossistema Java evoluiu significativamente. Consulte o documento [`docs/MELHORIAS.md`](docs/MELHORIAS.md) para uma analise detalhada do que seria diferente se o projeto fosse construido hoje: Java 21, Spring Boot 3.x, GraalVM Native Image, PostgreSQL + Redis, Kubernetes, observabilidade com Prometheus/Grafana, mensageria com RabbitMQ, CI/CD com GitHub Actions, Testcontainers e muito mais.
 
 ---
 

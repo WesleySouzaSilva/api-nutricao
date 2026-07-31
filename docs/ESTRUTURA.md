@@ -15,7 +15,8 @@ api-nutricao/
 │   ├── ENDPOINTS.md
 │   ├── ESTRUTURA.md
 │   ├── PLANEJAMENTO.md
-│   └── DEPLOY.md
+│   ├── DEPLOY.md
+│   └── MELHORIAS.md
 ├── src/
 │   ├── main/
 │   │   ├── java/br/com/nutricao/

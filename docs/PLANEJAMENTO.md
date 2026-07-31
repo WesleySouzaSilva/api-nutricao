@@ -196,7 +196,8 @@ Os ciclos foram estruturados para seguir TDD, começando pelas entidades e servi
 |---|--------|------|----------|
 | 12.1 | Guia de deploy AWS EC2 (Nginx + Certbot + HTTPS) | ❌ | `docs/DEPLOY.md` |
 | 12.2 | Ajustes finais na documentacao | ❌ | `docs/ENTIDADES.md`, `docs/ESTRUTURA.md`, `docs/ENDPOINTS.md`, `docs/PLANEJAMENTO.md`, `README.md` |
-| 12.3 | Verificacao final: `mvn clean test` | ❌ | — |
+| 12.3 | Analise de melhorias para 2026 | ❌ | `docs/MELHORIAS.md` |
+| 12.4 | Verificacao final: `mvn clean test` | ❌ | — |
 
 **Resumo do Deploy**: A API foi hospedada em uma instancia EC2 (AWS) com Linux, usando Nginx como reverse proxy com dominio proprio e certificado SSL via Certbot (Let's Encrypt). O deploy manual ensinou conceitos de redes (security groups, firewall), configuracao de DNS, vinculacao de dominio e HTTPS — conhecimento fundamental antes da adocao de containers.
 
