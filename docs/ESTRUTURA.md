@@ -19,131 +19,164 @@ api-nutricao/
 │   ├── main/
 │   │   ├── java/br/com/nutricao/
 │   │   │   ├── ApiNutricaoApplication.java
-│   │   │   ├── config/
-│   │   │   │   ├── SecurityConfig.java
-│   │   │   │   └── OpenApiConfig.java
+│   │   │   ├── controller/
+│   │   │   │   ├── AuthController.java
+│   │   │   │   ├── UsuarioController.java
+│   │   │   │   ├── CategoriaAlimentoController.java
+│   │   │   │   ├── AlimentoController.java
+│   │   │   │   ├── RefeicaoController.java
+│   │   │   │   ├── AlimentoRefeicaoController.java
+│   │   │   │   ├── AlimentoFavoritoController.java
+│   │   │   │   ├── MetaNutricionalController.java
+│   │   │   │   ├── ObjetivoController.java
+│   │   │   │   └── RegistroDiarioController.java
 │   │   │   ├── domain/
-│   │   │   │   ├── model/
-│   │   │   │   │   ├── Usuario.java
-│   │   │   │   │   ├── CategoriaAlimento.java
-│   │   │   │   │   ├── Alimento.java
-│   │   │   │   │   ├── Refeicao.java
-│   │   │   │   │   ├── AlimentoRefeicao.java
-│   │   │   │   │   ├── MetaNutricional.java
-│   │   │   │   │   ├── Objetivo.java
-│   │   │   │   │   ├── RegistroDiario.java
-│   │   │   │   │   └── AlimentoFavorito.java
-│   │   │   │   ├── repository/
-│   │   │   │   │   ├── UsuarioRepository.java
-│   │   │   │   │   ├── AlimentoRepository.java
-│   │   │   │   │   ├── RefeicaoRepository.java
-│   │   │   │   │   ├── MetaNutricionalRepository.java
-│   │   │   │   │   ├── ObjetivoRepository.java
-│   │   │   │   │   └── RegistroDiarioRepository.java
-│   │   │   │   └── service/
-│   │   │   │       ├── UsuarioService.java
-│   │   │   │       ├── AlimentoService.java
-│   │   │   │       ├── RefeicaoService.java
-│   │   │   │       ├── MetaNutricionalService.java
-│   │   │   │       ├── ObjetivoService.java
-│   │   │   │       └── RegistroDiarioService.java
-│   │   │   ├── api/
-│   │   │   │   ├── controller/
-│   │   │   │   │   ├── AuthController.java
-│   │   │   │   │   ├── UsuarioController.java
-│   │   │   │   │   ├── CategoriaController.java
-│   │   │   │   │   ├── AlimentoController.java
-│   │   │   │   │   ├── RefeicaoController.java
-│   │   │   │   │   ├── MetaNutricionalController.java
-│   │   │   │   │   ├── ObjetivoController.java
-│   │   │   │   │   ├── RegistroDiarioController.java
-│   │   │   │   │   └── HealthController.java
-│   │   │   │   ├── dto/
-│   │   │   │   │   ├── request/
-│   │   │   │   │   │   ├── LoginRequest.java
-│   │   │   │   │   │   ├── UsuarioCreateRequest.java
-│   │   │   │   │   │   ├── UsuarioUpdateRequest.java
-│   │   │   │   │   │   ├── CategoriaRequest.java
-│   │   │   │   │   │   ├── AlimentoRequest.java
-│   │   │   │   │   │   ├── RefeicaoRequest.java
-│   │   │   │   │   │   ├── MetaRequest.java
-│   │   │   │   │   │   ├── ObjetivoRequest.java
-│   │   │   │   │   │   └── RegistroDiarioRequest.java
-│   │   │   │   │   └── response/
-│   │   │   │   │       ├── TokenResponse.java
-│   │   │   │   │       ├── UsuarioResponse.java
-│   │   │   │   │       ├── AlimentoResponse.java
-│   │   │   │   │       ├── RefeicaoResponse.java
-│   │   │   │   │       ├── MetaResponse.java
-│   │   │   │   │       ├── ObjetivoResponse.java
-│   │   │   │   │       ├── ResumoDiarioResponse.java
-│   │   │   │   │       └── RegistroDiarioResponse.java
+│   │   │   │   ├── Usuario.java
+│   │   │   │   ├── CategoriaAlimento.java
+│   │   │   │   ├── Alimento.java
+│   │   │   │   ├── Refeicao.java
+│   │   │   │   ├── AlimentoRefeicao.java
+│   │   │   │   ├── AlimentoFavorito.java
+│   │   │   │   ├── MetaNutricional.java
+│   │   │   │   ├── Objetivo.java
+│   │   │   │   ├── RegistroDiario.java
+│   │   │   │   └── dto/
+│   │   │   │       ├── insercao/
+│   │   │   │       │   ├── UsuarioRequest.java
+│   │   │   │       │   ├── CategoriaAlimentoRequest.java
+│   │   │   │       │   ├── AlimentoRequest.java
+│   │   │   │       │   ├── RefeicaoRequest.java
+│   │   │   │       │   ├── AlimentoRefeicaoRequest.java
+│   │   │   │       │   ├── AlimentoFavoritoRequest.java
+│   │   │   │       │   ├── MetaNutricionalRequest.java
+│   │   │   │       │   ├── ObjetivoRequest.java
+│   │   │   │       │   └── RegistroDiarioRequest.java
+│   │   │   │       └── visualizacao/
+│   │   │   │           ├── UsuarioResponse.java
+│   │   │   │           ├── CategoriaAlimentoResponse.java
+│   │   │   │           ├── AlimentoResponse.java
+│   │   │   │           ├── RefeicaoResponse.java
+│   │   │   │           ├── AlimentoRefeicaoResponse.java
+│   │   │   │           ├── AlimentoFavoritoResponse.java
+│   │   │   │           ├── MetaNutricionalResponse.java
+│   │   │   │           ├── ObjetivoResponse.java
+│   │   │   │           ├── RegistroDiarioResponse.java
+│   │   │   │           ├── Login.java
+│   │   │   │           ├── LoginToken.java
+│   │   │   │           └── AuthResponseDTO.java
+│   │   │   ├── repositories/
+│   │   │   │   ├── UsuarioRepository.java
+│   │   │   │   ├── CategoriaAlimentoRepository.java
+│   │   │   │   ├── AlimentoRepository.java
+│   │   │   │   ├── RefeicaoRepository.java
+│   │   │   │   ├── AlimentoRefeicaoRepository.java
+│   │   │   │   ├── AlimentoFavoritoRepository.java
+│   │   │   │   ├── MetaNutricionalRepository.java
+│   │   │   │   ├── ObjetivoRepository.java
+│   │   │   │   └── RegistroDiarioRepository.java
+│   │   │   ├── security/
+│   │   │   │   ├── ConfiguracaoSecurity.java
+│   │   │   │   ├── JWTUtil.java
+│   │   │   │   ├── FiltroSecurity.java
+│   │   │   │   ├── UsuarioDetailsService.java
+│   │   │   │   └── UsuarioDetails.java
+│   │   │   ├── services/
+│   │   │   │   ├── UsuarioService.java
+│   │   │   │   ├── CategoriaAlimentoService.java
+│   │   │   │   ├── AlimentoService.java
+│   │   │   │   ├── RefeicaoService.java
+│   │   │   │   ├── AlimentoRefeicaoService.java
+│   │   │   │   ├── AlimentoFavoritoService.java
+│   │   │   │   ├── MetaNutricionalService.java
+│   │   │   │   ├── ObjetivoService.java
+│   │   │   │   ├── RegistroDiarioService.java
 │   │   │   │   └── exception/
 │   │   │   │       ├── ApiExceptionHandler.java
+│   │   │   │       ├── NegocioException.java
 │   │   │   │       ├── Problema.java
 │   │   │   │       ├── TipoProblema.java
-│   │   │   │       ├── EntidadeNaoEncontradaException.java
-│   │   │   │       ├── EntidadeEmUsoException.java
-│   │   │   │       └── NegocioException.java
-│   │   │   ├── security/
-│   │   │   │   ├── JwtUtil.java
-│   │   │   │   └── JwtAuthenticationFilter.java
-│   │   │   └── infrastructure/
-│   │   │       └── specification/
-│   │   │           └── AlimentoSpecification.java
+│   │   │   │       └── entidades/
+│   │   │   │           ├── EntidadeNaoEncontradaException.java
+│   │   │   │           └── EntidadeEmUsoException.java
 │   │   └── resources/
-│   │       ├── application.yml
-│   │       ├── application-dev.yml
-│   │       ├── application-prod.yml
+│   │       ├── application.properties
+│   │       ├── application-dev.properties
+│   │       ├── application-prod.properties
+│   │       ├── application-test.properties
 │   │       └── db/migration/
-│   │           ├── V1__create_tables.sql
-│   │           └── V2__seed_alimentos.sql
+│   │           └── V1__create_tables.sql
 │   └── test/java/br/com/nutricao/
-│       ├── domain/model/
+│       ├── controller/
+│       │   ├── AuthControllerTest.java
+│       │   ├── UsuarioControllerTest.java
+│       │   ├── CategoriaAlimentoControllerTest.java
+│       │   ├── AlimentoControllerTest.java
+│       │   ├── RefeicaoControllerTest.java
+│       │   ├── AlimentoRefeicaoControllerTest.java
+│       │   ├── AlimentoFavoritoControllerTest.java
+│       │   ├── MetaNutricionalControllerTest.java
+│       │   ├── ObjetivoControllerTest.java
+│       │   └── RegistroDiarioControllerTest.java
+│       ├── domain/
 │       │   ├── UsuarioTest.java
 │       │   ├── CategoriaAlimentoTest.java
 │       │   ├── AlimentoTest.java
 │       │   ├── RefeicaoTest.java
 │       │   ├── AlimentoRefeicaoTest.java
+│       │   ├── AlimentoFavoritoTest.java
 │       │   ├── MetaNutricionalTest.java
 │       │   ├── ObjetivoTest.java
-│       │   ├── RegistroDiarioTest.java
-│       │   └── AlimentoFavoritoTest.java
-│       ├── domain/repository/
+│       │   └── RegistroDiarioTest.java
+│       ├── integration/
+│       │   ├── IntegrationTestConfig.java
+│       │   ├── UsuarioIntegrationTest.java
+│       │   ├── CategoriaAlimentoIntegrationTest.java
+│       │   ├── AlimentoIntegrationTest.java
+│       │   ├── RefeicaoIntegrationTest.java
+│       │   ├── AlimentoRefeicaoIntegrationTest.java
+│       │   ├── AlimentoFavoritoIntegrationTest.java
+│       │   ├── MetaNutricionalIntegrationTest.java
+│       │   ├── ObjetivoIntegrationTest.java
+│       │   └── RegistroDiarioIntegrationTest.java
+│       ├── repositories/
 │       │   ├── UsuarioRepositoryTest.java
+│       │   ├── CategoriaAlimentoRepositoryTest.java
 │       │   ├── AlimentoRepositoryTest.java
 │       │   ├── RefeicaoRepositoryTest.java
+│       │   ├── AlimentoRefeicaoRepositoryTest.java
+│       │   ├── AlimentoFavoritoRepositoryTest.java
 │       │   ├── MetaNutricionalRepositoryTest.java
 │       │   ├── ObjetivoRepositoryTest.java
 │       │   └── RegistroDiarioRepositoryTest.java
-│       ├── domain/service/
+│       ├── security/
+│       │   └── JWTUtilTest.java
+│       ├── services/
 │       │   ├── UsuarioServiceTest.java
+│       │   ├── CategoriaAlimentoServiceTest.java
 │       │   ├── AlimentoServiceTest.java
 │       │   ├── RefeicaoServiceTest.java
+│       │   ├── AlimentoRefeicaoServiceTest.java
+│       │   ├── AlimentoFavoritoServiceTest.java
 │       │   ├── MetaNutricionalServiceTest.java
 │       │   ├── ObjetivoServiceTest.java
-│       │   └── RegistroDiarioServiceTest.java
-│       ├── api/controller/
-│       │   ├── AuthControllerTest.java
-│       │   ├── UsuarioControllerTest.java
-│       │   ├── CategoriaControllerTest.java
-│       │   ├── AlimentoControllerTest.java
-│       │   ├── RefeicaoControllerTest.java
-│       │   ├── MetaNutricionalControllerTest.java
-│       │   ├── ObjetivoControllerTest.java
-│       │   └── RegistroDiarioControllerTest.java
-│       └── security/
-│           ├── JwtUtilTest.java
-│           └── JwtAuthenticationFilterTest.java
+│       │   ├── RegistroDiarioServiceTest.java
+│       │   └── exception/
+│       │       ├── ApiExceptionHandlerTest.java
+│       │       ├── NegocioExceptionTest.java
+│       │       ├── ProblemaTest.java
+│       │       ├── TipoProblemaTest.java
+│       │       └── entidades/
+│       │           ├── EntidadeNaoEncontradaExceptionTest.java
+│       │           └── EntidadeEmUsoExceptionTest.java
 ```
 
-**Total estimado**: ~82 arquivos.
+**Total**: 123 arquivos Java (69 main + 54 test).
 
 ---
 
 ## Como Executar
 
-### Pré-requisitos
+### Pre-requisitos
 
 ```bash
 java -version          # Java 11+
@@ -160,23 +193,23 @@ mvn clean compile
 # Executar testes
 mvn clean test
 
-# Subir aplicação (requer MySQL local ou Docker)
+# Subir aplicacao (requer MySQL local ou Docker)
 mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
-### Produção (Docker Compose)
+### Producao (Docker Compose)
 
 ```bash
 docker compose up --build
 ```
 
-A API estará disponível em `http://localhost:8080` e o Swagger em `http://localhost:8080/swagger-ui.html`.
+A API estara disponivel em `http://localhost:8080` e o Swagger em `http://localhost:8080/swagger-ui.html`.
 
 ---
 
-## Padrões de Commit e Branch
+## Padroes de Commit e Branch
 
-Seguimos o padrão descrito em [`padrao estrutura github.txt`](../padrao%20estrutura%20github.txt):
+Seguimos o padrao descrito em [`padrao estrutura github.txt`](../padrao%20estrutura%20github.txt):
 
 ### Branches
 
@@ -192,7 +225,7 @@ AN-03/criar-servicos
 ### Commits
 
 ```
-tipo(escopo): descrição
+tipo(escopo): descricao
 
 Tipos: feat, fix, docs, style, refactor, perf, test, chore
 Exemplo: feat(alimento): criar CRUD de alimentos com filtros
@@ -201,7 +234,7 @@ Exemplo: feat(alimento): criar CRUD de alimentos com filtros
 ### Pull Requests
 
 ```
-[AN-{id}] tipo(escopo): descrição
+[AN-{id}] tipo(escopo): descricao
 
 Exemplo:
 [AN-01] docs(projeto): criar documentacao e planejamento inicial

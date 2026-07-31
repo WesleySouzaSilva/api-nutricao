@@ -133,18 +133,60 @@ Os ciclos foram estruturados para seguir TDD, começando pelas entidades e servi
 | 7.4 | **Teste** → RegistroDiarioController | ✅ | `RegistroDiarioControllerTest.java`, `RegistroDiarioController.java` |
 | 7.5 | DTOs de Refeição, Meta, Objetivo, Registro | ❌ | DTOs request/response |
 
-### Ciclo 8 — Exception Handling, Documentação e Finalização
+### Ciclo 8 — Exception Handling, Documentação e Finalização 🔧
 *Arquivos: 8 | Depende de: Ciclo 7*
+*Status: Parcialmente concluído — ApiExceptionHandler básico implementado; os itens restantes foram redistribuídos nos Ciclos 9, 10 e 11.*
 
 | # | Tarefa | TDD? | Arquivos |
 |---|--------|------|----------|
-| 8.1 | **Teste** → ApiExceptionHandler | ✅ | `ApiExceptionHandlerTest.java`, `ApiExceptionHandler.java` |
-| 8.2 | Modelo RFC 7807 (Problema + TipoProblema) | ❌ | `Problema.java`, `TipoProblema.java` |
-| 8.3 | Exceções customizadas | ❌ | `EntidadeNaoEncontradaException.java`, `EntidadeEmUsoException.java`, `NegocioException.java` |
-| 8.4 | OpenApiConfig (SpringDoc) | ❌ | `OpenApiConfig.java` |
-| 8.5 | Seed data (alimentos comuns) | ❌ | `V2__seed_alimentos.sql` |
-| 8.6 | Build final: `mvn clean package` | ❌ | — |
-| 8.7 | Testes completos: `mvn clean test` | ❌ | — |
+| 8.1 | **Teste** → ApiExceptionHandler | ✅ | `ApiExceptionHandlerTest.java`, `ApiExceptionHandler.java` ✅ *(versão básica: IllegalArgumentException + Exception genérica)* |
+| 8.2 | ~~Modelo RFC 7807 (Problema + TipoProblema)~~ → movido para Ciclo 9 | ❌ | — |
+| 8.3 | ~~Exceções customizadas~~ → movido para Ciclo 9 | ❌ | — |
+| 8.4 | ~~OpenApiConfig (SpringDoc)~~ → movido para Ciclo 11 | ❌ | — |
+| 8.5 | ~~Seed data (alimentos comuns)~~ → movido para Ciclo 11 | ❌ | — |
+| 8.6 | ~~Build final: `mvn clean package`~~ → movido para Ciclo 11 | ❌ | — |
+| 8.7 | Testes completos: `mvn clean test` | ❌ | ✅ 309 testes passando, JaCoCo 100% |
+
+---
+
+### Ciclo 9 — PR 1: Validações e Exceções (RFC 7807)
+*Branch: `AN-05/ciclo-5-validacoes-excecoes` | Depende de: Ciclo 8*
+
+| # | Tarefa | TDD? | Arquivos |
+|---|--------|------|----------|
+| 9.1 | Exceções customizadas | ✅ | `EntidadeNaoEncontradaException.java`, `EntidadeEmUsoException.java`, `NegocioException.java` |
+| 9.2 | Modelo RFC 7807 (Problem Detail) | ❌ | `Problema.java`, `TipoProblema.java` |
+| 9.3 | Expandir ApiExceptionHandler | ✅ | Handlers para: `EntidadeNaoEncontradaException` (404), `EntidadeEmUsoException` (409), `NegocioException` (422), `MethodArgumentNotValidException` (400), `DataIntegrityViolationException` (409) |
+| 9.4 | Atualizar services para lançar exceções customizadas | ❌ | Substituir `throw new IllegalArgumentException(...)` por exceções específicas |
+| 9.5 | Atualizar testes dos controllers e services | ✅ | Ajustar asserts para Problem Detail + status codes corretos |
+| 9.6 | Verificação: `mvn test` (todos passando) | ❌ | — |
+
+### Ciclo 10 — PR 2: Paginação e Filtros com Specification
+*Branch: `AN-06/ciclo-6-paginacao-filtros` | Depende de: Ciclo 9*
+
+**Padrão de referência (api-mbs):** Controller recebe `CamposFiltro` + `Pageable` → Service chama `repository.findAll(Specification, pageable)` → retorna `Page<DTO>`.
+
+| # | Tarefa | TDD? | Arquivos |
+|---|--------|------|----------|
+| 10.1 | Repository: adicionar `JpaSpecificationExecutor<T>` | ❌ | Todos os 9 repositories |
+| 10.2 | Criar `CamposFiltro` (DTO de binding automático) | ✅ | `AlimentoCamposFiltro`, `RefeicaoCamposFiltro`, `RegistroDiarioCamposFiltro`, `MetaNutricionalCamposFiltro`, `ObjetivoCamposFiltro` |
+| 10.3 | Criar `Specification` (Criteria API dinâmica) | ✅ | `AlimentoFiltro`, `RefeicaoFiltro`, `RegistroDiarioFiltro`, `MetaNutricionalFiltro`, `ObjetivoFiltro` |
+| 10.4 | Refatorar Services: método único `listarTodosFiltro(filtro, pageable)` | ✅ | `AlimentoService`, `RefeicaoService`, `RegistroDiarioService`, `MetaNutricionalService`, `ObjetivoService` |
+| 10.5 | Refatorar Controllers: GET listar → `Page<XxxResponse>` | ✅ | `AlimentoController`, `RefeicaoController`, `RegistroDiarioController`, `MetaNutricionalController`, `ObjetivoController` |
+| 10.6 | Paginação simples no `CategoriaAlimentoController` | ❌ | Apenas `Pageable`, sem filtro dinâmico |
+| 10.7 | Atualizar testes (controllers + services + repositories) | ✅ | Ajustar mocks para `Page<>`, testar filtros combinados |
+| 10.8 | Verificação: `mvn test` (todos passando) | ❌ | — |
+
+### Ciclo 11 — PR 3: Documentação e Seed de Dados
+*Branch: `AN-07/ciclo-7-documentacao-seed` | Depende de: Ciclo 10*
+
+| # | Tarefa | TDD? | Arquivos |
+|---|--------|------|----------|
+| 11.1 | SpringDoc OpenAPI | ❌ | `OpenApiConfig.java` — título "API de Nutrição", descrição, versão, segurança Bearer JWT |
+| 11.2 | Seed de alimentos comuns | ❌ | `V2__seed_alimentos.sql` — +50 alimentos: arroz, feijão, frango, ovo, banana, etc. |
+| 11.3 | Build final: `mvn clean package` | ❌ | Verificar empacotamento do JAR |
+| 11.4 | Testes finais: `mvn clean test` | ❌ | Todos os testes passando com cobertura |
+| 11.5 | Atualizar docs (ENDPOINTS.md, README.md) | ❌ | Refletir endpoints paginados, novos filtros, OpenAPI |
 
 ---
 
