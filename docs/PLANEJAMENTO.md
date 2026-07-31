@@ -183,10 +183,22 @@ Os ciclos foram estruturados para seguir TDD, começando pelas entidades e servi
 | # | Tarefa | TDD? | Arquivos |
 |---|--------|------|----------|
 | 11.1 | SpringDoc OpenAPI | ❌ | `OpenApiConfig.java` — título "API de Nutrição", descrição, versão, segurança Bearer JWT |
-| 11.2 | Seed de alimentos comuns | ❌ | `V2__seed_alimentos.sql` — +50 alimentos: arroz, feijão, frango, ovo, banana, etc. |
+| 11.2 | Seed de alimentos comuns | ❌ | `V2__seed_categorias_alimentos.sql` — +50 alimentos: arroz, feijão, frango, ovo, banana, etc. |
 | 11.3 | Build final: `mvn clean package` | ❌ | Verificar empacotamento do JAR |
 | 11.4 | Testes finais: `mvn clean test` | ❌ | Todos os testes passando com cobertura |
 | 11.5 | Atualizar docs (ENDPOINTS.md, README.md) | ❌ | Refletir endpoints paginados, novos filtros, OpenAPI |
+
+---
+### Ciclo 12 — PR 4: Deploy em Producao (AWS EC2)
+*Branch: `AN-08/ciclo-8-deploy-ajustes-finais` | Depende de: Ciclo 11*
+
+| # | Tarefa | TDD? | Arquivos |
+|---|--------|------|----------|
+| 12.1 | Guia de deploy AWS EC2 (Nginx + Certbot + HTTPS) | ❌ | `docs/DEPLOY.md` |
+| 12.2 | Ajustes finais na documentacao | ❌ | `docs/ENTIDADES.md`, `docs/ESTRUTURA.md`, `docs/ENDPOINTS.md`, `docs/PLANEJAMENTO.md`, `README.md` |
+| 12.3 | Verificacao final: `mvn clean test` | ❌ | — |
+
+**Resumo do Deploy**: A API foi hospedada em uma instancia EC2 (AWS) com Linux, usando Nginx como reverse proxy com dominio proprio e certificado SSL via Certbot (Let's Encrypt). O deploy manual ensinou conceitos de redes (security groups, firewall), configuracao de DNS, vinculacao de dominio e HTTPS — conhecimento fundamental antes da adocao de containers.
 
 ---
 

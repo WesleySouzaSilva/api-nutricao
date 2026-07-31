@@ -2,8 +2,8 @@
 
 API REST para controle alimentar e nutricional — projeto portfólio demonstrando boas práticas com **Spring Boot**, **TDD**, **Clean Architecture** e **padrões profissionais de desenvolvimento**.
 
-> **Status**: Em desenvolvimento — Ciclo 11: Documentacao e Seed de Dados (PR #7)
-> **Stack**: Java 11 | Spring Boot 2.7.18 | MySQL 8 | Flyway | JWT | Docker
+> **Status**: Concluido — 12 ciclos de implementacao (8 PRs)
+> **Stack**: Java 11 | Spring Boot 2.7.18 | MySQL 8 | Flyway | JWT | Docker | AWS EC2 | Nginx | Certbot
 
 ---
 
@@ -34,9 +34,10 @@ O **api-nutricao** nasce como um projeto portfólio que consolida todo esse apre
 - [Abordagem TDD](#-abordagem-tdd)
 - [Ciclos de Implementação](docs/PLANEJAMENTO.md#ciclos-de-implementação)
 - [Estrutura do Projeto](docs/ESTRUTURA.md)
+- [Deploy em Producao](docs/DEPLOY.md)
 - [Como Executar](#-como-executar)
 - [Padrões de Commit e Branch](#-padrões-de-commit-e-branch)
-- [Próximos Passos](#-próximos-passos)
+- [Pull Requests](#-pull-requests)
 
 ---
 
@@ -48,8 +49,8 @@ O **api-nutricao** é uma API REST desenvolvida do zero para demonstrar competê
 - ✅ Tabela nutricional completa com alimentos e categorias
 - ✅ Registro de refeições diárias com cálculo automático de calorias e macronutrientes
 - ✅ Definição de objetivos (ganhar massa, reduzir gordura, manter peso)
-- ✅ Metas nutricionais personalizadas com periodicidade (diária, semanal, mensal, trimestral)
-- ✅ Acompanhamento diário de peso, ingestão de água e passos
+- ✅ Metas nutricionais de macronutrientes (calorias, proteinas, carboidratos, gorduras)
+- ✅ Acompanhamento diario de macronutrientes consumidos
 - ✅ Dashboard com progresso diário e semanal
 - ✅ Documentação OpenAPI (Swagger)
 - ✅ Tratamento de erros padronizado (RFC 7807)
@@ -138,13 +139,13 @@ Matriz de testes e detalhes → [`docs/PLANEJAMENTO.md`](docs/PLANEJAMENTO.md)
 
 ## 📐 Ciclos de Implementação
 
-Consulte o documento [`docs/PLANEJAMENTO.md`](docs/PLANEJAMENTO.md) para os 8 ciclos de implementação com tarefas, dependências e arquivos envolvidos.
+Consulte o documento [`docs/PLANEJAMENTO.md`](docs/PLANEJAMENTO.md) para os 12 ciclos de implementacao com tarefas, dependencias e arquivos envolvidos.
 
 ---
 
 ## 📁 Estrutura do Projeto
 
-Consulte o documento [`docs/ESTRUTURA.md`](docs/ESTRUTURA.md) para a árvore completa de arquivos (~82 no total) e detalhes de organização.
+Consulte o documento [`docs/ESTRUTURA.md`](docs/ESTRUTURA.md) para a arvore completa de arquivos (~145 no total) e detalhes de organizacao.
 
 ---
 
@@ -177,7 +178,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=dev
 docker compose up --build
 ```
 
-A API estará disponível em `http://localhost:8080` e o Swagger em `http://localhost:8080/swagger-ui.html`.
+A API estará disponível em `http://localhost:8080/api/v1/...` e o Swagger em `http://localhost:8080/swagger-ui/index.html`.
 
 ---
 
@@ -216,15 +217,16 @@ Exemplo:
 
 ---
 
-## 📌 Próximos Passos
+## 📌 Pull Requests
 
-1. ✅ **PR #1** — Documentacao e planejamento inicial
-2. ✅ **PR #2** — Ciclo 1-2: Projeto base + entidades + migracoes (TDD)
-3. ✅ **PR #3** — Ciclo 3: Repositories (TDD)
-4. ✅ **PR #4** — Ciclo 4: Services + Autenticacao JWT (TDD)
-5. ✅ **PR #5** — Ciclo 5-7: Controllers + Validacao + Testes de integracao
-6. ✅ **PR #6** — Ciclo 9-10: Exception Handling + Paginacao e Filtros com Specification
-7. 🔄 **PR #7** — Ciclo 11: Documentacao OpenAPI + Seed de dados (atual)
+1. ✅ **PR #1** — [AN-01] docs(projeto): criar documentacao e planejamento inicial do projeto api-nutricao
+2. ✅ **PR #2** — [AN-02] docs(planejamento): ajuste descricao do projeto
+3. ✅ **PR #3** — [AN-03] feat(domain): implementar entidades do dominio com TDD e migracao Flyway V1
+4. ✅ **PR #4** — [AN-04] feat(auth): implementar autenticacao com email/senha e token
+5. ✅ **PR #5** — [AN-05] refactor(estrutura): reestruturar projeto conforme padrao api-mbs e implementar tratamento de erros
+6. ✅ **PR #6** — [AN-06] feat(paginacao): implementar paginacao e filtros dinamicos com Specification
+7. ✅ **PR #7** — [AN-07] docs(openapi): criar documentacao SpringDoc com interfaces, seed TACO e atualizar docs
+8. 🔄 **PR #8** — [AN-08] docs(deploy): documentar deploy AWS EC2, ajustes finais e DEPLOY.md (atual)
 
 ---
 

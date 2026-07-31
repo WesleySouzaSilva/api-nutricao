@@ -14,11 +14,14 @@ api-nutricao/
 │   ├── ENTIDADES.md
 │   ├── ENDPOINTS.md
 │   ├── ESTRUTURA.md
-│   └── PLANEJAMENTO.md
+│   ├── PLANEJAMENTO.md
+│   └── DEPLOY.md
 ├── src/
 │   ├── main/
 │   │   ├── java/br/com/nutricao/
 │   │   │   ├── ApiNutricaoApplication.java
+│   │   │   ├── config/
+│   │   │   │   └── OpenApiConfig.java
 │   │   │   ├── controller/
 │   │   │   │   ├── AuthController.java
 │   │   │   │   ├── UsuarioController.java
@@ -29,7 +32,18 @@ api-nutricao/
 │   │   │   │   ├── AlimentoFavoritoController.java
 │   │   │   │   ├── MetaNutricionalController.java
 │   │   │   │   ├── ObjetivoController.java
-│   │   │   │   └── RegistroDiarioController.java
+│   │   │   │   ├── RegistroDiarioController.java
+│   │   │   │   └── documentacao/
+│   │   │   │       ├── AuthControllerSwagger.java
+│   │   │   │       ├── UsuarioControllerSwagger.java
+│   │   │   │       ├── CategoriaAlimentoControllerSwagger.java
+│   │   │   │       ├── AlimentoControllerSwagger.java
+│   │   │   │       ├── RefeicaoControllerSwagger.java
+│   │   │   │       ├── AlimentoRefeicaoControllerSwagger.java
+│   │   │   │       ├── AlimentoFavoritoControllerSwagger.java
+│   │   │   │       ├── MetaNutricionalControllerSwagger.java
+│   │   │   │       ├── ObjetivoControllerSwagger.java
+│   │   │   │       └── RegistroDiarioControllerSwagger.java
 │   │   │   ├── domain/
 │   │   │   │   ├── Usuario.java
 │   │   │   │   ├── CategoriaAlimento.java
@@ -51,19 +65,25 @@ api-nutricao/
 │   │   │   │       │   ├── MetaNutricionalRequest.java
 │   │   │   │       │   ├── ObjetivoRequest.java
 │   │   │   │       │   └── RegistroDiarioRequest.java
-│   │   │   │       └── visualizacao/
-│   │   │   │           ├── UsuarioResponse.java
-│   │   │   │           ├── CategoriaAlimentoResponse.java
-│   │   │   │           ├── AlimentoResponse.java
-│   │   │   │           ├── RefeicaoResponse.java
-│   │   │   │           ├── AlimentoRefeicaoResponse.java
-│   │   │   │           ├── AlimentoFavoritoResponse.java
-│   │   │   │           ├── MetaNutricionalResponse.java
-│   │   │   │           ├── ObjetivoResponse.java
-│   │   │   │           ├── RegistroDiarioResponse.java
-│   │   │   │           ├── Login.java
-│   │   │   │           ├── LoginToken.java
-│   │   │   │           └── AuthResponseDTO.java
+│   │   │   │       ├── visualizacao/
+│   │   │   │       │   ├── UsuarioResponse.java
+│   │   │   │       │   ├── CategoriaAlimentoResponse.java
+│   │   │   │       │   ├── AlimentoResponse.java
+│   │   │   │       │   ├── RefeicaoResponse.java
+│   │   │   │       │   ├── AlimentoRefeicaoResponse.java
+│   │   │   │       │   ├── AlimentoFavoritoResponse.java
+│   │   │   │       │   ├── MetaNutricionalResponse.java
+│   │   │   │       │   ├── ObjetivoResponse.java
+│   │   │   │       │   ├── RegistroDiarioResponse.java
+│   │   │   │       │   ├── Login.java
+│   │   │   │       │   ├── LoginToken.java
+│   │   │   │       │   └── AuthResponseDTO.java
+│   │   │   │       └── filtro/
+│   │   │   │           ├── AlimentoCamposFiltro.java
+│   │   │   │           ├── MetaNutricionalCamposFiltro.java
+│   │   │   │           ├── ObjetivoCamposFiltro.java
+│   │   │   │           ├── RefeicaoCamposFiltro.java
+│   │   │   │           └── RegistroDiarioCamposFiltro.java
 │   │   │   ├── repositories/
 │   │   │   │   ├── UsuarioRepository.java
 │   │   │   │   ├── CategoriaAlimentoRepository.java
@@ -74,6 +94,12 @@ api-nutricao/
 │   │   │   │   ├── MetaNutricionalRepository.java
 │   │   │   │   ├── ObjetivoRepository.java
 │   │   │   │   └── RegistroDiarioRepository.java
+│   │   │   ├── specification/
+│   │   │   │   ├── AlimentoFiltro.java
+│   │   │   │   ├── MetaNutricionalFiltro.java
+│   │   │   │   ├── ObjetivoFiltro.java
+│   │   │   │   ├── RefeicaoFiltro.java
+│   │   │   │   └── RegistroDiarioFiltro.java
 │   │   │   ├── security/
 │   │   │   │   ├── ConfiguracaoSecurity.java
 │   │   │   │   ├── JWTUtil.java
@@ -104,7 +130,8 @@ api-nutricao/
 │   │       ├── application-prod.properties
 │   │       ├── application-test.properties
 │   │       └── db/migration/
-│   │           └── V1__create_tables.sql
+│   │           ├── V1__create_tables.sql
+│   │           └── V2__seed_categorias_alimentos.sql
 │   └── test/java/br/com/nutricao/
 │       ├── controller/
 │       │   ├── AuthControllerTest.java
@@ -170,7 +197,7 @@ api-nutricao/
 │       │           └── EntidadeEmUsoExceptionTest.java
 ```
 
-**Total**: 123 arquivos Java (69 main + 54 test).
+**Total**: 145 arquivos Java (91 main + 54 test) | 331 testes
 
 ---
 
@@ -203,7 +230,11 @@ mvn spring-boot:run -Dspring-boot.run.profiles=dev
 docker compose up --build
 ```
 
-A API estara disponivel em `http://localhost:8080` e o Swagger em `http://localhost:8080/swagger-ui.html`.
+A API estara disponivel em `http://localhost:8080/api/v1/...` e o Swagger em `http://localhost:8080/swagger-ui/index.html`.
+
+### Deploy em Producao
+
+Consulte [`docs/DEPLOY.md`](DEPLOY.md) para o guia completo de deploy em AWS EC2 com Nginx + Certbot + HTTPS.
 
 ---
 
