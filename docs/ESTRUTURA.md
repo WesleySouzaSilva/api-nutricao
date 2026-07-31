@@ -100,8 +100,6 @@ api-nutricao/
 │   │   │   │   │   └── TipoProblema.java
 │   │   │   │   └── handler/
 │   │   │   │       └── ApiExceptionHandler.java
-│   │   │   └── (vazio: security/, infrastructure/ — removidos pois
-│   │   │       JWT foi movido para config/ e Specification nao existe)
 │   │   └── resources/
 │   │       ├── application.properties
 │   │       ├── application-dev.properties
