@@ -1,4 +1,4 @@
-# Entidades do Domínio
+# Entidades do Dominio
 
 ## Diagrama ER
 
@@ -25,20 +25,13 @@
          │               ├──────────────────┤     ├──────────────────┤     ├──────────────────┤
          │               │ id (PK)          │     │ id (PK)          │     │ id (PK)          │
          │               │ usuario_id (FK)  │     │ usuario_id (FK)  │     │ nome             │
-         │               │ tipo (CALORIA/   │     │ data             │     │ created_at       │
-         │               │   PROTEINA/      │     │ peso_jejum       │     └──────────────────┘
-         │               │   CARBOIDRATO/   │     │ agua_ml          │
-         │               │   GORDURA)       │     │ passos           │
-         │               │ valor_meta       │     │ created_at       │
-         │               │ periodicidade    │     └──────────────────┘
-         │               │   (DIARIO/       │
-         │               │    SEMANAL/      │
-         │               │    MENSAL/       │
-         │               │    TRIMESTRAL)   │
-         │               │ data_inicio      │
-         │               │ data_fim         │
-         │               │ created_at       │
-         │               └──────────────────┘
+         │               │ calorias         │     │ data             │     │ created_at       │
+         │               │ proteinas        │     │ calorias_cons    │     └──────────────────┘
+         │               │ carboidratos     │     │ proteinas_cons   │
+         │               │ gorduras         │     │ carboidratos_cons│
+         │               │ data_inicio      │     │ gorduras_cons    │
+         │               │ data_fim         │     │ observacoes      │
+         │               └──────────────────┘     └──────────────────┘
          │
          │1              ┌────────────────────────┐
          ├──────────────N│      Objetivo           │
@@ -48,10 +41,11 @@
          │               │ tipo (GANHAR_MASSA/     │
          │               │   REDUZIR_GORDURA/      │
          │               │   MANTER_PESO)          │
+         │               │ peso_alvo               │
+         │               │ calorias_diarias        │
          │               │ data_inicio             │
          │               │ data_fim                │
-         │               │ ativo                   │
-         │               │ created_at              │
+         │               │ descricao               │
          │               └────────────────────────┘
          │
          │1              ┌──────────────────────┐
@@ -64,18 +58,18 @@
                          └──────────────────────┘
 ```
 
-## Descrição das Entidades
+## Descricao das Entidades
 
 | Entidade | Tabela | Finalidade | Campos principais |
 |---|---|---|---|
-| **Usuario** | `usuario` | Cadastro e autenticação de usuários | id, nome, senha, email, dataNascimento, altura, sexo, dataCadastro, medida, tipoLogin, tokenId |
-| **CategoriaAlimento** | `categoria_alimento` | Classificação de alimentos (Laticínios, Carnes, Frutas, etc.) | id, nome |
-| **Alimento** | `alimento` | Tabela nutricional com calorias, proteínas, carboidratos, gorduras, fibras | id, nome, categoria, calorias, proteina, carboidrato, gordura, fibra |
-| **Refeicao** | `refeicao` | Registro de refeição (CAFE_DA_MANHA, ALMOCO, JANTAR, LANCHE) | id, usuario, tipo, dataRefeicao, observacao |
-| **AlimentoRefeicao** | `refeicao_alimento` | Itens consumidos em cada refeição | id, refeicao, alimento, quantidade, calorias |
-| **MetaNutricional** | `meta_nutricional` | Metas nutricionais com periodicidade configurável | id, usuario, tipo, valorMeta, periodicidade, dataInicio, dataFim |
-| **Objetivo** | `objetivo` | Objetivo principal do usuário (ganhar massa, reduzir gordura, manter peso) | id, usuario, tipo, dataInicio, dataFim, ativo |
-| **RegistroDiario** | `registro_diario` | Acompanhamento diário: peso jejum, água (ml), passos | id, usuario, data, pesoJejum, aguaMl, passos |
+| **Usuario** | `usuario` | Cadastro e autenticacao de usuarios | id, nome, senha, email, dataNascimento, altura, sexo, dataCadastro, medida, tipoLogin, tokenId |
+| **CategoriaAlimento** | `categoria_alimento` | Classificacao de alimentos (Laticinios, Carnes, Frutas, etc.) | id, nome |
+| **Alimento** | `alimento` | Tabela nutricional com calorias, proteinas, carboidratos, gorduras, fibras | id, nome, categoria, calorias, proteina, carboidrato, gordura, fibra |
+| **Refeicao** | `refeicao` | Registro de refeicao (CAFE_DA_MANHA, ALMOCO, JANTAR, LANCHE) | id, usuario, tipo, dataRefeicao, observacao |
+| **AlimentoRefeicao** | `refeicao_alimento` | Itens consumidos em cada refeicao | id, refeicao, alimento, quantidade, calorias |
+| **MetaNutricional** | `meta_nutricional` | Metas de macronutrientes (calorias, proteinas, carboidratos, gorduras) | id, usuario, calorias, proteinas, carboidratos, gorduras, dataInicio, dataFim |
+| **Objetivo** | `objetivo` | Objetivo principal do usuario (ganhar massa, reduzir gordura, manter peso) | id, usuario, tipo, pesoAlvo, caloriasDiarias, dataInicio, dataFim, descricao |
+| **RegistroDiario** | `registro_diario` | Acompanhamento diario de macronutrientes consumidos e observacoes | id, usuario, data, caloriasConsumidas, proteinasConsumidas, carboidratosConsumidos, gordurasConsumidas, observacoes |
 | **AlimentoFavorito** | `alimento_favorito` | Alimentos marcados como favoritos | id, usuario, alimento |
 
 ---
